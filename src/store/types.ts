@@ -10,7 +10,9 @@ export interface ClockUpdate {
 }
 
 export interface BackgroundState {
+    readonly applyBackgroundUrl: string
     readonly backgroundUrl: string
+    readonly setApplyBackgroundUrl: (url: string) => void
     readonly setBackgroundUrl: (url: string) => void
 }
 

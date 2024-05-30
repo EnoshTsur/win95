@@ -21,7 +21,9 @@ export const useClockState = create<ClockUpdate>((set) => ({
 }))
 
 export const useBackgroundState = create<BackgroundState>((set) => ({
+    applyBackgroundUrl: '[None]',
     backgroundUrl: '[None]',
+    setApplyBackgroundUrl: (url) => set((pre) => ({ ...pre, applyBackgroundUrl: url })),
     setBackgroundUrl: (url) => set((pre) => ({...pre, backgroundUrl: url }))
 }))
 

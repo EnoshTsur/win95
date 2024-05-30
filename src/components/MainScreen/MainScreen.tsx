@@ -1,5 +1,6 @@
-import Alert from "components/Alert/Alert";
-import DisplayAlertContent from "components/DispalyAlertContent/DisplayAlertContent";
+import ApplyBackground from "components/DispalyAlert/ApplyBackground/ApplyBackground";
+import DisplayAlert from "components/DispalyAlert/DisplayAlert";
+import { mapToWallPaper } from "components/DispalyAlert/context/DisplayContext";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useState } from "react";
@@ -9,8 +10,8 @@ import styled from "styled-components";
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     position: relative;
     height: 40rem;
-    background-color: ${({ theme }) => theme.colors.windowsBg};
-    background-image: ${({ backgroundurl }) => backgroundurl !== '[None]' ? `url(${backgroundurl})` : 'none'}; 
+    ${({ backgroundurl }) => backgroundurl !== '[None]' && `background-image: url(${mapToWallPaper(backgroundurl)});`}
+    ${({ backgroundurl, theme }) => backgroundurl === '[None]' && `background-color: ${theme.colors.windowsBg};`}
 `
 
 const ScreenMenu = styled.div<{ x: number, y: number }>`
@@ -38,8 +39,9 @@ const ScreenMenuItem = styled.div`
 const MainScreen = () => {
     const [offset, setOffset] = useState({ x: 0,  y: 0})
     const { closeStartMenu } = useStartMenuState()
-    const { isOpen: displayOpen, setDisplaySettingsOpen } = useDispaySettingsState()
+    const { setDisplaySettingsOpen } = useDispaySettingsState()
     const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
+    const { isOpen: isDisplayOpen } = useDispaySettingsState()
 
     const { backgroundUrl } = useBackgroundState()
 
@@ -54,29 +56,26 @@ const MainScreen = () => {
         toggleRightMenu()
     };
 
-    const handleCloseDispaly = () => {
-        setDisplaySettingsOpen(false)
-    }
-
     return (
         <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={backgroundUrl} onClick={handleClick} >
+            <ApplyBackground>
+                {
+                    isDisplayOpen && (
+                        <DisplayAlert />
+                    )
+                }
 
-            { rightMenuOpen && (
-                <ScreenMenu x={offset.x} y={offset.y} >
-                    <ScreenMenuItem onClick={() => setDisplaySettingsOpen(true)}>
-                        Dispaly Settings
-                    </ScreenMenuItem>
-                </ScreenMenu>
-            )
-            }
-
-            { displayOpen && (
-                <Alert title="Display properties" onClose={handleCloseDispaly}>
-                    <DisplayAlertContent />
-                </Alert>
-                )
-            }
-            <MainScreenContainer list={screenItems} />
+                {
+                    rightMenuOpen && (
+                        <ScreenMenu x={offset.x} y={offset.y} >
+                            <ScreenMenuItem onClick={() => setDisplaySettingsOpen(true)}>
+                                Dispaly Settings
+                            </ScreenMenuItem>
+                        </ScreenMenu>
+                    )
+                }
+                <MainScreenContainer list={screenItems} />
+            </ApplyBackground>
         </ScreenWrapper>
     )
 }

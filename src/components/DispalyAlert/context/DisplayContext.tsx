@@ -4,6 +4,7 @@ import bubblesWallpaper from '../../../assets/bubbles-wallpaper.jpg'
 import carvedStonedWallpaper from '../../../assets/craved-stoned-wallpaper.png'
 
 import { createContext } from "react";
+import { DisplayContextTypes } from './types';
 
 export const patterListData: ReadonlyArray<string> = [
     '[None]', 'Bricks', 'Buttons', 'Cargo Net', 'Circuits'
@@ -29,12 +30,9 @@ export const mapToWallPaper = (wallpaper: string) => {
 }
 
 
-const DisplayContext = createContext<{
-    wallpaper: string,
-    setWallpaper: React.Dispatch<React.SetStateAction<string>>
-}>({
-    wallpaper: wallpaperListData[0],
-    setWallpaper: (value: React.SetStateAction<string>) => {}
+const DisplayContext = createContext<DisplayContextTypes>({
+    wallpaper: '',
+    setWallpaper: () => {}
 })
 
 export default DisplayContext

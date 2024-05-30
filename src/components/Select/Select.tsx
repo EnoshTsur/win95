@@ -49,15 +49,16 @@ const buttonStyles: React.CSSProperties = {
 
 interface SelectProps {
     readonly listData: ReadonlyArray<string>
+    readonly initialSelectedIndex?: number
     readonly setSelectedValue: (index: number) => void
 }
 
-const Select = ({ listData, setSelectedValue }: SelectProps) => {
+const Select = ({ listData, setSelectedValue, initialSelectedIndex = 0 }: SelectProps) => {
 
-    const [{ selectedIndex }, setSelectedIndex ] = useState({ selectedIndex: 0 })
+    const [selectedIndex, setSelectedIndex ] = useState(initialSelectedIndex)
 
     const handleSelection = (index: number) => {
-        setSelectedIndex({ selectedIndex: index })
+        setSelectedIndex(index)
         setSelectedValue(index)
     }
 

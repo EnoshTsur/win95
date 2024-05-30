@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Computer from "./Computer/Computer";
 import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/DisplayBackgorundOptionsContainer";
-import DisplayContext, { mapToWallPaper, wallpaperListData } from "./context/DisplayContext";
-import { useCallback, useMemo, useState } from "react";
+import DisplayContext from "./context/DisplayContext";
+import { useContext, useMemo } from "react";
 import { useBackgroundState, useDispaySettingsState } from "store/store";
 import PanelButton from "components/PanelButton/PanelButton";
 
@@ -56,31 +56,36 @@ const DisplayMain = styled.div`
 
 const tabs = ['Background', 'Screen Saver', 'Appearance', 'Settings']
 
-const DisplayAlertContent = () => {
+interface DisplayAlertContentProps {
+    readonly handleClose: () => void
+}
 
-    const [ wallpaper, setWallpaper ] = useState(wallpaperListData[0])
-    const { backgroundUrl, setBackgroundUrl } = useBackgroundState()
+
+const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
+
+    const { wallpaper } = useContext(DisplayContext)
+    const { backgroundUrl, setBackgroundUrl, applyBackgroundUrl, setApplyBackgroundUrl } = useBackgroundState()
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
-    const isTheSameWallpaper = useMemo(() => mapToWallPaper(wallpaper) === backgroundUrl, [wallpaper, backgroundUrl])
+    const isApplyAllowed = useMemo(() => {
+        if (applyBackgroundUrl !== '') {
+            return applyBackgroundUrl !== wallpaper
+        }
+        return wallpaper != backgroundUrl
+    }, [applyBackgroundUrl, wallpaper, backgroundUrl])
+
 
     const handleOk = () => {
-        if (!isTheSameWallpaper) {
-            setBackgroundUrl(mapToWallPaper(wallpaper))
-        }
+        setBackgroundUrl(wallpaper)
+        setApplyBackgroundUrl(wallpaper)
         setDisplaySettingsOpen(false)
     }
 
-    const handleApply = () => {
-        setBackgroundUrl(mapToWallPaper(wallpaper))
-    }
-
-    const handleCancel = () => {
-        setDisplaySettingsOpen(false)
+    const handleApply = () => {                
+        setApplyBackgroundUrl(wallpaper)
     }
 
     return (
-        <DisplayContext.Provider value={{ wallpaper, setWallpaper }}>
             <DisplayWrapper>
                 <TabsContainer>
                     { tabs.map((title, i) => (
@@ -96,11 +101,10 @@ const DisplayAlertContent = () => {
                 </DisplayMain>
                 <div style={{ padding: '1rem', gap: '5px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center'}}>
                     <PanelButton onClick={handleOk}>Ok</PanelButton>
-                    <PanelButton onClick={handleCancel}>Cancel</PanelButton>
-                    <PanelButton disabled={isTheSameWallpaper} onClick={handleApply}>Apply</PanelButton>
+                    <PanelButton onClick={handleClose}>Cancel</PanelButton>
+                    <PanelButton disabled={!isApplyAllowed} onClick={handleApply}>Apply</PanelButton>
                 </div>
             </DisplayWrapper>
-        </DisplayContext.Provider>
     )
 }
 

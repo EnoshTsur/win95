@@ -3,8 +3,9 @@ import DisplayBackgorundOptionsItem from "./DisplayBackgorundOptionsItem"
 import Select from "components/Select/Select"
 import Button from "components/Button/Button"
 import Underline from "components/Underline/Underline"
-import { useContext, useState } from "react"
+import { useContext, useMemo, useState } from "react"
 import DisplayContext, { patterListData, wallpaperListData } from "../context/DisplayContext"
+import { useBackgroundState } from "store/store"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -45,10 +46,13 @@ const DisabledButton = ({ children }: DisabledButtonProps) => {
 const DisplayBackgorundOptionsContainer = () => {
 
     const { setWallpaper } = useContext(DisplayContext)
+    const { backgroundUrl } = useBackgroundState()
 
     const handleSelectedWallpaper = (index: number) => {
         setWallpaper(wallpaperListData[index])
     }
+
+    const initialSelectedIndex = useMemo(() => wallpaperListData.findIndex((bg) => bg  === backgroundUrl) ?? 0, [backgroundUrl])
 
     return (
         <OptionsWrapper>
@@ -61,7 +65,11 @@ const DisplayBackgorundOptionsContainer = () => {
                 </DisabledButtonWrapper>
             </DisplayBackgorundOptionsItem>
             <DisplayBackgorundOptionsItem title="Wallpaper">
-                <Select setSelectedValue={handleSelectedWallpaper} listData={wallpaperListData} />
+                <Select 
+                    initialSelectedIndex={initialSelectedIndex}
+                    setSelectedValue={handleSelectedWallpaper} 
+                    listData={wallpaperListData} 
+                />
                 <DisabledButtonWrapper>
                     <DisabledButton>
                         <Underline color="grey">B</Underline><span>rowse</span>
