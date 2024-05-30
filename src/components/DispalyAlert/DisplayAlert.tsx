@@ -17,7 +17,6 @@ const DisplayAlert = () => {
     
     const contextValue = useMemo(() => ({ wallpaper, setWallpaper }), [wallpaper, setWallpaper])
 
-
     const handleClose = useCallback(() => {
         setDisplaySettingsOpen(false)
         setApplyBackgroundUrl(backgroundUrl)
