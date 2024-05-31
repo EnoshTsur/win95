@@ -9,11 +9,18 @@ export interface ClockUpdate {
     readonly updateTime: () => void
 }
 
+export interface UserBackgroundUpload {
+    readonly fileName: string
+    readonly url: string
+}
+
 export interface BackgroundState {
-    readonly applyBackgroundUrl: string
-    readonly backgroundUrl: string
-    readonly setApplyBackgroundUrl: (url: string) => void
-    readonly setBackgroundUrl: (url: string) => void
+    readonly backgroundList: ReadonlyArray<UserBackgroundUpload>
+    readonly applyBackground: UserBackgroundUpload
+    readonly selectedBackground: UserBackgroundUpload
+    readonly addUserBackground: (userUpload: UserBackgroundUpload) => void
+    readonly setApplyBackground: (applyObj: UserBackgroundUpload) => void
+    readonly setSelectedBackground: (backgroundObj: UserBackgroundUpload) => void
 }
 
 export interface DisplaySettingsState {

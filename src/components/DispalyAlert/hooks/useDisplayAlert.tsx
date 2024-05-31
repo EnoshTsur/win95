@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { useBackgroundState, useDispaySettingsState } from "store/store"
-import { wallpaperListData } from "../context/DisplayContext"
+import { useBackgroundState } from "store/store"
 
 const useDisplayAlert = () => {
-    const { backgroundUrl } = useBackgroundState()
-    const [wallpaper, setWallpaper] = useState(backgroundUrl != '' ? backgroundUrl : wallpaperListData[0])
+    const { selectedBackground, backgroundList } = useBackgroundState()
+    const [wallpaper, setWallpaper] = useState(selectedBackground.fileName != '[None]' ? selectedBackground : backgroundList[0])
 
     return {
         wallpaper,

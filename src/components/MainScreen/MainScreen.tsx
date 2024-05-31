@@ -1,5 +1,4 @@
 import DisplayAlert from "components/DispalyAlert/DisplayAlert";
-import { mapToWallPaper } from "components/DispalyAlert/context/DisplayContext";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
@@ -9,8 +8,10 @@ import styled from "styled-components";
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     position: relative;
     height: 40rem;
-    ${({ backgroundurl }) => backgroundurl !== '[None]' && `background-image: url(${mapToWallPaper(backgroundurl)});`}
-    ${({ backgroundurl, theme }) => backgroundurl === '[None]' && `background-color: ${theme.colors.windowsBg};`}
+    ${({ backgroundurl }) => backgroundurl !== '' && `background-image: url(${backgroundurl});`}
+    ${({ backgroundurl }) => backgroundurl !== '' && `background-size: contain;`}
+    background-position: center center;
+    ${({ backgroundurl, theme }) => backgroundurl === '' && `background-color: ${theme.colors.windowsBg};`}
 `
 
 const ScreenMenu = styled.div<{ x: number, y: number }>`
@@ -42,9 +43,13 @@ const MainScreen = () => {
     const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
     const { isOpen: isDisplayOpen } = useDispaySettingsState()
 
-    const { backgroundUrl, applyBackgroundUrl } = useBackgroundState()
+    const { selectedBackground, applyBackground } = useBackgroundState()
 
-    const mainScreenUrl = useMemo(() => isDisplayOpen ? applyBackgroundUrl : backgroundUrl, [isDisplayOpen, applyBackgroundUrl, backgroundUrl])
+    const mainScreenUrl = useMemo(() => isDisplayOpen 
+        ? applyBackground.url
+        : selectedBackground.url
+    , [isDisplayOpen, applyBackground, selectedBackground])
+
 
     const handleClick = () => {
         closeStartMenu()

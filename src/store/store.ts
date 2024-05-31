@@ -1,5 +1,10 @@
 import { create } from 'zustand'
 import { StartMenuState, ClockUpdate, BackgroundState, DisplaySettingsState, WindowsRightClickMenu } from './types'
+import blackThatchUrl from '../assets/black-thatch-wallpaper.png'
+import blueRivetsUrl from '../assets/blue-rivets-wallpaper.png'
+import bubblesUrl from '../assets/bubbles-wallpaper.jpg'
+import cravedStonedUrl from '../assets/craved-stoned-wallpaper.png'
+
 
 const timeSupplier = () => {
     const now = new Date()
@@ -21,10 +26,22 @@ export const useClockState = create<ClockUpdate>((set) => ({
 }))
 
 export const useBackgroundState = create<BackgroundState>((set) => ({
-    applyBackgroundUrl: '[None]',
-    backgroundUrl: '[None]',
-    setApplyBackgroundUrl: (url) => set((pre) => ({ ...pre, applyBackgroundUrl: url })),
-    setBackgroundUrl: (url) => set((pre) => ({...pre, backgroundUrl: url }))
+    applyBackground: { fileName: '[None]', url: ''},
+    backgroundList: [
+        { fileName: '[None]', url: ''},
+        { fileName: 'Black Thatch', url: blackThatchUrl },
+        { fileName: 'Blue Rivets', url: blueRivetsUrl }, 
+        { fileName: 'Bubbles', url: bubblesUrl },
+        { fileName: 'Carved Stoned', url: cravedStonedUrl }
+    ],
+    selectedBackground: { fileName: '[None]', url: ''},
+    addUserBackground: (userUpload) => set((pre) => pre.backgroundList
+        .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
+        ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
+        : pre
+    ),
+    setApplyBackground: (applyObj) => set((pre) => ({ ...pre, applyBackground: applyObj })),
+    setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj })), 
 }))
 
 export const useDispaySettingsState = create<DisplaySettingsState>((set) => ({

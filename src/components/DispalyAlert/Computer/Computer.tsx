@@ -1,6 +1,7 @@
 import { useContext, useMemo } from "react"
 import styled from "styled-components"
-import DisplayContext, { mapToWallPaper } from "../context/DisplayContext"
+import DisplayContext from "../context/DisplayContext"
+import { useBackgroundState } from "store/store"
 
 
 const ComputerWrapper = styled.div`
@@ -119,7 +120,7 @@ const Computer = () => {
 
     const { wallpaper } = useContext(DisplayContext)
 
-    const wallpaperUrl = useMemo(() => mapToWallPaper(wallpaper), [wallpaper]);
+    const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
 
     return (
         <ComputerWrapper>

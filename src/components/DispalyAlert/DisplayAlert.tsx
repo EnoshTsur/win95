@@ -8,7 +8,7 @@ import { useBackgroundState, useDispaySettingsState } from "store/store"
 const DisplayAlert = () => {
     
     const { setDisplaySettingsOpen } = useDispaySettingsState()
-    const { backgroundUrl, setApplyBackgroundUrl } = useBackgroundState()
+    const { selectedBackground, setApplyBackground } = useBackgroundState()
 
     const { 
         wallpaper,
@@ -19,9 +19,9 @@ const DisplayAlert = () => {
 
     const handleClose = useCallback(() => {
         setDisplaySettingsOpen(false)
-        setApplyBackgroundUrl(backgroundUrl)
-        setWallpaper(backgroundUrl)
-    }, [backgroundUrl])
+        setApplyBackground(selectedBackground)
+        setWallpaper(selectedBackground)
+    }, [selectedBackground])
     
 
     return (

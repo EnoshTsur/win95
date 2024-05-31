@@ -1,7 +1,7 @@
 import Button from "components/Button/Button";
 import styled from "styled-components";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import scrollBg from '../../assets/bg-scroll.png'
 
 const SelectConainer = styled.div`
@@ -49,13 +49,12 @@ const buttonStyles: React.CSSProperties = {
 
 interface SelectProps {
     readonly listData: ReadonlyArray<string>
-    readonly initialSelectedIndex?: number
+    readonly selectedIndex?: number
     readonly setSelectedValue: (index: number) => void
+    readonly setSelectedIndex: (index: number) => void
 }
 
-const Select = ({ listData, setSelectedValue, initialSelectedIndex = 0 }: SelectProps) => {
-
-    const [selectedIndex, setSelectedIndex ] = useState(initialSelectedIndex)
+const Select = ({ listData, setSelectedValue, setSelectedIndex, selectedIndex = 0 }: SelectProps) => {
 
     const handleSelection = (index: number) => {
         setSelectedIndex(index)
@@ -68,7 +67,7 @@ const Select = ({ listData, setSelectedValue, initialSelectedIndex = 0 }: Select
                 { listData.map(( value, i ) => (
                     <SelectOption 
                         selected={i === selectedIndex}
-                        key={value} 
+                        key={value + i} 
                         onClick={() => handleSelection(i)}
                     >
                      {value} 

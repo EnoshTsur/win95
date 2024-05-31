@@ -32,25 +32,25 @@ interface DisplayAlertContentProps {
 const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
 
     const { wallpaper } = useContext(DisplayContext)
-    const { backgroundUrl, setBackgroundUrl, applyBackgroundUrl, setApplyBackgroundUrl } = useBackgroundState()
+    const { selectedBackground, setSelectedBackground, applyBackground, setApplyBackground } = useBackgroundState()
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
     const isApplyAllowed = useMemo(() => {
-        if (applyBackgroundUrl !== '') {
-            return applyBackgroundUrl !== wallpaper
+        if (applyBackground.fileName !== '[None]') {
+            return applyBackground.fileName !== wallpaper.fileName
         }
-        return wallpaper != backgroundUrl
-    }, [applyBackgroundUrl, wallpaper, backgroundUrl])
+        return wallpaper.fileName != selectedBackground.fileName
+    }, [applyBackground, wallpaper, selectedBackground])
 
 
     const handleOk = useCallback(() => {
-        setBackgroundUrl(wallpaper)
-        setApplyBackgroundUrl(wallpaper)
+        setSelectedBackground(wallpaper)
+        setApplyBackground(wallpaper)
         setDisplaySettingsOpen(false)
     }, [wallpaper])
 
-    const handleApply = useCallback(() => {                
-        setApplyBackgroundUrl(wallpaper)
+    const handleApply = useCallback(() => {  
+        setApplyBackground(wallpaper)
     }, [wallpaper])
 
     const buttonsData = useMemo(() => [

@@ -3,9 +3,11 @@ import DisplayBackgorundOptionsItem from "./DisplayBackgorundOptionsItem"
 import Select from "components/Select/Select"
 import Button from "components/Button/Button"
 import Underline from "components/Underline/Underline"
-import { useContext, useMemo, useState } from "react"
-import DisplayContext, { patterListData, wallpaperListData } from "../context/DisplayContext"
+import { useCallback, useContext, useEffect, useMemo, useState } from "react"
+import DisplayContext, { patterListData } from "../context/DisplayContext"
 import { useBackgroundState } from "store/store"
+import BrowseImage from "components/BrowseImage/BrowseImage"
+import { UserBackgroundUpload } from "store/types"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -44,20 +46,31 @@ const DisabledButton = ({ children }: DisabledButtonProps) => {
 }
 
 const DisplayBackgorundOptionsContainer = () => {
+    
+    const { setWallpaper, wallpaper } = useContext(DisplayContext)
+    const { addUserBackground, backgroundList } = useBackgroundState()
+    
+    const [wallpaperSelecetedIndex, setWallpaperSelectedIndex] = useState(0)
 
-    const { setWallpaper } = useContext(DisplayContext)
-    const { backgroundUrl } = useBackgroundState()
+    useEffect(() => {
+        setWallpaperSelectedIndex(backgroundList.findIndex(({ fileName }) => fileName  === wallpaper.fileName))
+    }, [backgroundList, wallpaper])
 
-    const handleSelectedWallpaper = (index: number) => {
-        setWallpaper(wallpaperListData[index])
-    }
+    const listData = useMemo(() => backgroundList.map(({ fileName }) => fileName), [backgroundList])
 
-    const initialSelectedIndex = useMemo(() => wallpaperListData.findIndex((bg) => bg  === backgroundUrl) ?? 0, [backgroundUrl])
+    const handleSelectedWallpaper = useCallback((index: number) => {
+        setWallpaper(backgroundList[index])
+    }, [])
+
+    const handleImageAdditoin = useCallback((image: UserBackgroundUpload) => {
+        addUserBackground(image)
+        setWallpaper(image)
+    }, [])
 
     return (
         <OptionsWrapper>
             <DisplayBackgorundOptionsItem title="Pattern">
-                <Select setSelectedValue={() => {}} listData={patterListData} />
+                <Select setSelectedValue={() => {}} setSelectedIndex={(i) => {}} selectedIndex={0} listData={patterListData} />
                 <DisabledButtonWrapper>
                     <DisabledButton >
                         <Underline color="grey">E</Underline><span>dit Pattern</span>
@@ -66,14 +79,15 @@ const DisplayBackgorundOptionsContainer = () => {
             </DisplayBackgorundOptionsItem>
             <DisplayBackgorundOptionsItem title="Wallpaper">
                 <Select 
-                    initialSelectedIndex={initialSelectedIndex}
+                    selectedIndex={wallpaperSelecetedIndex}
+                    setSelectedIndex={setWallpaperSelectedIndex}
                     setSelectedValue={handleSelectedWallpaper} 
-                    listData={wallpaperListData} 
+                    listData={listData} 
                 />
                 <DisabledButtonWrapper>
-                    <DisabledButton>
+                    <BrowseImage saveImage={handleImageAdditoin}>
                         <Underline color="grey">B</Underline><span>rowse</span>
-                    </DisabledButton>
+                    </BrowseImage>
                 </DisabledButtonWrapper>
             </DisplayBackgorundOptionsItem>
         </OptionsWrapper>
