@@ -5,12 +5,12 @@ import styled from "styled-components"
 const ButtonsWrapper = styled.div`
     display: flex;
     gap: 5px;
-    padding: 1rem;
-    justify-content: flex-end;
+    padding: 10px;
+    justify-content: center;
     align-items: center;
 `
 
-interface PannelButtonsContainerProps {
+export interface PannelButtonsContainerProps {
     readonly data: ReadonlyArray<ButtonProps>
     readonly style?: React.CSSProperties
 }

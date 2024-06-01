@@ -31,7 +31,6 @@ const StarMenuWrapper = styled.div`
     border-right: 3px solid ${({ theme }) => theme.colors.black};
     border-left: 3px solid ${({ theme }) => theme.colors.white};
     border-top: 3px solid ${({ theme }) => theme.colors.white};
-    z-index: 10;
     top: -280px;
     left: -3px;
     background-color: ${({ theme }) => theme.colors.menu };

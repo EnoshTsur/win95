@@ -5,7 +5,7 @@ const ButtonWrapper = styled(Button)<ButtonProps>`
     font-family: mslevi;
     letter-spacing: 2px;
     font-weight: 600;
-    width: 70px; 
+    width: 100px; 
     height: 30px;
     border-top: 1px solid white;
     border-left: 1px solid white;

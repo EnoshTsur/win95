@@ -1,9 +1,11 @@
 import Button from "components/Button/Button";
 import styled from "styled-components";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { useMemo, useState } from "react";
+import { SetStateAction, memo, useCallback, useEffect, useMemo, useState } from "react";
 import scrollBg from '../../assets/bg-scroll.png'
+import { useBackgroundState } from "store/store";
 import { splitIntoLimitedLengthChunks } from "utils/functions";
+
 
 const SelectConainer = styled.div`
     display: flex;
@@ -71,54 +73,79 @@ const buttonStyles: React.CSSProperties = {
 }
 
 interface SelectProps {
-    readonly listData: ReadonlyArray<string>
-    readonly selectedIndex?: number
-    readonly setSelectedValue: (index: number) => void
-    readonly setSelectedIndex: (index: number) => void
+    readonly initialSelectedIndex: number
+    readonly selectData: ReadonlyArray<string>
+    readonly select: (value: number) => void
 }
 
-const Select = ({ listData, setSelectedValue, setSelectedIndex, selectedIndex = 0 }: SelectProps) => {
+const Select = ({ selectData, select, initialSelectedIndex }: SelectProps) => {
 
-    const handleSelection = (index: number) => {
-        setSelectedIndex(index)
-        setSelectedValue(index)
-    }
+    const [{ activeArray, activeIndex }, setSelecetdIndexes] = useState({
+        activeArray: Math.floor(initialSelectedIndex / 5),
+        activeIndex: initialSelectedIndex % 5
+    })
 
-    const listCunks = useMemo(() => splitIntoLimitedLengthChunks(listData)(5), [listData])
+    const {backgroundList} = useBackgroundState()
 
-    const indicatorSize = useMemo(() => 100 / listCunks.length, [listCunks])
+    const selectChunks = useMemo(() =>  splitIntoLimitedLengthChunks(selectData)(5), [selectData]);
 
-    const [activeArrayIndex, setActiveArrayIndex] = useState(0)
+    const indicatorSize = useMemo(() => 100 / selectChunks.length, [selectChunks])
 
-    const isUpDisabled = useMemo(() => !(activeArrayIndex > 0), [activeArrayIndex, listCunks])
+    const isUpDisabled = useMemo(() => !(activeArray > 0), [activeArray, selectChunks])
 
-    const isDownDisabled = useMemo(() => (activeArrayIndex === listCunks.length - 1), [activeArrayIndex, listCunks])
+    const isDownDisabled = useMemo(() => (activeArray === selectChunks.length - 1), [activeArray, selectChunks])
+
+    useEffect(() => {
+        const flattenedIndex = flatternSelection(activeIndex)
+        select(flattenedIndex)
+    }, [activeIndex, activeArray])
+
+
+    useEffect(() => {
+        console.log({ selectData });
+        
+    }, [selectData])
+
+    const flatternSelection = useCallback((index: number) => {
+        const elementsBefore = selectChunks.slice(0, activeArray).reduce((acc, curr) => acc + curr.length, 0);
+        const flattenedIndex = elementsBefore + index;        
+        return flattenedIndex
+    }, [selectChunks, activeArray])
+
+    const handleSelection = useCallback((index: number) => {        
+        setSelecetdIndexes({ activeArray, activeIndex: index })
+        const selectDataActiveIndex = flatternSelection(index)        
+        console.log({ selectDataActiveIndex, backgroundList });
+        
+        select(selectDataActiveIndex)
+    }, [activeArray, selectChunks])
+
 
     const scrollIndicatorFlexPosition = useMemo(() => {
-        const middle = Math.floor(listCunks.length / 2);
-        if (activeArrayIndex === 0) {
+        const middle = Math.floor(selectChunks.length / 2);
+        if (activeArray === 0) {
             return 'flex-start'
         }
 
-        if (activeArrayIndex === listCunks.length - 1) {
+        if (activeArray === selectChunks.length - 1) {
             return 'flex-end'
         }
 
-        if (activeArrayIndex === middle) {
+        if (activeArray === middle) {
             return 'center'
         }
 
-        return activeArrayIndex > middle ? 'flex-end' : 'flex-start'
+        return activeArray > middle ? 'flex-end' : 'flex-start'
         
-    }, [activeArrayIndex, listCunks])
+    }, [activeArray, selectChunks])
 
 
     return (
         <SelectConainer>
             <SelectWrapper>
-                { listCunks[activeArrayIndex].map(( value, i ) => (
+                { selectChunks[activeArray].map(( value, i ) => (
                     <SelectOption 
-                        selected={i === selectedIndex}
+                        selected={i === activeIndex}
                         key={value + i} 
                         onClick={() => handleSelection(i)}
                     >
@@ -127,13 +154,19 @@ const Select = ({ listData, setSelectedValue, setSelectedIndex, selectedIndex = 
                 ))}
             </SelectWrapper>
             <ScrollArea >
-                <Button disabled={isUpDisabled} style={buttonStyles} onClick={() => setActiveArrayIndex((pre) => pre - 1)}>
+                <Button disabled={isUpDisabled} style={buttonStyles} onClick={() => {
+                       setSelecetdIndexes((pre) => ({ activeIndex: 4, activeArray: pre.activeArray - 1 }))
+
+                }}>
                     <TiArrowSortedUp />
                 </Button>
                 <ScrollIndicatorArea indicatorposition={scrollIndicatorFlexPosition}>
                     <ScrollIndicator  indicatorsize={indicatorSize}/>
                 </ScrollIndicatorArea>
-                <Button disabled={isDownDisabled} style={buttonStyles} onClick={() => setActiveArrayIndex((pre) => pre + 1)}>
+                <Button disabled={isDownDisabled} style={buttonStyles} onClick={() => {
+                        setSelecetdIndexes((pre) => ({ activeIndex: 0, activeArray: pre.activeArray  + 1 }))
+                    }
+                }>
                     <TiArrowSortedDown />
                 </Button>
             </ScrollArea>
@@ -141,4 +174,4 @@ const Select = ({ listData, setSelectedValue, setSelectedIndex, selectedIndex = 
     )
 }
 
-export default Select;
+export default memo<SelectProps>(Select, (pre, next) => pre.selectData === next.selectData);

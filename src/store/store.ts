@@ -1,9 +1,10 @@
 import { create } from 'zustand'
-import { StartMenuState, ClockUpdate, BackgroundState, DisplaySettingsState, WindowsRightClickMenu } from './types'
+import { StartMenuState, ClockUpdate, BackgroundState, DisplaySettingsState, WindowsRightClickMenu, OpenedWindowsState } from './types'
 import blackThatchUrl from '../assets/black-thatch-wallpaper.png'
 import blueRivetsUrl from '../assets/blue-rivets-wallpaper.png'
 import bubblesUrl from '../assets/bubbles-wallpaper.jpg'
 import cravedStonedUrl from '../assets/craved-stoned-wallpaper.png'
+import { moveOpenWindowToTop, popOpenWindow } from 'utils/functions'
 
 
 const timeSupplier = () => {
@@ -54,4 +55,11 @@ export const useWindowsRightClickMenuState = create<WindowsRightClickMenu>((set)
     isOpen: false,
     closeRightMenu: () => set((pre) => ({...pre, isOpen: false })),
     toggleRightMenu: () => set((pre) => ({...pre, isOpen: !pre.isOpen }))
+}))
+
+export const useOpenWindowState = create<OpenedWindowsState>((set) => ({
+    openedWindows: [],
+    addWindow: (id) => set((pre) => ({ ...pre, openedWindows: [{ id, zIndex: pre.openedWindows.length + 1 }, ...pre.openedWindows] })),
+    removeWindow: (id) => set((pre) => ({ ...pre, openedWindows: popOpenWindow(pre.openedWindows)(id) })),
+    moveToTop: (id) => set((pre) => ({...pre, openedWindows: moveOpenWindowToTop(pre.openedWindows)(id) }))
 }))

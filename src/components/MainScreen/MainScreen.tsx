@@ -1,4 +1,4 @@
-import DisplayAlert from "components/DispalyAlert/DisplayAlert";
+import DisplayProperties from "components/DispalyProperties/DisplayProperties";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     position: relative;
-    height: 40rem;
+    height: 55rem;
     ${({ backgroundurl }) => backgroundurl !== '' && `background-image: url(${backgroundurl});`}
     ${({ backgroundurl }) => backgroundurl !== '' && `background-size: contain;`}
     background-position: center center;
@@ -23,7 +23,7 @@ const ScreenMenu = styled.div<{ x: number, y: number }>`
     border-bottom: 1px solid black;
     border-right: 1px solid black;
     border-left: 1px solid white;
-    bordre-top: 1px solid white;
+    border-top: 1px solid white;
 `
 const ScreenMenuItem = styled.div`
     font-family: mslevi;
@@ -41,14 +41,15 @@ const MainScreen = () => {
     const { closeStartMenu } = useStartMenuState()
     const { setDisplaySettingsOpen } = useDispaySettingsState()
     const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
-    const { isOpen: isDisplayOpen } = useDispaySettingsState()
+    const { isOpen: isDisplayPropertiesOpen } = useDispaySettingsState()
 
     const { selectedBackground, applyBackground } = useBackgroundState()
 
-    const mainScreenUrl = useMemo(() => isDisplayOpen 
+
+    const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? applyBackground.url
         : selectedBackground.url
-    , [isDisplayOpen, applyBackground, selectedBackground])
+    , [isDisplayPropertiesOpen, applyBackground, selectedBackground])
 
 
     const handleClick = () => {
@@ -65,7 +66,7 @@ const MainScreen = () => {
     return (
         <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} onClick={handleClick} >
                 
-                { isDisplayOpen && <DisplayAlert /> }
+                { isDisplayPropertiesOpen && <DisplayProperties /> }
 
                 {
                     rightMenuOpen && (

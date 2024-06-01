@@ -1,91 +1,83 @@
-import React from "react";
-import styled from "styled-components";
-import { IoMdClose } from "react-icons/io";
-import { BsQuestion } from "react-icons/bs";
-import Button, { ButtonProps } from "components/Button/Button";
+import { ButtonProps } from "components/Button/Button"
+import Window from "components/Window/Window"
+import { useMemo, useState } from "react"
+import emarkIcon from '../../assets/emark-icon.png'
+import questionIcon from '../../assets/question-icon.png'
+import closeIcon from '../../assets/close-icon.png'
 
-const AlertWrapper = styled.div`
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    flex-direction: column;
-    border-bottom: 2px solid ${({ theme }) => theme.colors.buttonShadow};
-    border-right: 2px solid ${({ theme }) => theme.colors.buttonShadow};
-    border-left: 2px solid ${({ theme }) => theme.colors.white};
-    border-top: 2px solid ${({ theme }) => theme.colors.white};
-`
-
-const TitleBar = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 5px;
-    color: ${({ theme }) => theme.colors.white };
-    background-color: ${({ theme }) => theme.colors.alertTitleBar };
-    &:hover {
-        cursor: grab;
-    }
-    `
-    
-    const TitleText = styled.span`
-    padding: 0 5px;
-    display: flex;
-    align-items: center;
-    font-family: mslevi;
-    font-weight: 600;
-    letter-spacing: 1px;
-`
+import styled from "styled-components"
+import Backdrop from "./Backdrop"
+import { createPortal } from "react-dom"
 
 const AlertContent = styled.div`
     background-color: ${({ theme }) => theme.colors.menu };
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
 `
 
-const ButtonsArea = styled.div`
-    display: flex;
+const AlertMessage = styled.div`
+    max-width: 300px;
+    font-family: mslevi;
 `
+
+const AlertIcon = styled.img`
+    width: 80px;
+    height: 70px;
+`
+
+export type AlertStatus = 'ERROR'| 'WARNING' | 'QUESTION'
 
 interface AlertProps {
     readonly title?: string
-    readonly children: React.ReactNode
-    readonly onClose: () => void
+    readonly titleButtons: ReadonlyArray<ButtonProps>
+    readonly message: string
+    readonly status?: AlertStatus
+    readonly panelButtons?: ReadonlyArray<ButtonProps>
 }
 
-const buttonStyles: React.CSSProperties = {
-    margin: '2px 0',
-    display: 'flex',
-    alignItems: 'center'
-}
+const Alert = ({ title, titleButtons, message, status, panelButtons }: AlertProps) => {
 
-const TitleButton = ({ children, ...rest }: ButtonProps) => (
-    <Button style={buttonStyles} {...rest}>
-        { children }
-    </Button>
-)
+    const [zIndex, setZindex] = useState(0)
 
-const Alert = ({ title, children, onClose }: AlertProps) => {
+    const icon = useMemo(() => {
+        switch (status) {
+            case 'ERROR':
+                return (
+                    <AlertIcon src={closeIcon} />
+                )
+            case 'WARNING':
+                return (
+                    <AlertIcon src={emarkIcon} />
+                )
+            case 'QUESTION':
+                return (
+                    <AlertIcon src={questionIcon} />
+                )
+            default: 
+                return (
+                    <>
+                    </>
+                )
+        }
+    }, [status])
 
-    return (
-        <AlertWrapper >
-            <TitleBar>
-                <TitleText>
-                { title }
-                </TitleText>
-                <ButtonsArea>
-                    <TitleButton>   
-                        <BsQuestion />
-                    </TitleButton>
-                    <TitleButton onClick={onClose}>
-                        <IoMdClose />
-                    </TitleButton>
-                </ButtonsArea>
-            </TitleBar>
-            <AlertContent>
-                {children}
-            </AlertContent>
-        </AlertWrapper>
+    const alertProptal = useMemo(() => document.getElementById('alert-portal'), [])
+
+    return createPortal(
+        <Backdrop zIndex={zIndex}>  
+            <Window title={title} titleButtons={titleButtons} panelButtons={panelButtons} getZIndex={(index) => setZindex(index)}>
+                <AlertContent>
+                    { status && icon }
+                    <AlertMessage>
+                    { message }
+                    </AlertMessage>
+                </AlertContent>
+            </Window>
+        </Backdrop>,
+        alertProptal!
     )
 }
 
 export default Alert
-

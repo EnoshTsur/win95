@@ -12,7 +12,6 @@ const TabsContainer = styled.div`
     top: 10px;
     position: absolute;
     background: ${({ theme }) => theme.colors.menu};
-    z-index: 10;
 `
 
 const TabItem = styled.div<{ chosen: number }>`

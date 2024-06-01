@@ -34,3 +34,15 @@ export interface WindowsRightClickMenu {
     readonly closeRightMenu: () => void
     readonly toggleRightMenu: () => void
 }
+
+export interface OpenWindow {
+    readonly id: string
+    readonly zIndex: number;
+}
+
+export interface OpenedWindowsState {
+    readonly openedWindows: ReadonlyArray<OpenWindow>
+    readonly addWindow: (id: string) => void
+    readonly removeWindow: (id: string) => void
+    readonly moveToTop: (id: string) => void
+}

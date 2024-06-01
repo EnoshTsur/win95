@@ -50,6 +50,8 @@ const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
     }, [wallpaper])
 
     const handleApply = useCallback(() => {  
+        console.log('apply', wallpaper);
+        
         setApplyBackground(wallpaper)
     }, [wallpaper])
 
@@ -76,7 +78,7 @@ const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
                     <Computer />
                     <DisplayBackgorundOptionsContainer />
                 </DisplayMain>
-                <PannelButtonsContainer data={buttonsData} />
+                <PannelButtonsContainer data={buttonsData} style={{ justifyContent: 'flex-end'}}/>
             </DisplayWrapper>
     )
 }
