@@ -1,7 +1,6 @@
 import Window from "components/Window/Window"
 import DisplayPropertiesContent from "./DisplayPropertiesContent"
-import { useCallback, useMemo, useState } from "react"
-import DisplayContext from "./context/DisplayContext"
+import { useCallback, useEffect, useMemo } from "react"
 import { useBackgroundState, useDispaySettingsState } from "store/store"
 import { ButtonProps } from "components/Button/Button"
 import { BsQuestion } from 'react-icons/bs'
@@ -12,12 +11,12 @@ const DisplayProperties  = () => {
     
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
-    const { selectedBackground, backgroundList, setApplyBackground } = useBackgroundState()
+    const { selectedBackground, backgroundList, setApplyBackground, setWallpaper } = useBackgroundState()
 
-    const [wallpaper, setWallpaper] = useState(selectedBackground.fileName != '[None]' ? selectedBackground : backgroundList[0])
+    useEffect(() => {
+        setWallpaper(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])
+    }, [])
     
-    const contextValue = useMemo(() => ({ wallpaper, setWallpaper }), [wallpaper, setWallpaper])
-
     const handleClose = useCallback(() => {
         setDisplaySettingsOpen(false)
         setApplyBackground(selectedBackground)
@@ -31,11 +30,9 @@ const DisplayProperties  = () => {
     
 
     return (
-        <DisplayContext.Provider value={contextValue}>
             <Window title="Display properties" titleButtons={displayAlertButtons}>
                 <DisplayPropertiesContent handleClose={handleClose}/>
             </Window>
-        </DisplayContext.Provider>
     )
 }
 

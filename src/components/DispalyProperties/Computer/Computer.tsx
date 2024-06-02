@@ -1,6 +1,5 @@
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 import styled from "styled-components"
-import DisplayContext from "../context/DisplayContext"
 import { useBackgroundState } from "store/store"
 
 
@@ -118,7 +117,7 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { wallpaper } = useContext(DisplayContext)
+    const { wallpaper } = useBackgroundState()
 
     const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
 

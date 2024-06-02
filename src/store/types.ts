@@ -18,9 +18,11 @@ export interface BackgroundState {
     readonly backgroundList: ReadonlyArray<UserBackgroundUpload>
     readonly applyBackground: UserBackgroundUpload
     readonly selectedBackground: UserBackgroundUpload
+    readonly wallpaper: UserBackgroundUpload
     readonly addUserBackground: (userUpload: UserBackgroundUpload) => void
     readonly setApplyBackground: (applyObj: UserBackgroundUpload) => void
     readonly setSelectedBackground: (backgroundObj: UserBackgroundUpload) => void
+    readonly setWallpaper: (wallpaper: UserBackgroundUpload) => void
 }
 
 export interface DisplaySettingsState {

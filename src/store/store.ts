@@ -36,13 +36,15 @@ export const useBackgroundState = create<BackgroundState>((set) => ({
         { fileName: 'Carved Stoned', url: cravedStonedUrl }
     ],
     selectedBackground: { fileName: '[None]', url: ''},
+    wallpaper: { fileName: '[None]', url: ''},
     addUserBackground: (userUpload) => set((pre) => pre.backgroundList
         .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
-        ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
-        : pre
+            ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
+            : pre
     ),
     setApplyBackground: (applyObj) => set((pre) => ({ ...pre, applyBackground: applyObj })),
     setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj })), 
+    setWallpaper: (wallpaper) =>  set((pre) => ({...pre, wallpaper })),
 }))
 
 export const useDispaySettingsState = create<DisplaySettingsState>((set) => ({

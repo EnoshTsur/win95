@@ -1,14 +1,12 @@
 import styled from "styled-components"
 import DisplayBackgorundOptionsItem from "./DisplayBackgorundOptionsItem"
-import Select from "components/Select/Select"
 import Button from "components/Button/Button"
 import Underline from "components/Underline/Underline"
-import { memo, useCallback, useContext, useEffect, useMemo, useState } from "react"
-import DisplayContext, { patterListData } from "../context/DisplayContext"
+import {  useCallback, useEffect, useMemo, useState } from "react"
 import { useBackgroundState } from "store/store"
 import BrowseImage from "components/BrowseImage/BrowseImage"
 import { UserBackgroundUpload } from "store/types"
-import { splitIntoLimitedLengthChunks } from "utils/functions"
+import Select from "components/Select/Select"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -48,33 +46,65 @@ const DisabledButton = ({ children }: DisabledButtonProps) => {
 
 const DisplayBackgorundOptionsContainer = () => {
     
-    const { setWallpaper, wallpaper } = useContext(DisplayContext)
+    const patterListData: ReadonlyArray<string> = [
+        '[None]', 'Bricks', 'Buttons', 'Cargo Net', 'Circuits'
+    ]
 
-    const { addUserBackground, backgroundList } = useBackgroundState()
+    const [{ selectedWallpaperItemIndex, selectedWallpaperChunkIndex }, setSelectedWallpaperIndexes ] = useState({ 
+        selectedWallpaperItemIndex: 0, 
+        selectedWallpaperChunkIndex: 0
+    })
+
+    const [{ selectedPatternItemIndex, selectedPatternChunkIndex }, setSelectedPatternIndexes ] = useState({ 
+        selectedPatternItemIndex: 0, 
+        selectedPatternChunkIndex: 0
+    })
+
+
+    const { addUserBackground, backgroundList, wallpaper, setWallpaper } = useBackgroundState()
 
     const selectWallpaperList = useMemo(() => backgroundList.map(({ fileName }) => fileName ), [backgroundList])
     
-    const initialSelectedIndex = useMemo(() => backgroundList.findIndex(({ fileName }) => fileName  === wallpaper.fileName), [backgroundList])
+    useEffect(() => {
+       const flatternIndex = backgroundList.findIndex(({ fileName }) => fileName  === wallpaper.fileName)
+       const chunkIndex = Math.floor(flatternIndex / 5)
+       const itemIndex = flatternIndex % 5
+       setSelectedWallpaperIndexes({ selectedWallpaperChunkIndex: chunkIndex, selectedWallpaperItemIndex: itemIndex })
+    }, [])
 
 
-    const handleSelectedValue = useCallback((index: number) => {
-        setWallpaper(backgroundList[index])
-    }, [backgroundList])
-
-
-    const handleImageAdditoin = (image: UserBackgroundUpload) => {
+    const handleImageAdditoin = useCallback((image: UserBackgroundUpload) => {
         addUserBackground(image)
         setWallpaper(image)
-    }
+        setSelectedWallpaperIndexes({ selectedWallpaperChunkIndex: 0, selectedWallpaperItemIndex: 0})
+    }, [backgroundList, wallpaper])
+
+
+    const handleSelectedIndex = useCallback((index: number) => {
+        const flatternIndex = selectedWallpaperChunkIndex * 5 + index
+        setWallpaper(backgroundList[flatternIndex])
+        setSelectedWallpaperIndexes((pre) => ({...pre, selectedWallpaperItemIndex: index }))
+    }, [backgroundList, wallpaper, selectWallpaperList])
+
+
+    const handleSelectedChunk = useCallback((index: number) => {
+        const itemIndex = index > selectedWallpaperChunkIndex ? 0 : 4
+        const flatternIndex = index * 5 + itemIndex
+        setWallpaper(backgroundList[flatternIndex])
+        setSelectedWallpaperIndexes(() => ({ selectedWallpaperItemIndex: itemIndex, selectedWallpaperChunkIndex: index }))
+    }, [backgroundList, wallpaper, selectedWallpaperItemIndex, selectedWallpaperChunkIndex, selectWallpaperList])
 
     return (
         <OptionsWrapper>
             <DisplayBackgorundOptionsItem title="Pattern">
                 <Select
-                    initialSelectedIndex={0}
-                    selectData={patterListData}
-                    select={() => {}}
-                    />
+                    selectData={patterListData} 
+                    chunkSize={5}
+                    selectedChunkIndex={selectedPatternChunkIndex}
+                    selectedItemIndex={selectedPatternItemIndex}
+                    onChunkChange={() => {}}
+                    onItemChange={() => {}}
+                />
                 <DisabledButtonWrapper>
                     <DisabledButton >
                         <Underline color="grey">E</Underline><span>dit Pattern</span>
@@ -82,10 +112,13 @@ const DisplayBackgorundOptionsContainer = () => {
                 </DisabledButtonWrapper>
             </DisplayBackgorundOptionsItem>
             <DisplayBackgorundOptionsItem title="Wallpaper">
-                <Select 
-                    initialSelectedIndex={initialSelectedIndex}
-                    selectData={selectWallpaperList}
-                    select={handleSelectedValue}
+                <Select
+                    selectData={selectWallpaperList} 
+                    chunkSize={5}
+                    selectedChunkIndex={selectedWallpaperChunkIndex}
+                    selectedItemIndex={selectedWallpaperItemIndex}
+                    onChunkChange={handleSelectedChunk}
+                    onItemChange={handleSelectedIndex}
                 />
                 <DisabledButtonWrapper>
                     <BrowseImage saveImage={handleImageAdditoin}>

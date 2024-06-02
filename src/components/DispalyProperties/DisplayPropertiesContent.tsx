@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import Computer from "./Computer/Computer";
 import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/DisplayBackgorundOptionsContainer";
-import DisplayContext from "./context/DisplayContext";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useBackgroundState, useDispaySettingsState } from "store/store";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
@@ -29,10 +28,17 @@ interface DisplayAlertContentProps {
 }
 
 
-const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
+const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => {
 
-    const { wallpaper } = useContext(DisplayContext)
-    const { selectedBackground, setSelectedBackground, applyBackground, setApplyBackground } = useBackgroundState()
+    const { 
+        selectedBackground, 
+        setSelectedBackground, 
+        applyBackground, 
+        setApplyBackground, 
+        backgroundList, 
+        wallpaper, 
+    } = useBackgroundState()
+
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
     const isApplyAllowed = useMemo(() => {
@@ -47,13 +53,11 @@ const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
         setSelectedBackground(wallpaper)
         setApplyBackground(wallpaper)
         setDisplaySettingsOpen(false)
-    }, [wallpaper])
+    }, [wallpaper, backgroundList])
 
-    const handleApply = useCallback(() => {  
-        console.log('apply', wallpaper);
-        
+    const handleApply = () => {  
         setApplyBackground(wallpaper)
-    }, [wallpaper])
+    }
 
     const buttonsData = useMemo(() => [
         {
@@ -83,4 +87,4 @@ const DisplayAlertContent = ({ handleClose }: DisplayAlertContentProps) => {
     )
 }
 
-export default DisplayAlertContent
+export default DisplayPropertiesContent
