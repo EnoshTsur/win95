@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { DisplayBackgroundSizeStore, DisplayBackgroundStore, DisplayModalStore } from "./types";
+import { DisplayApplyBackgroundStore, DisplayBackgroundSizeStore, DisplayBackgroundStore, DisplayModalStore } from "./types";
+import { initialBackgroundList } from "components/MainScreen/store/store";
 
 export const useDisplayModalStore = create<DisplayModalStore>((set) => ({
     isDisplayPropertiesOpen: false,
@@ -25,4 +26,9 @@ export const useDisplayBackgroundStore = create<DisplayBackgroundStore>((set) =>
 export const useDisplayBackgroundSizeStore = create<DisplayBackgroundSizeStore>((set) => ({
     displayBackgroundSize: 'cover',
     setDisplayBackgroundSize: (backgroundSize) => set((pre) => ({...pre, displayBackgroundSize: backgroundSize }))
+}))
+
+export const useDisplayApplyBackgroundStore = create<DisplayApplyBackgroundStore>((set) => ({
+    displayApplyBackground: initialBackgroundList[0],
+    setDisplayApplyBackground: (applyObj) => set((pre) => ({ ...pre, displayApplyBackground: applyObj })),
 }))

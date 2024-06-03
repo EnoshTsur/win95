@@ -24,3 +24,8 @@ export interface DisplayBackgroundSizeStore {
     readonly displayBackgroundSize: BackgroundSize
     readonly setDisplayBackgroundSize: (backgroundSize: BackgroundSize) => void
 }
+
+export interface DisplayApplyBackgroundStore {
+    readonly displayApplyBackground: Background
+    readonly setDisplayApplyBackground: (applyObj: Background) => void
+}

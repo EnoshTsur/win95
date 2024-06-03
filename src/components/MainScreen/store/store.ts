@@ -1,11 +1,11 @@
 import { create } from "zustand";
-import { Background, MainScreenApplyBackgroundStore, MainScreenBackgroundStore } from "./types";
+import { Background, MainScreenBackgroundStore } from "./types";
 import blackThatchUrl from '../../../assets/black-thatch-wallpaper.png'
 import blueRivetsUrl from '../../../assets/blue-rivets-wallpaper.png'
 import bubblesUrl from '../../../assets/bubbles-wallpaper.jpg'
 import cravedStonedUrl from '../../../assets/craved-stoned-wallpaper.png'
 
-const initialBackgroundList: ReadonlyArray<Background> = [
+export const initialBackgroundList: ReadonlyArray<Background> = [
     { fileName: '[None]', url: ''},
     { fileName: 'Black Thatch', url: blackThatchUrl },
     { fileName: 'Blue Rivets', url: blueRivetsUrl }, 
@@ -14,17 +14,12 @@ const initialBackgroundList: ReadonlyArray<Background> = [
 ]
 
 export const useMainScreenBackgroundStore = create<MainScreenBackgroundStore>((set) => ({
-    backgroundList: initialBackgroundList,
-    selectedBackground: initialBackgroundList[0],
-    addUserBackground: (userUpload) => set((pre) => pre.backgroundList
+    mainScreenBackgroundList: initialBackgroundList,
+    mainScreenSelectedBackground: initialBackgroundList[0],
+    addUserBackground: (userUpload) => set((pre) => pre.mainScreenBackgroundList
         .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
-            ? ({...pre, backgroundList: [ ...pre.backgroundList.slice(0, 1), userUpload, ...pre.backgroundList.slice(1)]})
+            ? ({...pre, mainScreenBackgroundList: [ ...pre.mainScreenBackgroundList.slice(0, 1), userUpload, ...pre.mainScreenBackgroundList.slice(1)]})
             : pre
     ),
-    setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj }))
-}))
-
-export const useMainScreenApplyBackgroundStore = create<MainScreenApplyBackgroundStore>((set) => ({
-    applyBackground: initialBackgroundList[0],
-    setApplyBackground: (applyObj) => set((pre) => ({ ...pre, applyBackground: applyObj })),
+    setMainScreenSelectedBackground: (backgroundObj) => set((pre) => ({...pre, mainScreenSelectedBackground: backgroundObj }))
 }))

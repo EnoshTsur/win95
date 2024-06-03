@@ -4,17 +4,17 @@ import { useCallback, useEffect, useMemo } from "react"
 import { ButtonProps } from "components/Button/Button"
 import { BsQuestion } from 'react-icons/bs'
 import { IoMdClose  } from "react-icons/io"
-import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "components/MainScreen/store/store"
-import { useDisplayBackgroundStore, useDisplayModalStore } from "./store/store"
+import { useMainScreenBackgroundStore } from "components/MainScreen/store/store"
+import { useDisplayApplyBackgroundStore, useDisplayBackgroundStore, useDisplayModalStore } from "./store/store"
 
 
 const DisplayProperties  = () => {
     
-    const { setApplyBackground } = useMainScreenApplyBackgroundStore(({ setApplyBackground }) => ({ setApplyBackground }))
+    const { setDisplayApplyBackground } = useDisplayApplyBackgroundStore(({ setDisplayApplyBackground }) => ({ setDisplayApplyBackground }))
 
-    const { backgroundList, selectedBackground } = useMainScreenBackgroundStore(({ backgroundList, selectedBackground }) => ({ 
-        backgroundList, 
-        selectedBackground 
+    const { mainScreenBackgroundList, mainScreenSelectedBackground } = useMainScreenBackgroundStore(({ mainScreenBackgroundList, mainScreenSelectedBackground }) => ({ 
+        mainScreenBackgroundList, 
+        mainScreenSelectedBackground 
     }))
 
     const { setDisplayBackground } = useDisplayBackgroundStore(({ setDisplayBackground }) => ({ setDisplayBackground }))
@@ -22,14 +22,14 @@ const DisplayProperties  = () => {
     const { closeDisplayProperties } = useDisplayModalStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
 
     useEffect(() => {
-        setDisplayBackground(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])
+        setDisplayBackground(mainScreenSelectedBackground.fileName !== '[None]' ? mainScreenSelectedBackground : mainScreenBackgroundList[0])
     }, [])
     
     const handleClose = useCallback(() => {
         closeDisplayProperties()
-        setApplyBackground(selectedBackground)
-        setDisplayBackground(selectedBackground)
-    }, [selectedBackground])
+        setDisplayApplyBackground(mainScreenSelectedBackground)
+        setDisplayBackground(mainScreenSelectedBackground)
+    }, [mainScreenSelectedBackground])
 
     const displayAlertButtons: ReadonlyArray<ButtonProps> = useMemo(() => [
         { children: <BsQuestion />},

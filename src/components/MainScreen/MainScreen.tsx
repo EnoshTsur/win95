@@ -1,5 +1,5 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useDisplayModalStore } from "components/DispalyProperties/store/store";
+import { useDisplayApplyBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
@@ -7,7 +7,7 @@ import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
-import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "./store/store";
+import { useMainScreenBackgroundStore } from "./store/store";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     position: relative;
@@ -32,17 +32,17 @@ const MainScreen = () => {
     const { isDisplayPropertiesOpen } = useDisplayModalStore(({ isDisplayPropertiesOpen }) => ({ isDisplayPropertiesOpen }))
 
 
-    const { applyBackground } = useMainScreenApplyBackgroundStore(({ applyBackground }) => ({ 
-        applyBackground, 
+    const { displayApplyBackground } = useDisplayApplyBackgroundStore(({ displayApplyBackground }) => ({ 
+        displayApplyBackground, 
     }))
 
-    const { selectedBackground } = useMainScreenBackgroundStore(({ selectedBackground }) => ({ selectedBackground }))
+    const { mainScreenSelectedBackground } = useMainScreenBackgroundStore(({ mainScreenSelectedBackground }) => ({ mainScreenSelectedBackground }))
 
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
-        ? applyBackground.url
-        : selectedBackground.url
-    , [isScreenMenuOpen, applyBackground, selectedBackground])
+        ? displayApplyBackground.url
+        : mainScreenSelectedBackground.url
+    , [isScreenMenuOpen, displayApplyBackground, mainScreenSelectedBackground])
 
 
     const handleClick = () => {

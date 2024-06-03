@@ -6,13 +6,11 @@ export interface Background {
 export type BackgroundSize = 'center' | 'cover'
 
 export interface MainScreenBackgroundStore {
-    readonly backgroundList: ReadonlyArray<Background>
-    readonly selectedBackground: Background
+    readonly mainScreenBackgroundList: ReadonlyArray<Background>
+    readonly mainScreenSelectedBackground: Background
     readonly addUserBackground: (userUpload: Background) => void
-    readonly setSelectedBackground: (backgroundObj: Background) => void
+    readonly setMainScreenSelectedBackground: (backgroundObj: Background) => void
 }
 
-export interface MainScreenApplyBackgroundStore {
-    readonly applyBackground: Background
-    readonly setApplyBackground: (applyObj: Background) => void
+export interface MainScreenBackgroundSizeStore {
 }
