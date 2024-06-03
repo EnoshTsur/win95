@@ -23,10 +23,14 @@ const ScreenItem = styled.div`
     }
 
     span {
-        background: rgba(0, 0, 0, 0.6);
+        background-color: ${({ theme }) => theme.colors.windowsBg};
         color: white;
-        padding: 2px;
+        padding: 0 1px;
+        font-weight: 600;
+        letter-spacing: 1px;
     }
+
+    
 `
 
 interface MainScreenContainerProps {

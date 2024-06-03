@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { StartMenuState, ClockUpdate, DisplaySettingsState, WindowsRightClickMenu, OpenedWindowsState } from './types'
+import { StartMenuState, ClockUpdate, OpenedWindowsState } from './types'
 import { moveOpenWindowToTop, popOpenWindow } from 'utils/functions'
 
 
@@ -20,18 +20,6 @@ export const useStartMenuState = create<StartMenuState>((set) => ({
 export const useClockState = create<ClockUpdate>((set) => ({
     time: timeSupplier(),
     updateTime: () => set((pre) => ({ ...pre, time: timeSupplier() }))
-}))
-
-export const useDispaySettingsState = create<DisplaySettingsState>((set) => ({
-    isOpen: false,
-    toggleDispalySettings: () => set((pre) => ({ ...pre, isOpen: !pre.isOpen })),
-    setDisplaySettingsOpen: (open) => set((pre) => ({...pre, isOpen: open }))
-}))
-
-export const useWindowsRightClickMenuState = create<WindowsRightClickMenu>((set) => ({
-    isOpen: false,
-    closeRightMenu: () => set((pre) => ({...pre, isOpen: false })),
-    toggleRightMenu: () => set((pre) => ({...pre, isOpen: !pre.isOpen }))
 }))
 
 export const useOpenWindowState = create<OpenedWindowsState>((set) => ({

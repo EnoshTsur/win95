@@ -1,9 +1,11 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useApplyBackgroundStore, useBackgroundStore } from "components/DispalyProperties/store/store";
+import { useApplyBackgroundStore, useBackgroundStore, useDisplayPropertiesStore } from "components/DispalyProperties/store/store";
+import ScreenMenu from "components/ScreenMenu/ScreenMenu";
+import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
-import { useDispaySettingsState, useStartMenuState, useWindowsRightClickMenuState } from "store/store";
+import { useStartMenuState } from "store/store";
 import styled from "styled-components";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
@@ -15,34 +17,19 @@ const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     ${({ backgroundurl, theme }) => backgroundurl === '' && `background-color: ${theme.colors.windowsBg};`}
 `
 
-const ScreenMenu = styled.div<{ x: number, y: number }>`
-    position: absolute;
-    top: ${({ y }) => y}px;
-    left: ${({ x }) => x}px;
-    background-color: ${({ theme }) => theme.colors.menu};
-    padding: 5px;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid white;
-    border-top: 1px solid white;
-`
-const ScreenMenuItem = styled.div`
-    font-family: mslevi;
-    letter-spacing: 1px;
-    font-weight: 500;
-
-    &:hover {
-        cursor: pointer;
-        background-color: ${({ theme }) => theme.colors.buttonFace};
-    }
-`
-
 const MainScreen = () => {
     const [offset, setOffset] = useState({ x: 0,  y: 0})
+
     const { closeStartMenu } = useStartMenuState()
-    const { setDisplaySettingsOpen } = useDispaySettingsState()
-    const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
-    const { isOpen: isDisplayPropertiesOpen } = useDispaySettingsState()
+
+    const { isScreenMenuOpen, closeScreenMenu, openScreenMenu, } = useScreenMenuStore(({ 
+        isScreenMenuOpen, 
+        closeScreenMenu, 
+        openScreenMenu 
+    }) => ({ isScreenMenuOpen, closeScreenMenu, openScreenMenu}))
+
+    const { isDisplayPropertiesOpen } = useDisplayPropertiesStore(({ isDisplayPropertiesOpen }) => ({ isDisplayPropertiesOpen }))
+
 
     const { applyBackground } = useApplyBackgroundStore(({ applyBackground }) => ({ 
         applyBackground, 
@@ -54,18 +41,18 @@ const MainScreen = () => {
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? applyBackground.url
         : selectedBackground.url
-    , [isDisplayPropertiesOpen, applyBackground, selectedBackground])
+    , [isScreenMenuOpen, applyBackground, selectedBackground])
 
 
     const handleClick = () => {
         closeStartMenu()
-        closeRightMenu()
+        closeScreenMenu()
     }
 
     const handleContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault()
         setOffset({ x: e.clientX, y: e.clientY })
-        toggleRightMenu()
+        openScreenMenu()
     };
 
     return (
@@ -74,13 +61,7 @@ const MainScreen = () => {
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
 
                 {
-                    rightMenuOpen && (
-                        <ScreenMenu x={offset.x} y={offset.y} >
-                            <ScreenMenuItem onClick={() => setDisplaySettingsOpen(true)}>
-                                Dispaly Settings
-                            </ScreenMenuItem>
-                        </ScreenMenu>
-                    )
+                    isScreenMenuOpen && ( <ScreenMenu offset={offset} /> )
                 }
                 <MainScreenContainer list={screenItems} />
         </ScreenWrapper>

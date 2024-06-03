@@ -6,7 +6,12 @@ export interface Background {
 export interface WallpaperSelection {
     readonly activeSelectedIndex: number
     readonly activeSelectedChunk: number
+}
 
+export interface DisplayPropertiesStore {
+    readonly isDisplayPropertiesOpen: boolean
+    readonly openDisplayProperties: () => void
+    readonly closeDisplayProperties: () => void
 }
 
 export interface WallpaperStore {

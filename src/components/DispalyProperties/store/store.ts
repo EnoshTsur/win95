@@ -1,9 +1,15 @@
 import { create } from "zustand";
-import { BackgroundStore, WallpaperStore, Background, ApplyBackgroundStore } from "./types";
+import { BackgroundStore, WallpaperStore, Background, ApplyBackgroundStore, DisplayPropertiesStore } from "./types";
 import blackThatchUrl from '../../../assets/black-thatch-wallpaper.png'
 import blueRivetsUrl from '../../../assets/blue-rivets-wallpaper.png'
 import bubblesUrl from '../../../assets/bubbles-wallpaper.jpg'
 import cravedStonedUrl from '../../../assets/craved-stoned-wallpaper.png'
+
+export const useDisplayPropertiesStore = create<DisplayPropertiesStore>((set) => ({
+    isDisplayPropertiesOpen: false,
+    openDisplayProperties: () => set((pre) => ({ ...pre, isDisplayPropertiesOpen: true })),
+    closeDisplayProperties: () => set((pre) => ({ ...pre, isDisplayPropertiesOpen: false }))
+}))
 
 export const useWallpaperStore = create<WallpaperStore>((set) => ({
     wallpaper: { fileName: '[None]', url: ''},

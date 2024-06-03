@@ -2,10 +2,9 @@ import styled from "styled-components";
 import Computer from "./Computer/Computer";
 import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/DisplayBackgorundOptionsContainer";
 import { useCallback, useMemo } from "react";
-import { useDispaySettingsState } from "store/store";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
-import { useApplyBackgroundStore, useBackgroundStore, useWallpaperStore } from "./store/store";
+import { useApplyBackgroundStore, useBackgroundStore, useDisplayPropertiesStore, useWallpaperStore } from "./store/store";
 
 const DisplayWrapper = styled.div`
     width: 500px;
@@ -44,7 +43,7 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
 
     const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
 
-    const { setDisplaySettingsOpen } = useDispaySettingsState(({ setDisplaySettingsOpen }) => ({ setDisplaySettingsOpen }))
+    const { closeDisplayProperties } = useDisplayPropertiesStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
 
     const isApplyAllowed = useMemo(() => {
         if (applyBackground.fileName !== '[None]') {
@@ -57,10 +56,10 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
     const handleOk = useCallback(() => {
         setSelectedBackground(wallpaper)
         setApplyBackground(wallpaper)
-        setDisplaySettingsOpen(false)
+        closeDisplayProperties()
     }, [wallpaper, backgroundList])
 
-    const handleApply = useCallback(() => {          
+    const handleApply = useCallback(() => {        
         setApplyBackground(wallpaper)
     }, [wallpaper])
 

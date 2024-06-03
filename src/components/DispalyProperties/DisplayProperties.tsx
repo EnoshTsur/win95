@@ -1,29 +1,28 @@
 import Window from "components/Window/Window"
 import DisplayPropertiesContent from "./DisplayPropertiesContent"
 import { useCallback, useEffect, useMemo } from "react"
-import { useDispaySettingsState } from "store/store"
 import { ButtonProps } from "components/Button/Button"
 import { BsQuestion } from 'react-icons/bs'
 import { IoMdClose  } from "react-icons/io"
-import { useApplyBackgroundStore, useBackgroundStore, useWallpaperStore } from "./store/store"
+import { useApplyBackgroundStore, useBackgroundStore, useDisplayPropertiesStore, useWallpaperStore } from "./store/store"
 
 
 const DisplayProperties  = () => {
     
-    const { setDisplaySettingsOpen } = useDispaySettingsState()
-
     const { setApplyBackground } = useApplyBackgroundStore(({ setApplyBackground }) => ({ setApplyBackground }))
 
     const { backgroundList, selectedBackground } = useBackgroundStore(({ backgroundList, selectedBackground }) => ({ backgroundList, selectedBackground }))
 
     const { setWallpaper } = useWallpaperStore(({ setWallpaper }) => ({ setWallpaper }))
 
+    const { closeDisplayProperties } = useDisplayPropertiesStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
+
     useEffect(() => {
         setWallpaper(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])
     }, [])
     
     const handleClose = useCallback(() => {
-        setDisplaySettingsOpen(false)
+        closeDisplayProperties()
         setApplyBackground(selectedBackground)
         setWallpaper(selectedBackground)
     }, [selectedBackground])

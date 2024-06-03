@@ -1,4 +1,4 @@
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import styled from "styled-components"
 import { useWallpaperStore } from "../store/store"
 
@@ -45,6 +45,7 @@ const ComputerBorder4 = styled.div<{ wallpaperurl: string | null }>`
     height: 100px;
     background-color: ${({ theme }) => theme.colors.windowsBg};
     background-image: ${({ wallpaperurl }) => wallpaperurl !== '' ? `url(${wallpaperurl})` : 'none'};
+    background-size: cover;
     border-left: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-top: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-right: 2px solid ${({ theme }) => theme.colors.white};
@@ -120,6 +121,11 @@ const Computer = () => {
     const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
 
     const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
+
+    useEffect(() => {
+        console.log('Computer', { wallpaper, wallpaperUrl});
+        
+    }, [wallpaper, wallpaperUrl])
 
     return (
         <ComputerWrapper>

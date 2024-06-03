@@ -9,18 +9,6 @@ export interface ClockUpdate {
     readonly updateTime: () => void
 }
 
-export interface DisplaySettingsState {
-    readonly isOpen: boolean
-    readonly setDisplaySettingsOpen: (open: boolean) => void
-    readonly toggleDispalySettings: () => void
-}
-
-export interface WindowsRightClickMenu {
-    readonly isOpen: boolean,
-    readonly closeRightMenu: () => void
-    readonly toggleRightMenu: () => void
-}
-
 export interface OpenWindow {
     readonly id: string
     readonly zIndex: number;
