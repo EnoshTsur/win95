@@ -3,10 +3,10 @@ import DisplayBackgorundOptionsItem from "./DisplayBackgorundOptionsItem"
 import Button from "components/Button/Button"
 import Underline from "components/Underline/Underline"
 import {  useCallback, useEffect, useMemo, useState } from "react"
-import { useBackgroundState } from "store/store"
 import BrowseImage from "components/BrowseImage/BrowseImage"
-import { Background } from "store/types"
 import Select from "components/Select/Select"
+import { useBackgroundStore, useWallpaperStore } from "../store/store"
+import { Background } from "../store/types"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -55,30 +55,26 @@ const DisplayBackgorundOptionsContainer = () => {
         selectedPatternChunkIndex: 0
     })
 
-    const { 
-        addUserBackground, 
-        backgroundList, 
-        setWallpaper, 
-        setWallpaperSelection, 
-        setWallpaperActiveIndex,
-        wallpaper, 
-        wallpaperSelection 
-    } = useBackgroundState(({ 
-        addUserBackground, 
-        backgroundList, 
-        setWallpaper,
-        setWallpaperSelection,
-        setWallpaperActiveIndex,
+    const { backgroundList, addUserBackground } = useBackgroundStore(({ backgroundList, addUserBackground }) => ({ backgroundList, addUserBackground}))
+
+    const {
         wallpaper,
         wallpaperSelection,
-    }) => ({ 
-        addUserBackground,
-        backgroundList, 
         setWallpaper,
-        setWallpaperSelection,
         setWallpaperActiveIndex,
+        setWallpaperSelection,
+    } = useWallpaperStore(({
+        wallpaper, 
+        wallpaperSelection, 
+        setWallpaper,
+        setWallpaperActiveIndex, 
+        setWallpaperSelection 
+    }) => ({
         wallpaper,
-        wallpaperSelection
+        wallpaperSelection,
+        setWallpaper,
+        setWallpaperActiveIndex,
+        setWallpaperSelection
     }))
 
     const selectWallpaperList = useMemo(() => backgroundList.map(({ fileName }) => fileName ), [backgroundList])

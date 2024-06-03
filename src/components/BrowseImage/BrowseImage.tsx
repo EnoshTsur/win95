@@ -1,9 +1,9 @@
 import Alert from "components/Alert/Alert";
 import { ButtonProps } from "components/Button/Button";
+import { Background } from "components/DispalyProperties/store/types";
 import PanelButton from "components/PanelButton/PanelButton";
 import { useMemo, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { Background } from "store/types";
 import styled from "styled-components";
 import { playErrorSound } from "utils/functions";
 

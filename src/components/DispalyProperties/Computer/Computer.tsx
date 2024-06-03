@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import styled from "styled-components"
-import { useBackgroundState } from "store/store"
+import { useWallpaperStore } from "../store/store"
 
 
 const ComputerWrapper = styled.div`
@@ -117,7 +117,7 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { wallpaper } = useBackgroundState(({ wallpaper }) => ({ wallpaper }))
+    const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
 
     const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
 

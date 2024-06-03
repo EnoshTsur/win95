@@ -58,7 +58,7 @@ const ScrollIndicator = styled.div<{ indicatorsize: number, indicatorposition: s
     transition: top 400ms cubic-bezier(0.49, 0.19, 0.48, 1.05);
     left: 0;
     top: ${({ indicatorposition }) => indicatorposition};
-    background-color: ${({ theme }) => theme.colors.menu};
+    background-color: #aeaeae;
     border-left: 1px solid ${({ theme }) => theme.colors.white};
     border-top: 1px solid ${({ theme }) => theme.colors.white};
     border-bottom: 1px solid ${({ theme }) => theme.colors.buttonShadow};

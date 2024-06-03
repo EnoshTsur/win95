@@ -1,8 +1,9 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
+import { useApplyBackgroundStore, useBackgroundStore } from "components/DispalyProperties/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
-import { useBackgroundState, useDispaySettingsState, useStartMenuState, useWindowsRightClickMenuState } from "store/store";
+import { useDispaySettingsState, useStartMenuState, useWindowsRightClickMenuState } from "store/store";
 import styled from "styled-components";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
@@ -43,10 +44,11 @@ const MainScreen = () => {
     const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
     const { isOpen: isDisplayPropertiesOpen } = useDispaySettingsState()
 
-    const { selectedBackground, applyBackground } = useBackgroundState(({ applyBackground, selectedBackground }) => ({ 
+    const { applyBackground } = useApplyBackgroundStore(({ applyBackground }) => ({ 
         applyBackground, 
-        selectedBackground
     }))
+
+    const { selectedBackground } = useBackgroundStore(({ selectedBackground }) => ({ selectedBackground }))
 
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 

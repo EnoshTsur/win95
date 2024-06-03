@@ -2,9 +2,10 @@ import styled from "styled-components";
 import Computer from "./Computer/Computer";
 import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/DisplayBackgorundOptionsContainer";
 import { useCallback, useMemo } from "react";
-import { useBackgroundState, useDispaySettingsState } from "store/store";
+import { useDispaySettingsState } from "store/store";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
+import { useApplyBackgroundStore, useBackgroundStore, useWallpaperStore } from "./store/store";
 
 const DisplayWrapper = styled.div`
     width: 500px;
@@ -30,25 +31,20 @@ interface DisplayAlertContentProps {
 
 const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => {
 
-    const { applyBackground, backgroundList, setApplyBackground, setSelectedBackground, setWallpaperSelection, selectedBackground, wallpaper } = useBackgroundState(({ 
+    const { applyBackground, setApplyBackground } = useApplyBackgroundStore(({ applyBackground, setApplyBackground }) => ({ 
         applyBackground, 
-        backgroundList,
         setApplyBackground,
-        setSelectedBackground,
-        setWallpaperSelection,
-        selectedBackground, 
-        wallpaper,
-    }) => ({ 
-        applyBackground, 
-        backgroundList,
-        setApplyBackground,
-        setSelectedBackground,
-        setWallpaperSelection,
-        selectedBackground, 
-        wallpaper, 
     }))
 
-    const { setDisplaySettingsOpen } = useDispaySettingsState()
+    const {backgroundList, selectedBackground, setSelectedBackground} = useBackgroundStore(({ backgroundList, selectedBackground, setSelectedBackground }) => ({
+        backgroundList,
+        selectedBackground,
+        setSelectedBackground
+    }))
+
+    const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
+
+    const { setDisplaySettingsOpen } = useDispaySettingsState(({ setDisplaySettingsOpen }) => ({ setDisplaySettingsOpen }))
 
     const isApplyAllowed = useMemo(() => {
         if (applyBackground.fileName !== '[None]') {

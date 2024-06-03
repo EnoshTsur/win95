@@ -1,9 +1,5 @@
 import { create } from 'zustand'
-import { StartMenuState, ClockUpdate, BackgroundState, DisplaySettingsState, WindowsRightClickMenu, OpenedWindowsState } from './types'
-import blackThatchUrl from '../assets/black-thatch-wallpaper.png'
-import blueRivetsUrl from '../assets/blue-rivets-wallpaper.png'
-import bubblesUrl from '../assets/bubbles-wallpaper.jpg'
-import cravedStonedUrl from '../assets/craved-stoned-wallpaper.png'
+import { StartMenuState, ClockUpdate, DisplaySettingsState, WindowsRightClickMenu, OpenedWindowsState } from './types'
 import { moveOpenWindowToTop, popOpenWindow } from 'utils/functions'
 
 
@@ -24,32 +20,6 @@ export const useStartMenuState = create<StartMenuState>((set) => ({
 export const useClockState = create<ClockUpdate>((set) => ({
     time: timeSupplier(),
     updateTime: () => set((pre) => ({ ...pre, time: timeSupplier() }))
-}))
-
-export const useBackgroundState = create<BackgroundState>((set) => ({
-    applyBackground: { fileName: '[None]', url: ''},
-    backgroundList: [
-        { fileName: '[None]', url: ''},
-        { fileName: 'Black Thatch', url: blackThatchUrl },
-        { fileName: 'Blue Rivets', url: blueRivetsUrl }, 
-        { fileName: 'Bubbles', url: bubblesUrl },
-        { fileName: 'Carved Stoned', url: cravedStonedUrl }
-    ],
-    selectedBackground: { fileName: '[None]', url: ''},
-    wallpaper: { fileName: '[None]', url: ''},
-    wallpaperSelection: { activeSelectedIndex: 0, activeSelectedChunk: 0 },
-    addUserBackground: (userUpload) => set((pre) => pre.backgroundList
-        .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
-            ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
-            : pre
-    ),
-    setApplyBackground: (applyObj) => set((pre) => ({ ...pre, applyBackground: applyObj })),
-    setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj })), 
-    setWallpaper: (wallpaper) =>  set((pre) => ({...pre, wallpaper })),
-    setWallpaperSelection: (selection) => set((pre) => ({ ...pre, wallpaperSelection: selection })),
-    setWallpaperActiveIndex: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedIndex: index }})),
-    setWallpaperActiveChunk: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedChunk: index }})),
-
 }))
 
 export const useDispaySettingsState = create<DisplaySettingsState>((set) => ({
