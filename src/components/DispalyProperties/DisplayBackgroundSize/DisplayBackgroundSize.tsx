@@ -1,7 +1,7 @@
+import { BackgroundSize } from "components/MainScreen/store/types";
 import Underline from "components/Underline/Underline";
-import { SetStateAction, useCallback, useState } from "react";
+import { SetStateAction } from "react";
 import styled from "styled-components";
-import { BackgroundSize } from "../store/types";
 
 const BackgroundSizeWrapper = styled.div`
     display: flex;

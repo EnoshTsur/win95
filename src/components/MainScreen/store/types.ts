@@ -3,6 +3,8 @@ export interface Background {
     readonly url: string
 }
 
+export type BackgroundSize = 'center' | 'cover'
+
 export interface MainScreenBackgroundStore {
     readonly backgroundList: ReadonlyArray<Background>
     readonly selectedBackground: Background

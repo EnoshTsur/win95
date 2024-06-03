@@ -2,8 +2,7 @@ import Underline from "components/Underline/Underline"
 import { useMemo } from "react"
 import { useStartMenuState } from "store/store"
 import styled from "styled-components"
-import { useScreenMenuStore } from "./store/store"
-import { useDisplayPropertiesStore } from "components/DispalyProperties/store/store"
+import { useDisplayModalStore } from "components/DispalyProperties/store/store"
 
 const ScreenMenuWrapper = styled.div<{ x: number, y: number }>`
     position: absolute;
@@ -48,7 +47,7 @@ interface ScreenItemProps {
 
 const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
 
-    const { openDisplayProperties } = useDisplayPropertiesStore(({ openDisplayProperties }) => ({ openDisplayProperties }))
+    const { openDisplayProperties } = useDisplayModalStore(({ openDisplayProperties }) => ({ openDisplayProperties }))
     const { closeStartMenu } = useStartMenuState()
 
     const items = useMemo(() => [

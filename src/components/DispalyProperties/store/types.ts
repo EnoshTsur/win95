@@ -1,31 +1,26 @@
-export interface Background {
-    readonly fileName: string
-    readonly url: string
-}
+import { Background, BackgroundSize } from "components/MainScreen/store/types"
 
-export interface WallpaperSelection {
+export interface DisplayBackgroundSelection {
     readonly activeSelectedIndex: number
     readonly activeSelectedChunk: number
 }
 
-export interface DisplayPropertiesStore {
+export interface DisplayModalStore {
     readonly isDisplayPropertiesOpen: boolean
     readonly openDisplayProperties: () => void
     readonly closeDisplayProperties: () => void
 }
 
-export interface WallpaperStore {
-    readonly wallpaper: Background
-    readonly wallpaperSelection:  WallpaperSelection
-    readonly setWallpaper: (wallpaper: Background) => void
-    readonly setWallpaperSelection: (selection: WallpaperSelection) => void
-    readonly setWallpaperActiveIndex: (index: number) => void
-    readonly setWallpaperActiveChunk: (index: number) => void
+export interface DisplayBackgroundStore {
+    readonly displayBackground: Background
+    readonly displayBackgroundSelection:  DisplayBackgroundSelection
+    readonly setDisplayBackground: (displayBackground: Background) => void
+    readonly setDisplayBackgroundSelection: (selection: DisplayBackgroundSelection) => void
+    readonly setDisplayBackgroundActiveIndex: (index: number) => void
+    readonly setDisplayBackgroundActiveChunk: (index: number) => void
 }
 
-export type BackgroundSize = 'cover' | 'center'
-
-export interface BackgroundSizeStore {
-    readonly backgroundSize: BackgroundSize
-    readonly setBackgroundSize: (backgroundSize: BackgroundSize) => void
+export interface DisplayBackgroundSizeStore {
+    readonly displayBackgroundSize: BackgroundSize
+    readonly setDisplayBackgroundSize: (backgroundSize: BackgroundSize) => void
 }

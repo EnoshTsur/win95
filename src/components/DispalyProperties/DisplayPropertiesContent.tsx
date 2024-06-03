@@ -4,8 +4,8 @@ import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/Displa
 import { useCallback, useMemo } from "react";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
-import { useDisplayPropertiesStore, useWallpaperStore } from "./store/store";
 import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "components/MainScreen/store/store";
+import { useDisplayBackgroundStore, useDisplayModalStore } from "./store/store";
 
 const DisplayWrapper = styled.div`
     width: 500px;
@@ -46,27 +46,27 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
         setSelectedBackground
     }))
 
-    const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
+    const { displayBackground } = useDisplayBackgroundStore(({ displayBackground }) => ({ displayBackground }))
 
-    const { closeDisplayProperties } = useDisplayPropertiesStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
+    const { closeDisplayProperties } = useDisplayModalStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
 
     const isApplyAllowed = useMemo(() => {
         if (applyBackground.fileName !== '[None]') {
-            return applyBackground.fileName !== wallpaper.fileName
+            return applyBackground.fileName !== displayBackground.fileName
         }
-        return wallpaper.fileName != selectedBackground.fileName
-    }, [applyBackground, wallpaper, selectedBackground])
+        return displayBackground.fileName != selectedBackground.fileName
+    }, [applyBackground, displayBackground, selectedBackground])
 
 
     const handleOk = useCallback(() => {
-        setSelectedBackground(wallpaper)
-        setApplyBackground(wallpaper)
+        setSelectedBackground(displayBackground)
+        setApplyBackground(displayBackground)
         closeDisplayProperties()
-    }, [wallpaper, backgroundList])
+    }, [displayBackground, backgroundList])
 
     const handleApply = useCallback(() => {        
-        setApplyBackground(wallpaper)
-    }, [wallpaper])
+        setApplyBackground(displayBackground)
+    }, [displayBackground])
 
     const buttonsData = useMemo(() => [
         {
@@ -82,7 +82,7 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
             onClick: handleApply,
             disabled: !isApplyAllowed
         }
-    ], [isApplyAllowed, wallpaper])
+    ], [isApplyAllowed, displayBackground])
 
     return (
             <DisplayWrapper>

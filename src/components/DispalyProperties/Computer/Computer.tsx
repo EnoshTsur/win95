@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import styled from "styled-components"
-import { useWallpaperStore } from "../store/store"
-
+import { useDisplayBackgroundStore } from "../store/store"
 
 const ComputerWrapper = styled.div`
     display: flex;
@@ -40,11 +39,11 @@ const ComputerBorder3 = styled.div`
     border-right: 3px dashed #b0b0b0;
 `
 
-const ComputerBorder4 = styled.div<{ wallpaperurl: string | null }>`
+const ComputerBorder4 = styled.div<{ backgroundurl: string | null }>`
     width: 150px;
     height: 100px;
     background-color: ${({ theme }) => theme.colors.windowsBg};
-    background-image: ${({ wallpaperurl }) => wallpaperurl !== '' ? `url(${wallpaperurl})` : 'none'};
+    background-image: ${({ backgroundurl }) => backgroundurl !== '' ? `url(${backgroundurl})` : 'none'};
     background-size: cover;
     border-left: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-top: 2px solid ${({ theme }) => theme.colors.buttonShadow};
@@ -118,16 +117,16 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { wallpaper } = useWallpaperStore(({ wallpaper }) => ({ wallpaper }))
+    const { displayBackground } = useDisplayBackgroundStore(({ displayBackground }) => ({ displayBackground }))
 
-    const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
+    const backgroundUrl = useMemo(() => displayBackground.url, [displayBackground]);
 
     return (
         <ComputerWrapper>
             <ComputerBorder1>
                 <ComputerBorder2>
                     <ComputerBorder3>
-                        <ComputerBorder4 wallpaperurl={wallpaperUrl}/>
+                        <ComputerBorder4 backgroundurl={backgroundUrl}/>
                     </ComputerBorder3>
                 </ComputerBorder2>
             </ComputerBorder1>

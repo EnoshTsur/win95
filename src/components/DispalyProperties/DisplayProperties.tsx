@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo } from "react"
 import { ButtonProps } from "components/Button/Button"
 import { BsQuestion } from 'react-icons/bs'
 import { IoMdClose  } from "react-icons/io"
-import { useDisplayPropertiesStore, useWallpaperStore } from "./store/store"
 import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "components/MainScreen/store/store"
+import { useDisplayBackgroundStore, useDisplayModalStore } from "./store/store"
 
 
 const DisplayProperties  = () => {
@@ -17,18 +17,18 @@ const DisplayProperties  = () => {
         selectedBackground 
     }))
 
-    const { setWallpaper } = useWallpaperStore(({ setWallpaper }) => ({ setWallpaper }))
+    const { setDisplayBackground } = useDisplayBackgroundStore(({ setDisplayBackground }) => ({ setDisplayBackground }))
 
-    const { closeDisplayProperties } = useDisplayPropertiesStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
+    const { closeDisplayProperties } = useDisplayModalStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
 
     useEffect(() => {
-        setWallpaper(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])
+        setDisplayBackground(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])
     }, [])
     
     const handleClose = useCallback(() => {
         closeDisplayProperties()
         setApplyBackground(selectedBackground)
-        setWallpaper(selectedBackground)
+        setDisplayBackground(selectedBackground)
     }, [selectedBackground])
 
     const displayAlertButtons: ReadonlyArray<ButtonProps> = useMemo(() => [

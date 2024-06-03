@@ -1,22 +1,28 @@
 import { create } from "zustand";
-import { WallpaperStore, DisplayPropertiesStore, BackgroundSizeStore } from "./types";
+import { DisplayBackgroundSizeStore, DisplayBackgroundStore, DisplayModalStore } from "./types";
 
-export const useDisplayPropertiesStore = create<DisplayPropertiesStore>((set) => ({
+export const useDisplayModalStore = create<DisplayModalStore>((set) => ({
     isDisplayPropertiesOpen: false,
     openDisplayProperties: () => set((pre) => ({ ...pre, isDisplayPropertiesOpen: true })),
     closeDisplayProperties: () => set((pre) => ({ ...pre, isDisplayPropertiesOpen: false }))
 }))
 
-export const useWallpaperStore = create<WallpaperStore>((set) => ({
-    wallpaper: { fileName: '[None]', url: ''},
-    wallpaperSelection: { activeSelectedIndex: 0, activeSelectedChunk: 0 },
-    setWallpaper: (wallpaper) =>  set((pre) => ({...pre, wallpaper })),
-    setWallpaperSelection: (selection) => set((pre) => ({ ...pre, wallpaperSelection: selection })),
-    setWallpaperActiveIndex: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedIndex: index }})),
-    setWallpaperActiveChunk: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedChunk: index }})),
+export const useDisplayBackgroundStore = create<DisplayBackgroundStore>((set) => ({
+    displayBackground: { fileName: '[None]', url: ''},
+    displayBackgroundSelection: { activeSelectedIndex: 0, activeSelectedChunk: 0 },
+    setDisplayBackground: (displayBackground) =>  set((pre) => ({...pre, displayBackground })),
+    setDisplayBackgroundSelection: (selection) => set((pre) => ({ ...pre, displayBackgroundSelection: selection })),
+    setDisplayBackgroundActiveIndex: (index) => set((pre) => ({
+        ...pre, 
+        displayBackgroundSelection: { ...pre.displayBackgroundSelection, activeSelectedIndex: index }
+    })),
+    setDisplayBackgroundActiveChunk: (index) => set((pre) => ({
+        ...pre, 
+        wallpaperSelection: { ...pre.displayBackgroundSelection, activeSelectedChunk: index }
+    })),
 }))
 
-export const useBackgroundSizeStore = create<BackgroundSizeStore>((set) => ({
-    backgroundSize: 'cover',
-    setBackgroundSize: (backgroundSize) => set((pre) => ({...pre, backgroundSize }))
+export const useDisplayBackgroundSizeStore = create<DisplayBackgroundSizeStore>((set) => ({
+    displayBackgroundSize: 'cover',
+    setDisplayBackgroundSize: (backgroundSize) => set((pre) => ({...pre, displayBackgroundSize: backgroundSize }))
 }))

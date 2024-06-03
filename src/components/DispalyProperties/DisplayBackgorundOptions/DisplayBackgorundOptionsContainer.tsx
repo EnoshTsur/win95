@@ -5,10 +5,10 @@ import Underline from "components/Underline/Underline"
 import {  useCallback, useEffect, useMemo, useState } from "react"
 import BrowseImage from "components/BrowseImage/BrowseImage"
 import Select from "components/Select/Select"
-import { useBackgroundSizeStore, useWallpaperStore } from "../store/store"
-import { Background } from "../store/types"
 import DisplayBackgroundSize from "../DisplayBackgroundSize/DisplayBackgroundSize"
 import { useMainScreenBackgroundStore } from "components/MainScreen/store/store"
+import { useDisplayBackgroundSizeStore, useDisplayBackgroundStore } from "../store/store"
+import { Background } from "components/MainScreen/store/types"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -57,39 +57,39 @@ const DisplayBackgorundOptionsContainer = () => {
         selectedPatternChunkIndex: 0
     })
 
-    const { backgroundSize } = useBackgroundSizeStore(({ backgroundSize }) => ({ backgroundSize }))
+    const { displayBackgroundSize } = useDisplayBackgroundSizeStore(({ displayBackgroundSize }) => ({ displayBackgroundSize }))
 
-    const [wallpaperBackgroundSize, setWallpaperBackgroundSize ] = useState(backgroundSize)
+    const [wallpaperBackgroundSize, setWallpaperBackgroundSize ] = useState(displayBackgroundSize)
 
     const { backgroundList, addUserBackground } = useMainScreenBackgroundStore(({ backgroundList, addUserBackground }) => ({ 
         backgroundList, 
         addUserBackground
     }))
 
-    const {
-        wallpaper,
-        wallpaperSelection,
-        setWallpaper,
-        setWallpaperActiveIndex,
-        setWallpaperSelection,
-    } = useWallpaperStore(({
-        wallpaper, 
-        wallpaperSelection, 
-        setWallpaper,
-        setWallpaperActiveIndex, 
-        setWallpaperSelection 
+    const { 
+        displayBackground,
+        displayBackgroundSelection,
+        setDisplayBackground,
+        setDisplayBackgroundActiveIndex,
+        setDisplayBackgroundSelection,
+    } = useDisplayBackgroundStore(({ 
+        displayBackground,
+        displayBackgroundSelection,
+        setDisplayBackground,
+        setDisplayBackgroundActiveIndex,
+        setDisplayBackgroundSelection,
     }) => ({
-        wallpaper,
-        wallpaperSelection,
-        setWallpaper,
-        setWallpaperActiveIndex,
-        setWallpaperSelection
+        displayBackground,
+        displayBackgroundSelection,
+        setDisplayBackground,
+        setDisplayBackgroundActiveIndex,
+        setDisplayBackgroundSelection
     }))
 
     const selectWallpaperList = useMemo(() => backgroundList.map(({ fileName }) => fileName ), [backgroundList])
 
     const computeWallpaperSelection = useCallback(() => {
-        const flatternIndex = backgroundList.findIndex(({ fileName }) => fileName  === wallpaper.fileName)
+        const flatternIndex = backgroundList.findIndex(({ fileName }) => fileName  === displayBackground.fileName)
         const chunkIndex = Math.floor(flatternIndex / 5)
         const itemIndex = flatternIndex % 5
         return { activeSelectedChunk: chunkIndex, activeSelectedIndex: itemIndex }
@@ -97,32 +97,32 @@ const DisplayBackgorundOptionsContainer = () => {
     
     useEffect(() => {
        const activeSelection = computeWallpaperSelection()
-       setWallpaperSelection(activeSelection)
+       setDisplayBackgroundSelection(activeSelection)
     }, [])
 
 
     const handleImageAdditoin = useCallback((image: Background) => {
         addUserBackground(image)
-        setWallpaper(image)
-        setWallpaperSelection({ activeSelectedChunk: 0, activeSelectedIndex: 1})
-    }, [backgroundList, wallpaper])
+        setDisplayBackground(image)
+        setDisplayBackgroundSelection({ activeSelectedChunk: 0, activeSelectedIndex: 1})
+    }, [backgroundList, displayBackground])
 
 
     const handleWallpaperSelectedIndex = useCallback((index: number) => {
-        const flatternIndex = wallpaperSelection.activeSelectedChunk * 5 + index
-        setWallpaper(backgroundList[flatternIndex])
-        setWallpaperActiveIndex(index)
+        const flatternIndex = displayBackgroundSelection.activeSelectedChunk * 5 + index
+        setDisplayBackground(backgroundList[flatternIndex])
+        setDisplayBackgroundActiveIndex(index)
 
-    }, [backgroundList, wallpaper, wallpaperSelection, selectWallpaperList])
+    }, [backgroundList, displayBackground, displayBackgroundSelection, selectWallpaperList])
 
 
     const handleWallpaperSelectedChunk = useCallback((index: number) => {
-        const itemIndex = index > wallpaperSelection.activeSelectedChunk ? 0 : 4
+        const itemIndex = index > displayBackgroundSelection.activeSelectedChunk ? 0 : 4
         const flatternIndex = index * 5 + itemIndex
-        setWallpaper(backgroundList[flatternIndex])
-        setWallpaperSelection(({ activeSelectedIndex: itemIndex, activeSelectedChunk: index }))
+        setDisplayBackground(backgroundList[flatternIndex])
+        setDisplayBackgroundSelection(({ activeSelectedIndex: itemIndex, activeSelectedChunk: index }))
 
-    }, [backgroundList, wallpaper, wallpaperSelection, selectWallpaperList])
+    }, [backgroundList, displayBackground, displayBackgroundSelection, selectWallpaperList])
 
     const handlePatternSelectedIndex = useCallback((index: number) => {
         setSelectedPatternIndexes((pre) => ({ ...pre, selectedPatternItemIndex: index }))
@@ -156,8 +156,8 @@ const DisplayBackgorundOptionsContainer = () => {
                     tabIndex={2}
                     selectData={selectWallpaperList} 
                     chunkSize={5}
-                    selectedChunkIndex={wallpaperSelection.activeSelectedChunk}
-                    selectedItemIndex={wallpaperSelection.activeSelectedIndex}
+                    selectedChunkIndex={displayBackgroundSelection.activeSelectedChunk}
+                    selectedItemIndex={displayBackgroundSelection.activeSelectedIndex}
                     onChunkChange={handleWallpaperSelectedChunk}
                     onItemChange={handleWallpaperSelectedIndex}
                 />

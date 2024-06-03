@@ -1,5 +1,5 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useDisplayPropertiesStore } from "components/DispalyProperties/store/store";
+import { useDisplayModalStore } from "components/DispalyProperties/store/store";
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
@@ -29,7 +29,7 @@ const MainScreen = () => {
         openScreenMenu 
     }) => ({ isScreenMenuOpen, closeScreenMenu, openScreenMenu}))
 
-    const { isDisplayPropertiesOpen } = useDisplayPropertiesStore(({ isDisplayPropertiesOpen }) => ({ isDisplayPropertiesOpen }))
+    const { isDisplayPropertiesOpen } = useDisplayModalStore(({ isDisplayPropertiesOpen }) => ({ isDisplayPropertiesOpen }))
 
 
     const { applyBackground } = useMainScreenApplyBackgroundStore(({ applyBackground }) => ({ 
