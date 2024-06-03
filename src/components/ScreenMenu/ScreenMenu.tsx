@@ -3,6 +3,7 @@ import { useMemo } from "react"
 import { useStartMenuState } from "store/store"
 import styled from "styled-components"
 import { useDisplayModalStore } from "components/DispalyProperties/store/store"
+import { FaCaretRight } from "react-icons/fa"
 
 const ScreenMenuWrapper = styled.div<{ x: number, y: number }>`
     position: absolute;
@@ -34,8 +35,19 @@ const ScreenMenuItem = styled.button`
     font-size: 16px;
     background: transparent;
     border: none;
+
     &:hover {
         cursor: pointer;
+        color: ${({ disabled, theme }) => disabled ? theme.colors.buttonFace :  'white' };
+    }
+    
+`
+
+const ScreenMenuItemWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &:hover {
         color: white;
         background-color: ${({ theme }) => theme.colors.alertTitleBar};
     }
@@ -54,13 +66,13 @@ const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
         [
             { 
                 children: <>Arrange <Underline>I</Underline>cons</>,
-                hasCarret: true,
+                hasCaret: true,
                 disabled: false,
                 onClick: () => {},
             },
             { 
                 children: <>Lin<Underline>e</Underline> up Icons</>,
-                hasCarret: false,
+                hasCaret: false,
                 disabled: false,
                 onClick: () => {},
             },
@@ -68,13 +80,13 @@ const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
         [
             { 
                 children: <><Underline color="light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))">P</Underline>aste</>,
-                hasCarret: false,
+                hasCaret: false,
                 disabled: true,
                 onClick: () => {},
             },
             { 
                 children: <>Paste <Underline color="light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))">S</Underline>hortcut</>,
-                hasCarret: false,
+                hasCaret: false,
                 disabled: true,
                 onClick: () => {},
             },
@@ -82,7 +94,7 @@ const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
         [
             { 
                 children: <>Ne<Underline>w</Underline></>,
-                hasCarret: true,
+                hasCaret: true,
                 disabled: false,
                 onClick: () => {},
             }, 
@@ -90,7 +102,7 @@ const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
         [
             { 
                 children: <>P<Underline>r</Underline>operties</>,
-                hasCarret: false,
+                hasCaret: false,
                 disabled: false,
                 onClick: () => {
                     openDisplayProperties()
@@ -104,10 +116,13 @@ const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
         <ScreenMenuWrapper x={x} y={y} >
             { items.map((row, rowIndex) => (
                 <ScreenMenuItemsContainer key={`menuscreen${row.length}${rowIndex}`} hasbordertop={rowIndex !== 0} hasborderbottom={rowIndex !== items.length - 1}>
-                    { row.map(({ children, hasCarret, disabled, onClick }, colIndex) => (
-                        <ScreenMenuItem key={`menuscreenitem${children}${colIndex}`} onClick={onClick} disabled={disabled}>
-                            { children }
-                        </ScreenMenuItem>
+                    { row.map(({ children, hasCaret, disabled, onClick }, colIndex) => (
+                        <ScreenMenuItemWrapper key={`memuscreenitem${children}${colIndex}`} >
+                            <ScreenMenuItem onClick={onClick} disabled={disabled}>
+                                { children }
+                            </ScreenMenuItem>
+                            { hasCaret && <FaCaretRight /> }
+                        </ScreenMenuItemWrapper>
                     ))}
                 </ScreenMenuItemsContainer>
             ))}

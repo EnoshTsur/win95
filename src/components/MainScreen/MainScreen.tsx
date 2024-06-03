@@ -3,11 +3,10 @@ import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplay
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
-import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
-import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
+import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore, useMainScreenItemsStore } from "./store/store";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
@@ -21,6 +20,8 @@ const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string
 
 const MainScreen = () => {
     const [offset, setOffset] = useState({ x: 0,  y: 0})
+
+    const { setMainScreenActiveItem } = useMainScreenItemsStore(({ setMainScreenActiveItem }) => ({ setMainScreenActiveItem }))
 
     const { closeStartMenu } = useStartMenuState()
 
@@ -73,7 +74,7 @@ const MainScreen = () => {
                 {
                     isScreenMenuOpen && ( <ScreenMenu offset={offset} /> )
                 }
-                <MainScreenContainer list={screenItems} />
+                <MainScreenContainer />
         </ScreenWrapper>
     )
 }

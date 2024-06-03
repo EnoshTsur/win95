@@ -1,15 +1,16 @@
+import { useMainScreenItemsStore } from "components/MainScreen/store/store";
+import { useCallback } from "react";
 import styled from "styled-components";
 
 const MainScreenWrapper = styled.div`
-    display: flex;
-    gap: 10px;
+    padding: 0 2px;
+    display: grid;
+    grid-auto-columns: max-content;
 `
 
-const ScreenItem = styled.div`
+const ScreenItem = styled.div<{ isactive: boolean }>`
     display: flex;
     flex-direction: column;
-    padding: 5px;
-    gap: 3px;
     text-align: center;
     align-items: center;
     font-family: mslevi;
@@ -19,33 +20,46 @@ const ScreenItem = styled.div`
     }
 
     img {
-        width: 3rem;
+        width: 80px;
     }
+
 
     span {
-        background-color: ${({ theme }) => theme.colors.windowsBg};
+        border: ${({ theme, isactive }) => isactive ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
+        background-color: ${({ theme, isactive }) => isactive ? theme.colors.alertTitleBar : theme.colors.windowsBg};
         color: white;
-        padding: 0 1px;
-        font-weight: 600;
         letter-spacing: 1px;
+        max-width: 6rem;
     }
-
-    
 `
 
-interface MainScreenContainerProps {
-    readonly list: ReadonlyArray<{
-        label: string,
-        icon: string,
-    }>
-}
+const MainScreenContainer = () => {
 
-const MainScreenContainer = ({ list }: MainScreenContainerProps) => {
+    const { mainScreenItems, mainScreenActiveItem, setMainScreenActiveItem } = useMainScreenItemsStore(({ 
+        mainScreenItems, 
+        mainScreenActiveItem, 
+        setMainScreenActiveItem 
+    }) => ({ 
+        mainScreenItems, 
+        mainScreenActiveItem,
+        setMainScreenActiveItem 
+    }))
+    
+    const handleClick = (index: number) => {
+        setMainScreenActiveItem(mainScreenActiveItem === index ? -1 : index)
+    }
+
+    const isActiveItem = useCallback((index: number) => mainScreenActiveItem === index, [mainScreenActiveItem])
+
+
     return (
         <MainScreenWrapper>
-            {list.map(({ label, icon }) => (
-                <ScreenItem key={label+icon}>
-                    <img src={icon} />
+            {mainScreenItems.map(({ label, icon, onClick }, index) => (
+                <ScreenItem key={label+icon} isactive={isActiveItem(index)} onClick={(e) => {
+                    onClick(e)
+                    handleClick(index)
+                }}>
+                    <img src={isActiveItem(index) ? icon.activeIcon : icon.icon} alt={label} />
                     <span>{label}</span>
                 </ScreenItem>
             ) )}
