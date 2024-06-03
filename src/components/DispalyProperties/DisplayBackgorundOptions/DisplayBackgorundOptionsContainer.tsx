@@ -95,11 +95,12 @@ const DisplayBackgorundOptionsContainer = () => {
     const handleImageAdditoin = useCallback((image: Background) => {
         addUserBackground(image)
         setWallpaper(image)
-        setWallpaperSelection({ activeSelectedChunk: 0, activeSelectedIndex: 0})
+        setWallpaperSelection({ activeSelectedChunk: 0, activeSelectedIndex: 1})
     }, [backgroundList, wallpaper])
 
 
     const handleWallpaperSelectedIndex = useCallback((index: number) => {
+        debugger
         const flatternIndex = wallpaperSelection.activeSelectedChunk * 5 + index
         setWallpaper(backgroundList[flatternIndex])
         setWallpaperActiveIndex(index)
@@ -108,6 +109,7 @@ const DisplayBackgorundOptionsContainer = () => {
 
 
     const handleWallpaperSelectedChunk = useCallback((index: number) => {
+        debugger
         const itemIndex = index > wallpaperSelection.activeSelectedChunk ? 0 : 4
         const flatternIndex = index * 5 + itemIndex
         setWallpaper(backgroundList[flatternIndex])

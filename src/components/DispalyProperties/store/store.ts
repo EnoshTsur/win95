@@ -33,7 +33,7 @@ export const useBackgroundStore = create<BackgroundStore>((set) => ({
     selectedBackground: initialBackgroundList[0],
     addUserBackground: (userUpload) => set((pre) => pre.backgroundList
         .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
-            ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
+            ? ({...pre, backgroundList: [ ...pre.backgroundList.slice(0, 1), userUpload, ...pre.backgroundList.slice(1)]})
             : pre
     ),
     setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj }))

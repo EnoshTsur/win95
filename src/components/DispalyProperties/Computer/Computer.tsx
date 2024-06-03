@@ -122,11 +122,6 @@ const Computer = () => {
 
     const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
 
-    useEffect(() => {
-        console.log('Computer', { wallpaper, wallpaperUrl});
-        
-    }, [wallpaper, wallpaperUrl])
-
     return (
         <ComputerWrapper>
             <ComputerBorder1>

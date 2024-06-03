@@ -164,6 +164,30 @@ const Select = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex, 
       }, [chunks, selectedChunkIndex, selectedItemIndex, selectData]);
 
 
+    const handleArrowUp = useCallback(() => {
+        if (selectedChunkIndex === 0 && selectedItemIndex === 0) {
+            return
+        }
+        if (selectedChunkIndex > 0 && selectedItemIndex === 0) {
+            handleChunkChange(selectedChunkIndex - 1)
+            return
+        }
+        handleItemChange(selectedItemIndex - 1)
+    }, [chunks, selectedChunkIndex, selectedItemIndex])
+
+
+    const handleArrowDown = useCallback(() => {
+        if (selectedChunkIndex === chunks.length - 1 && selectedItemIndex === chunks[selectedChunkIndex].length - 1) {
+            return
+        }
+        if (selectedItemIndex === 4) {
+            handleChunkChange(selectedChunkIndex + 1)
+            return
+        }
+        handleItemChange(selectedItemIndex + 1)
+    }, [chunks, selectedChunkIndex, selectedItemIndex])
+
+
     return (
         <SelectConainer>
             <SelectWrapper ref={selectRef} tabIndex={tabIndex} onClick={() => {
@@ -182,17 +206,13 @@ const Select = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex, 
                 ))}
             </SelectWrapper>
             <ScrollArea >
-                <Button disabled={selectedChunkIndex === 0} style={buttonStyles} onClick={() => {
-                    handleChunkChange(selectedChunkIndex - 1)
-                }}>
+                <Button disabled={selectedItemIndex === 0 && selectedChunkIndex === 0} style={buttonStyles} onClick={handleArrowUp}>
                     <TiArrowSortedUp />
                 </Button>
                 <ScrollIndicatorArea>
                     <ScrollIndicator indicatorposition={`${indicatorPosition}px`}  indicatorsize={indicatorSize}/>
                 </ScrollIndicatorArea>
-                <Button disabled={selectedChunkIndex === chunks.length - 1} style={buttonStyles} onClick={() => {
-                    handleChunkChange(selectedChunkIndex + 1)
-                    }}>
+                <Button disabled={selectedChunkIndex === chunks.length - 1 && selectedItemIndex === chunks[chunks.length - 1].length - 1} style={buttonStyles} onClick={handleArrowDown}>
                     <TiArrowSortedDown />
                 </Button>
             </ScrollArea>
