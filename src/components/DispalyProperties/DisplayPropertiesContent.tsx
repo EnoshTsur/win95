@@ -4,7 +4,8 @@ import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/Displa
 import { useCallback, useMemo } from "react";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
-import { useApplyBackgroundStore, useBackgroundStore, useDisplayPropertiesStore, useWallpaperStore } from "./store/store";
+import { useDisplayPropertiesStore, useWallpaperStore } from "./store/store";
+import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "components/MainScreen/store/store";
 
 const DisplayWrapper = styled.div`
     width: 500px;
@@ -30,12 +31,16 @@ interface DisplayAlertContentProps {
 
 const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => {
 
-    const { applyBackground, setApplyBackground } = useApplyBackgroundStore(({ applyBackground, setApplyBackground }) => ({ 
+    const { applyBackground, setApplyBackground } = useMainScreenApplyBackgroundStore(({ applyBackground, setApplyBackground }) => ({ 
         applyBackground, 
         setApplyBackground,
     }))
 
-    const {backgroundList, selectedBackground, setSelectedBackground} = useBackgroundStore(({ backgroundList, selectedBackground, setSelectedBackground }) => ({
+    const {backgroundList, selectedBackground, setSelectedBackground} = useMainScreenBackgroundStore(({ 
+        backgroundList, 
+        selectedBackground, 
+        setSelectedBackground 
+    }) => ({
         backgroundList,
         selectedBackground,
         setSelectedBackground

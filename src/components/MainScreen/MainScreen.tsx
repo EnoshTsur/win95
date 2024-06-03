@@ -1,5 +1,5 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useApplyBackgroundStore, useBackgroundStore, useDisplayPropertiesStore } from "components/DispalyProperties/store/store";
+import { useDisplayPropertiesStore } from "components/DispalyProperties/store/store";
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
@@ -7,6 +7,7 @@ import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
+import { useMainScreenApplyBackgroundStore, useMainScreenBackgroundStore } from "./store/store";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string }>`
     position: relative;
@@ -31,11 +32,11 @@ const MainScreen = () => {
     const { isDisplayPropertiesOpen } = useDisplayPropertiesStore(({ isDisplayPropertiesOpen }) => ({ isDisplayPropertiesOpen }))
 
 
-    const { applyBackground } = useApplyBackgroundStore(({ applyBackground }) => ({ 
+    const { applyBackground } = useMainScreenApplyBackgroundStore(({ applyBackground }) => ({ 
         applyBackground, 
     }))
 
-    const { selectedBackground } = useBackgroundStore(({ selectedBackground }) => ({ selectedBackground }))
+    const { selectedBackground } = useMainScreenBackgroundStore(({ selectedBackground }) => ({ selectedBackground }))
 
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 

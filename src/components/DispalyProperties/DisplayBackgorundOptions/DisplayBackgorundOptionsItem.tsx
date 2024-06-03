@@ -10,11 +10,13 @@ const OptionsItemWrapper = styled.div`
     border-bottom: 2px solid ${({ theme }) => theme.colors.white};
 `
 
-const OptionsItemWrapper2 = styled.div`
+const OptionsContentItemWrapper = styled.div`
     border-top: 2px solid ${({ theme }) => theme.colors.white};
     border-left: 2px solid ${({ theme }) => theme.colors.white};
     border-right: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-bottom: 2px solid ${({ theme }) => theme.colors.buttonShadow};
+    height: 100%;
+
 `
 
 const OptionsItemTitle = styled.div`
@@ -40,9 +42,9 @@ const DisplayBackgorundOptionsItem = ({ title, children }: OptionsItemProps) => 
                     {title.slice(1)}
                 </span>
             </OptionsItemTitle>
-            <OptionsItemWrapper2>
+            <OptionsContentItemWrapper>
             { children }
-            </OptionsItemWrapper2>
+            </OptionsContentItemWrapper>
         </OptionsItemWrapper>
     )
 }

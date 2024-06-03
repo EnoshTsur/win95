@@ -5,8 +5,10 @@ import Underline from "components/Underline/Underline"
 import {  useCallback, useEffect, useMemo, useState } from "react"
 import BrowseImage from "components/BrowseImage/BrowseImage"
 import Select from "components/Select/Select"
-import { useBackgroundStore, useWallpaperStore } from "../store/store"
+import { useBackgroundSizeStore, useWallpaperStore } from "../store/store"
 import { Background } from "../store/types"
+import DisplayBackgroundSize from "../DisplayBackgroundSize/DisplayBackgroundSize"
+import { useMainScreenBackgroundStore } from "components/MainScreen/store/store"
 
 const OptionsWrapper = styled.div`
     padding: 20px;
@@ -55,7 +57,14 @@ const DisplayBackgorundOptionsContainer = () => {
         selectedPatternChunkIndex: 0
     })
 
-    const { backgroundList, addUserBackground } = useBackgroundStore(({ backgroundList, addUserBackground }) => ({ backgroundList, addUserBackground}))
+    const { backgroundSize } = useBackgroundSizeStore(({ backgroundSize }) => ({ backgroundSize }))
+
+    const [wallpaperBackgroundSize, setWallpaperBackgroundSize ] = useState(backgroundSize)
+
+    const { backgroundList, addUserBackground } = useMainScreenBackgroundStore(({ backgroundList, addUserBackground }) => ({ 
+        backgroundList, 
+        addUserBackground
+    }))
 
     const {
         wallpaper,
@@ -100,7 +109,6 @@ const DisplayBackgorundOptionsContainer = () => {
 
 
     const handleWallpaperSelectedIndex = useCallback((index: number) => {
-        debugger
         const flatternIndex = wallpaperSelection.activeSelectedChunk * 5 + index
         setWallpaper(backgroundList[flatternIndex])
         setWallpaperActiveIndex(index)
@@ -109,7 +117,6 @@ const DisplayBackgorundOptionsContainer = () => {
 
 
     const handleWallpaperSelectedChunk = useCallback((index: number) => {
-        debugger
         const itemIndex = index > wallpaperSelection.activeSelectedChunk ? 0 : 4
         const flatternIndex = index * 5 + itemIndex
         setWallpaper(backgroundList[flatternIndex])
@@ -159,6 +166,7 @@ const DisplayBackgorundOptionsContainer = () => {
                         <Underline color="grey">B</Underline><span>rowse</span>
                     </BrowseImage>
                 </DisabledButtonWrapper>
+                <DisplayBackgroundSize backgroundSize={wallpaperBackgroundSize} setBackgroundSize={setWallpaperBackgroundSize}/>
             </DisplayBackgorundOptionsItem>
         </OptionsWrapper>
     )

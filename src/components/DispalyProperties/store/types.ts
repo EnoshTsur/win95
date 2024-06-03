@@ -23,14 +23,9 @@ export interface WallpaperStore {
     readonly setWallpaperActiveChunk: (index: number) => void
 }
 
-export interface BackgroundStore {
-    readonly backgroundList: ReadonlyArray<Background>
-    readonly selectedBackground: Background
-    readonly addUserBackground: (userUpload: Background) => void
-    readonly setSelectedBackground: (backgroundObj: Background) => void
-}
+export type BackgroundSize = 'cover' | 'center'
 
-export interface ApplyBackgroundStore {
-    readonly applyBackground: Background
-    readonly setApplyBackground: (applyObj: Background) => void
+export interface BackgroundSizeStore {
+    readonly backgroundSize: BackgroundSize
+    readonly setBackgroundSize: (backgroundSize: BackgroundSize) => void
 }
