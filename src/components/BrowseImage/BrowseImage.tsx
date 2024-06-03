@@ -56,7 +56,7 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
                             { children: <IoMdClose />, onClick: () => { setFormat(''); setFormatError(false); }}
                         ]}
                         message={`File of format ${format} is not supported, try image format instead`}
-                        status="WARNING"
+                        status="ERROR"
                         panelButtons={[
                             { children: 'OK', onClick: () => { setFormat(''); setFormatError(false) }}
                         ]}
