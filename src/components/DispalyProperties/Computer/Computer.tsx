@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import styled from "styled-components"
-import { useDisplayBackgroundStore } from "../store/store"
+import { useDisplayBackgroundSizeStore, useDisplayBackgroundStore } from "../store/store"
 
 const ComputerWrapper = styled.div`
     display: flex;
@@ -117,10 +117,9 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { displayBackground, displayBackgroundSize } = useDisplayBackgroundStore(({ displayBackground, displayBackgroundSize }) => ({ 
-        displayBackground, 
-        displayBackgroundSize 
-    }))
+    const { displayBackground } = useDisplayBackgroundStore(({ displayBackground }) => ({ displayBackground }))
+
+    const { displayBackgroundSize } = useDisplayBackgroundSizeStore(({ displayBackgroundSize }) => ({ displayBackgroundSize }))
 
     const backgroundUrl = useMemo(() => displayBackground.url, [displayBackground]);
 

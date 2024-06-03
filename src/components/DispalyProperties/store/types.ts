@@ -14,8 +14,6 @@ export interface DisplayModalStore {
 export interface DisplayBackgroundStore {
     readonly displayBackground: Background
     readonly displayBackgroundSelection:  DisplayBackgroundSelection
-    readonly displayBackgroundSize: BackgroundSize
-    readonly setDisplayBackgroundSize: (backgroundSize: BackgroundSize) => void
     readonly setDisplayBackground: (displayBackground: Background) => void
     readonly setDisplayBackgroundSelection: (selection: DisplayBackgroundSelection) => void
     readonly setDisplayBackgroundActiveIndex: (index: number) => void
@@ -24,7 +22,16 @@ export interface DisplayBackgroundStore {
 
 export interface DisplayApplyBackgroundStore {
     readonly displayApplyBackground: Background
-    readonly displayApplyBackgroundSize: BackgroundSize
-    readonly setDisplayApplyBackgroundSize: (backgroundSize: BackgroundSize) => void
     readonly setDisplayApplyBackground: (applyObj: Background) => void
+}
+
+export interface ApplyBackgroundSizeStore {
+    readonly applyBackgroundSize: BackgroundSize
+    readonly setApplyBackgroundSize: (backgroundSize: BackgroundSize) => void
+}
+
+
+export interface DisplayBackgroundSizeStore {
+    readonly displayBackgroundSize: BackgroundSize
+    readonly setDisplayBackgroundSize: (backgroundSize: BackgroundSize) => void
 }

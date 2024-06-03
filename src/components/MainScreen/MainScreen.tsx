@@ -1,5 +1,5 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useDisplayApplyBackgroundStore, useDisplayBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
+import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplayBackgroundSizeStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
@@ -37,7 +37,7 @@ const MainScreen = () => {
         displayApplyBackground, 
     }))
 
-    const {displayApplyBackgroundSize} = useDisplayApplyBackgroundStore(({ displayApplyBackgroundSize }) => ({ displayApplyBackgroundSize }))
+    const {applyBackgroundSize} = useApplyBackgroundSizeStore(({ applyBackgroundSize }) => ({ applyBackgroundSize }))
 
     const { mainScreenSelectedBackground } = useMainScreenBackgroundStore(({ mainScreenSelectedBackground }) => ({ mainScreenSelectedBackground }))
 
@@ -49,9 +49,9 @@ const MainScreen = () => {
     , [isDisplayPropertiesOpen, displayApplyBackground, mainScreenSelectedBackground])
 
     const backgroundSize = useMemo(() => isDisplayPropertiesOpen 
-    ? displayApplyBackgroundSize
+    ? applyBackgroundSize
     : mainScreenBackgroundSize
-    , [isDisplayPropertiesOpen, displayApplyBackgroundSize, mainScreenBackgroundSize])
+    , [isDisplayPropertiesOpen, applyBackgroundSize, mainScreenBackgroundSize])
 
 
     const handleClick = () => {

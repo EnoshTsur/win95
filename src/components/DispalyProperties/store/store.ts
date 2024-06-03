@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { DisplayApplyBackgroundStore, DisplayBackgroundStore, DisplayModalStore } from "./types";
+import { ApplyBackgroundSizeStore, DisplayApplyBackgroundStore, DisplayBackgroundSizeStore, DisplayBackgroundStore, DisplayModalStore } from "./types";
 import { initialBackgroundList } from "components/MainScreen/store/store";
 
 export const useDisplayModalStore = create<DisplayModalStore>((set) => ({
@@ -11,8 +11,6 @@ export const useDisplayModalStore = create<DisplayModalStore>((set) => ({
 export const useDisplayBackgroundStore = create<DisplayBackgroundStore>((set) => ({
     displayBackground: { fileName: '[None]', url: ''},
     displayBackgroundSelection: { activeSelectedIndex: 0, activeSelectedChunk: 0 },
-    displayBackgroundSize: 'cover',
-    setDisplayBackgroundSize: (backgroundSize) => set((pre) => ({...pre, displayBackgroundSize: backgroundSize })),
     setDisplayBackground: (displayBackground) =>  set((pre) => ({...pre, displayBackground })),
     setDisplayBackgroundSelection: (selection) => set((pre) => ({ ...pre, displayBackgroundSelection: selection })),
     setDisplayBackgroundActiveIndex: (index) => set((pre) => ({
@@ -27,7 +25,15 @@ export const useDisplayBackgroundStore = create<DisplayBackgroundStore>((set) =>
 
 export const useDisplayApplyBackgroundStore = create<DisplayApplyBackgroundStore>((set) => ({
     displayApplyBackground: initialBackgroundList[0],
-    displayApplyBackgroundSize: 'cover',
-    setDisplayApplyBackgroundSize: (backgroundSize) => set((pre) => ({...pre, displayApplyBackgroundSize: backgroundSize })),
     setDisplayApplyBackground: (applyObj) => set((pre) => ({ ...pre, displayApplyBackground: applyObj })),
+}))
+
+export const useDisplayBackgroundSizeStore = create<DisplayBackgroundSizeStore>((set) => ({
+    displayBackgroundSize: 'cover',
+    setDisplayBackgroundSize: (backgroundSize) => set((pre) => ({...pre, displayBackgroundSize: backgroundSize}))
+}))
+
+export const useApplyBackgroundSizeStore = create<ApplyBackgroundSizeStore>((set) => ({
+    applyBackgroundSize: 'cover',
+    setApplyBackgroundSize: (backgroundSize) => set((pre) => ({...pre, applyBackgroundSize: backgroundSize}))
 }))
