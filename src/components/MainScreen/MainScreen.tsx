@@ -1,5 +1,5 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useDisplayApplyBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
+import { useDisplayApplyBackgroundStore, useDisplayBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
 import ScreenMenu from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
@@ -7,15 +7,16 @@ import { screenItems } from "containers/MainScreenContainer/screen-items";
 import { useMemo, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
-import { useMainScreenBackgroundStore } from "./store/store";
+import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
 
-const ScreenWrapper = styled.div<{ backgroundurl: string }>`
+const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
     height: 55rem;
     ${({ backgroundurl }) => backgroundurl !== '' && `background-image: url(${backgroundurl});`}
-    ${({ backgroundurl }) => backgroundurl !== '' && `background-size: contain;`}
+    ${({ backgroundurl, backgroundsize }) => backgroundurl !== '' && `background-size: ${backgroundsize};`}
     background-position: center center;
-    ${({ backgroundurl, theme }) => backgroundurl === '' && `background-color: ${theme.colors.windowsBg};`}
+    background-repeat: no-repeat;
+    background-color: ${({ theme }) => theme.colors.windowsBg};
 `
 
 const MainScreen = () => {
@@ -36,13 +37,21 @@ const MainScreen = () => {
         displayApplyBackground, 
     }))
 
+    const {displayApplyBackgroundSize} = useDisplayApplyBackgroundStore(({ displayApplyBackgroundSize }) => ({ displayApplyBackgroundSize }))
+
     const { mainScreenSelectedBackground } = useMainScreenBackgroundStore(({ mainScreenSelectedBackground }) => ({ mainScreenSelectedBackground }))
 
+    const { mainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize }) => ({ mainScreenBackgroundSize }))
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? displayApplyBackground.url
         : mainScreenSelectedBackground.url
-    , [isScreenMenuOpen, displayApplyBackground, mainScreenSelectedBackground])
+    , [isDisplayPropertiesOpen, displayApplyBackground, mainScreenSelectedBackground])
+
+    const backgroundSize = useMemo(() => isDisplayPropertiesOpen 
+    ? displayApplyBackgroundSize
+    : mainScreenBackgroundSize
+    , [isDisplayPropertiesOpen, displayApplyBackgroundSize, mainScreenBackgroundSize])
 
 
     const handleClick = () => {
@@ -57,7 +66,7 @@ const MainScreen = () => {
     };
 
     return (
-        <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} onClick={handleClick} >
+        <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
                 
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
 

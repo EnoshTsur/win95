@@ -4,7 +4,7 @@ import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/Displa
 import { useCallback, useMemo } from "react";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
-import { useMainScreenBackgroundStore } from "components/MainScreen/store/store";
+import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "components/MainScreen/store/store";
 import { useDisplayApplyBackgroundStore, useDisplayBackgroundStore, useDisplayModalStore } from "./store/store";
 
 const DisplayWrapper = styled.div`
@@ -49,27 +49,44 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
         setMainScreenSelectedBackground
     }))
 
-    const { displayBackground } = useDisplayBackgroundStore(({ displayBackground }) => ({ displayBackground }))
+    const { displayBackground, displayBackgroundSize } = useDisplayBackgroundStore(({ displayBackground, displayBackgroundSize }) => ({ 
+        displayBackground, 
+        displayBackgroundSize 
+    }))
 
     const { closeDisplayProperties } = useDisplayModalStore(({ closeDisplayProperties }) => ({ closeDisplayProperties }))
 
+    const { mainScreenBackgroundSize, setMainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize, setMainScreenBackgroundSize }) => ({ 
+        mainScreenBackgroundSize, 
+        setMainScreenBackgroundSize 
+    }))
+
+    const { displayApplyBackgroundSize, setDisplayApplyBackgroundSize } = useDisplayApplyBackgroundStore(({ displayApplyBackgroundSize, setDisplayApplyBackgroundSize }) => ({ 
+        displayApplyBackgroundSize,
+        setDisplayApplyBackgroundSize 
+    }))
+
     const isApplyAllowed = useMemo(() => {
         if (displayApplyBackground.fileName !== '[None]') {
-            return displayApplyBackground.fileName !== displayBackground.fileName
+            return displayApplyBackground.fileName !== displayBackground.fileName 
+                || displayBackgroundSize !== displayApplyBackgroundSize
         }
         return displayBackground.fileName != mainScreenSelectedBackground.fileName
-    }, [displayApplyBackground, displayBackground, mainScreenSelectedBackground])
+    }, [displayApplyBackground, displayBackground, displayApplyBackgroundSize, displayBackgroundSize, mainScreenSelectedBackground])
 
 
     const handleOk = useCallback(() => {
         setMainScreenSelectedBackground(displayBackground)
         setDisplayApplyBackground(displayBackground)
         closeDisplayProperties()
-    }, [displayBackground, mainScreenBackgroundList])
+        setMainScreenBackgroundSize(displayBackgroundSize)
+    }, [displayBackground, mainScreenBackgroundList, displayBackgroundSize])
 
     const handleApply = useCallback(() => {        
+        debugger
         setDisplayApplyBackground(displayBackground)
-    }, [displayBackground])
+        setDisplayApplyBackgroundSize(displayBackgroundSize)
+    }, [displayBackground, displayBackgroundSize])
 
     const buttonsData = useMemo(() => [
         {

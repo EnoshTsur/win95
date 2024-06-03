@@ -1,7 +1,8 @@
-import { BackgroundSize } from "components/MainScreen/store/types";
 import Underline from "components/Underline/Underline";
-import { SetStateAction } from "react";
 import styled from "styled-components";
+import { useEffect } from "react";
+import { useMainScreenBackgroundSizeStore } from "components/MainScreen/store/store";
+import { useDisplayBackgroundStore } from "../store/store";
 
 const BackgroundSizeWrapper = styled.div`
     display: flex;
@@ -39,12 +40,18 @@ const DisplayButtonRadioOn = styled.div`
     background: black;
 `
 
-interface DisplayBackgroundSizeProps {
-    readonly backgroundSize: BackgroundSize
-    readonly setBackgroundSize: React.Dispatch<SetStateAction<BackgroundSize>>
-}
+const DisplayBackgroundSize = () => {
 
-const DisplayBackgroundSize = ({ backgroundSize, setBackgroundSize }: DisplayBackgroundSizeProps) => {
+    const { displayBackgroundSize, setDisplayBackgroundSize  } = useDisplayBackgroundStore(({ displayBackgroundSize, setDisplayBackgroundSize }) => ({ 
+        displayBackgroundSize, 
+        setDisplayBackgroundSize 
+    }))
+
+    const { mainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize }) => ({ mainScreenBackgroundSize }))
+
+    useEffect(() => {
+        setDisplayBackgroundSize(mainScreenBackgroundSize)
+    }, [])
 
     return (
         <BackgroundSizeWrapper>
@@ -52,16 +59,16 @@ const DisplayBackgroundSize = ({ backgroundSize, setBackgroundSize }: DisplayBac
                 <Underline color="black">D</Underline>isplay:
             </DisplaySpan>
             <div style={{ display: 'flex', gap: '8px'}}>
-            <DisplayButtonRadio onClick={() => setBackgroundSize('cover')}>
-                { backgroundSize === 'cover' && (<DisplayButtonRadioOn /> )}
+            <DisplayButtonRadio onClick={() => setDisplayBackgroundSize('cover')}>
+                { displayBackgroundSize === 'cover' && (<DisplayButtonRadioOn /> )}
             </DisplayButtonRadio>
             <DisplaySpan>
                 <Underline>T</Underline>ile
             </DisplaySpan>
             </div>
             <div style={{ display: 'flex', gap: '8px'}}>
-            <DisplayButtonRadio onClick={() => setBackgroundSize('center')}>
-                { backgroundSize === 'center' && (<DisplayButtonRadioOn /> )}
+            <DisplayButtonRadio onClick={() => setDisplayBackgroundSize('contain')}>
+                { displayBackgroundSize === 'contain' && (<DisplayButtonRadioOn /> )}
             </DisplayButtonRadio>
             <DisplaySpan>
                 <Underline>C</Underline>enter

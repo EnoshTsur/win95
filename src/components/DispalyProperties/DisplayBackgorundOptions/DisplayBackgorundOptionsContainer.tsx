@@ -7,7 +7,7 @@ import BrowseImage from "components/BrowseImage/BrowseImage"
 import Select from "components/Select/Select"
 import DisplayBackgroundSize from "../DisplayBackgroundSize/DisplayBackgroundSize"
 import { useMainScreenBackgroundStore } from "components/MainScreen/store/store"
-import { useDisplayBackgroundSizeStore, useDisplayBackgroundStore } from "../store/store"
+import { useDisplayBackgroundStore } from "../store/store"
 import { Background } from "components/MainScreen/store/types"
 
 const OptionsWrapper = styled.div`
@@ -56,10 +56,6 @@ const DisplayBackgorundOptionsContainer = () => {
         selectedPatternItemIndex: 0, 
         selectedPatternChunkIndex: 0
     })
-
-    const { displayBackgroundSize } = useDisplayBackgroundSizeStore(({ displayBackgroundSize }) => ({ displayBackgroundSize }))
-
-    const [wallpaperBackgroundSize, setWallpaperBackgroundSize ] = useState(displayBackgroundSize)
 
     const { mainScreenBackgroundList, addUserBackground } = useMainScreenBackgroundStore(({ mainScreenBackgroundList, addUserBackground }) => ({ 
         mainScreenBackgroundList, 
@@ -166,7 +162,7 @@ const DisplayBackgorundOptionsContainer = () => {
                         <Underline color="grey">B</Underline><span>rowse</span>
                     </BrowseImage>
                 </DisabledButtonWrapper>
-                <DisplayBackgroundSize backgroundSize={wallpaperBackgroundSize} setBackgroundSize={setWallpaperBackgroundSize}/>
+                <DisplayBackgroundSize />
             </DisplayBackgorundOptionsItem>
         </OptionsWrapper>
     )

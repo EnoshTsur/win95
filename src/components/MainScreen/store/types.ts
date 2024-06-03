@@ -3,7 +3,7 @@ export interface Background {
     readonly url: string
 }
 
-export type BackgroundSize = 'center' | 'cover'
+export type BackgroundSize = 'contain' | 'cover'
 
 export interface MainScreenBackgroundStore {
     readonly mainScreenBackgroundList: ReadonlyArray<Background>
@@ -13,4 +13,6 @@ export interface MainScreenBackgroundStore {
 }
 
 export interface MainScreenBackgroundSizeStore {
+    readonly mainScreenBackgroundSize: BackgroundSize
+    readonly setMainScreenBackgroundSize: (backgroundSize: BackgroundSize) => void
 }

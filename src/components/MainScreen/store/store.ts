@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Background, MainScreenBackgroundStore } from "./types";
+import { Background, MainScreenBackgroundSizeStore, MainScreenBackgroundStore } from "./types";
 import blackThatchUrl from '../../../assets/black-thatch-wallpaper.png'
 import blueRivetsUrl from '../../../assets/blue-rivets-wallpaper.png'
 import bubblesUrl from '../../../assets/bubbles-wallpaper.jpg'
@@ -23,3 +23,9 @@ export const useMainScreenBackgroundStore = create<MainScreenBackgroundStore>((s
     ),
     setMainScreenSelectedBackground: (backgroundObj) => set((pre) => ({...pre, mainScreenSelectedBackground: backgroundObj }))
 }))
+
+export const useMainScreenBackgroundSizeStore = create<MainScreenBackgroundSizeStore>((set) => ({
+    mainScreenBackgroundSize: 'cover',
+    setMainScreenBackgroundSize: (backgroundSize) => set((pre) => ({...pre, mainScreenBackgroundSize: backgroundSize }))
+}))
+

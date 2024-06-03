@@ -39,12 +39,12 @@ const ComputerBorder3 = styled.div`
     border-right: 3px dashed #b0b0b0;
 `
 
-const ComputerBorder4 = styled.div<{ backgroundurl: string | null }>`
+const ComputerBorder4 = styled.div<{ backgroundurl: string | null, backgroundsize: string }>`
     width: 150px;
     height: 100px;
     background-color: ${({ theme }) => theme.colors.windowsBg};
     background-image: ${({ backgroundurl }) => backgroundurl !== '' ? `url(${backgroundurl})` : 'none'};
-    background-size: cover;
+    background-size: ${({ backgroundsize }) => backgroundsize};
     border-left: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-top: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-right: 2px solid ${({ theme }) => theme.colors.white};
@@ -117,7 +117,10 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { displayBackground } = useDisplayBackgroundStore(({ displayBackground }) => ({ displayBackground }))
+    const { displayBackground, displayBackgroundSize } = useDisplayBackgroundStore(({ displayBackground, displayBackgroundSize }) => ({ 
+        displayBackground, 
+        displayBackgroundSize 
+    }))
 
     const backgroundUrl = useMemo(() => displayBackground.url, [displayBackground]);
 
@@ -126,7 +129,7 @@ const Computer = () => {
             <ComputerBorder1>
                 <ComputerBorder2>
                     <ComputerBorder3>
-                        <ComputerBorder4 backgroundurl={backgroundUrl}/>
+                        <ComputerBorder4 backgroundurl={backgroundUrl} backgroundsize={displayBackgroundSize} />
                     </ComputerBorder3>
                 </ComputerBorder2>
             </ComputerBorder1>
