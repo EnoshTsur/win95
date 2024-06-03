@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Computer from "./Computer/Computer";
 import DisplayBackgorundOptionsContainer from "./DisplayBackgorundOptions/DisplayBackgorundOptionsContainer";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useBackgroundState, useDispaySettingsState } from "store/store";
 import DisplayTabs from "./DisplayTabs/DisplayTabs";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
@@ -30,14 +30,23 @@ interface DisplayAlertContentProps {
 
 const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => {
 
-    const { 
-        selectedBackground, 
-        setSelectedBackground, 
+    const { applyBackground, backgroundList, setApplyBackground, setSelectedBackground, setWallpaperSelection, selectedBackground, wallpaper } = useBackgroundState(({ 
         applyBackground, 
-        setApplyBackground, 
-        backgroundList, 
+        backgroundList,
+        setApplyBackground,
+        setSelectedBackground,
+        setWallpaperSelection,
+        selectedBackground, 
+        wallpaper,
+    }) => ({ 
+        applyBackground, 
+        backgroundList,
+        setApplyBackground,
+        setSelectedBackground,
+        setWallpaperSelection,
+        selectedBackground, 
         wallpaper, 
-    } = useBackgroundState()
+    }))
 
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
@@ -55,9 +64,9 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
         setDisplaySettingsOpen(false)
     }, [wallpaper, backgroundList])
 
-    const handleApply = () => {  
+    const handleApply = useCallback(() => {          
         setApplyBackground(wallpaper)
-    }
+    }, [wallpaper])
 
     const buttonsData = useMemo(() => [
         {
@@ -73,7 +82,7 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
             onClick: handleApply,
             disabled: !isApplyAllowed
         }
-    ], [isApplyAllowed])
+    ], [isApplyAllowed, wallpaper])
 
     return (
             <DisplayWrapper>

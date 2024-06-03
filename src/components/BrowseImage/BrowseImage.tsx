@@ -3,7 +3,7 @@ import { ButtonProps } from "components/Button/Button";
 import PanelButton from "components/PanelButton/PanelButton";
 import { useMemo, useRef, useState } from "react";
 import { IoMdClose } from "react-icons/io";
-import { UserBackgroundUpload } from "store/types";
+import { Background } from "store/types";
 import styled from "styled-components";
 import { playErrorSound } from "utils/functions";
 
@@ -12,7 +12,7 @@ const HiddenInput = styled.input`
 `
 
 interface BrowseProps extends ButtonProps {
-    readonly saveImage: (userUpload: UserBackgroundUpload)=> void
+    readonly saveImage: (userUpload: Background)=> void
 }
 
 const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {

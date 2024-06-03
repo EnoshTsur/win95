@@ -117,7 +117,7 @@ const ComputerUnder3Inside = styled  .div`
 
 const Computer = () => {
 
-    const { wallpaper } = useBackgroundState()
+    const { wallpaper } = useBackgroundState(({ wallpaper }) => ({ wallpaper }))
 
     const wallpaperUrl = useMemo(() => wallpaper.url, [wallpaper]);
 

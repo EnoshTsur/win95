@@ -9,20 +9,30 @@ export interface ClockUpdate {
     readonly updateTime: () => void
 }
 
-export interface UserBackgroundUpload {
+export interface Background {
     readonly fileName: string
     readonly url: string
 }
 
+export interface WallpaperSelection {
+    readonly activeSelectedIndex: number
+    readonly activeSelectedChunk: number
+}
+
 export interface BackgroundState {
-    readonly backgroundList: ReadonlyArray<UserBackgroundUpload>
-    readonly applyBackground: UserBackgroundUpload
-    readonly selectedBackground: UserBackgroundUpload
-    readonly wallpaper: UserBackgroundUpload
-    readonly addUserBackground: (userUpload: UserBackgroundUpload) => void
-    readonly setApplyBackground: (applyObj: UserBackgroundUpload) => void
-    readonly setSelectedBackground: (backgroundObj: UserBackgroundUpload) => void
-    readonly setWallpaper: (wallpaper: UserBackgroundUpload) => void
+    readonly backgroundList: ReadonlyArray<Background>
+    readonly applyBackground: Background
+    readonly selectedBackground: Background
+    readonly wallpaper: Background
+    readonly wallpaperSelection:  WallpaperSelection
+    readonly addUserBackground: (userUpload: Background) => void
+    readonly setApplyBackground: (applyObj: Background) => void
+    readonly setSelectedBackground: (backgroundObj: Background) => void
+    readonly setWallpaper: (wallpaper: Background) => void
+    readonly setWallpaperSelection: (selection: WallpaperSelection) => void
+    readonly setWallpaperActiveIndex: (index: number) => void
+    readonly setWallpaperActiveChunk: (index: number) => void
+        
 }
 
 export interface DisplaySettingsState {

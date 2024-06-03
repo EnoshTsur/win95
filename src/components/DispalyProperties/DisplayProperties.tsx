@@ -11,7 +11,21 @@ const DisplayProperties  = () => {
     
     const { setDisplaySettingsOpen } = useDispaySettingsState()
 
-    const { selectedBackground, backgroundList, setApplyBackground, setWallpaper } = useBackgroundState()
+    const { backgroundList, setApplyBackground, setWallpaper, setWallpaperSelection, wallpaper, selectedBackground} = useBackgroundState(({ 
+        backgroundList, 
+        setApplyBackground,
+        setWallpaper,
+        setWallpaperSelection,
+        wallpaper,
+        selectedBackground 
+    }) => ({
+        backgroundList,
+        setApplyBackground, 
+        setWallpaper,
+        setWallpaperSelection,
+        wallpaper,
+        selectedBackground
+    }))
 
     useEffect(() => {
         setWallpaper(selectedBackground.fileName !== '[None]' ? selectedBackground : backgroundList[0])

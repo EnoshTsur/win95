@@ -37,6 +37,7 @@ export const useBackgroundState = create<BackgroundState>((set) => ({
     ],
     selectedBackground: { fileName: '[None]', url: ''},
     wallpaper: { fileName: '[None]', url: ''},
+    wallpaperSelection: { activeSelectedIndex: 0, activeSelectedChunk: 0 },
     addUserBackground: (userUpload) => set((pre) => pre.backgroundList
         .find(({ fileName }) =>  userUpload.fileName === fileName) == null 
             ? ({...pre, backgroundList: [ userUpload, ...pre.backgroundList]})
@@ -45,6 +46,10 @@ export const useBackgroundState = create<BackgroundState>((set) => ({
     setApplyBackground: (applyObj) => set((pre) => ({ ...pre, applyBackground: applyObj })),
     setSelectedBackground: (backgroundObj) => set((pre) => ({...pre, selectedBackground: backgroundObj })), 
     setWallpaper: (wallpaper) =>  set((pre) => ({...pre, wallpaper })),
+    setWallpaperSelection: (selection) => set((pre) => ({ ...pre, wallpaperSelection: selection })),
+    setWallpaperActiveIndex: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedIndex: index }})),
+    setWallpaperActiveChunk: (index) => set((pre) => ({...pre, wallpaperSelection: { ...pre.wallpaperSelection, activeSelectedChunk: index }})),
+
 }))
 
 export const useDispaySettingsState = create<DisplaySettingsState>((set) => ({

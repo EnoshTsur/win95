@@ -43,7 +43,10 @@ const MainScreen = () => {
     const { isOpen: rightMenuOpen, toggleRightMenu, closeRightMenu } = useWindowsRightClickMenuState()
     const { isOpen: isDisplayPropertiesOpen } = useDispaySettingsState()
 
-    const { selectedBackground, applyBackground } = useBackgroundState()
+    const { selectedBackground, applyBackground } = useBackgroundState(({ applyBackground, selectedBackground }) => ({ 
+        applyBackground, 
+        selectedBackground
+    }))
 
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 

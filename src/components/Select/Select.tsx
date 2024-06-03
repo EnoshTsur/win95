@@ -1,7 +1,7 @@
 import Button from "components/Button/Button";
 import styled from "styled-components";
 import { TiArrowSortedUp, TiArrowSortedDown } from "react-icons/ti";
-import { memo, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import scrollBg from '../../assets/bg-scroll.png'
 import { splitIntoLimitedLengthChunks } from "utils/functions";
 
@@ -20,6 +20,10 @@ const SelectWrapper = styled.div`
     border-left: 2px solid black;
     height: 117px;
     background-color: ${({ theme }) => theme.colors.white};
+
+    &:focus, &:focus-visible {
+        outline: none;
+    }
     
 `
 
@@ -48,19 +52,23 @@ const ScrollArea = styled.div`
 }
 `
 
-const ScrollIndicator = styled.div<{ indicatorsize: number}>`
+const ScrollIndicator = styled.div<{ indicatorsize: number, indicatorposition: string }>`
+    position: absolute;
+    box-sizing: border-box;
+    transition: top 400ms cubic-bezier(0.49, 0.19, 0.48, 1.05);
+    left: 0;
+    top: ${({ indicatorposition }) => indicatorposition};
     background-color: ${({ theme }) => theme.colors.menu};
     border-left: 1px solid ${({ theme }) => theme.colors.white};
     border-top: 1px solid ${({ theme }) => theme.colors.white};
     border-bottom: 1px solid ${({ theme }) => theme.colors.buttonShadow};
     border-right: 1px solid ${({ theme }) => theme.colors.buttonShadow};
-    height: ${({ indicatorsize }) => indicatorsize}%;
+    height: ${({ indicatorsize }) => indicatorsize}px;
     width: 100%;
 `
 
-const ScrollIndicatorArea = styled.div<{ indicatorposition: string }>`
-    display: flex;
-    align-items: ${({ indicatorposition }) => indicatorposition };
+const ScrollIndicatorArea = styled.div`
+    position: relative;
     background-image: url(${scrollBg});
     flex-basis: 80%;
 `
@@ -76,13 +84,16 @@ interface SelectProps {
     readonly chunkSize: number
     readonly selectedChunkIndex: number
     readonly selectedItemIndex: number
+    readonly tabIndex: number
     readonly onChunkChange: (index: number) => void
     readonly onItemChange: (index: number) => void 
 }
 
-const Select2 = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex, onChunkChange, onItemChange }: SelectProps) => {
+const Select = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex, tabIndex, onChunkChange, onItemChange }: SelectProps) => {
 
     const [chunks, setChunks] = useState<ReadonlyArray<ReadonlyArray<string>>>([[]])
+
+    const selectRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         const chunkData = splitIntoLimitedLengthChunks(selectData)(chunkSize)
@@ -97,32 +108,70 @@ const Select2 = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex,
         onItemChange(index)
     }
 
-    const indicatorSize = useMemo(() => 100 / chunks.length, [chunks])
+    const indicatorSize = useMemo(() => 78 / selectData.length, [selectData])
+
+    const indicatorPosition = useMemo(() => ((selectedChunkIndex * 5) + selectedItemIndex) * indicatorSize
+    , [selectedChunkIndex, selectedItemIndex, indicatorSize, chunks])
 
 
-    const scrollIndicatorFlexPosition = useMemo(() => {
-        const middle = Math.floor(chunks.length / 2);
-        if (selectedChunkIndex === 0) {
-            return 'flex-start'
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        if (event.key === 'ArrowDown') {
+
+            const totalLength = chunks.reduce((elementsSum, nextArray) =>  elementsSum + nextArray.length, 0) -1           
+
+            if (chunks[selectedChunkIndex][selectedItemIndex] === selectData[totalLength]) {
+                return
+            }
+
+            if ((selectedItemIndex + 1) % 5 === 0) {
+                onItemChange(0)
+                onChunkChange(selectedChunkIndex + 1)
+
+            } else {
+                onItemChange(selectedItemIndex + 1)
+
+            }
+        } else if (event.key === 'ArrowUp') {            
+            if (selectedItemIndex === 0 && selectedChunkIndex === 0) {
+                return
+            }
+            if ( selectedItemIndex === 1 && selectedChunkIndex === 0) {
+                onItemChange(0)
+                return
+            }
+            if (selectedItemIndex === 0) {
+                onItemChange(4)
+                onChunkChange(selectedChunkIndex - 1)
+
+            } else {
+                onItemChange(selectedItemIndex - 1)
+
+            }
         }
+      }, [chunks, selectedItemIndex, selectedChunkIndex, selectData])
 
-        if (selectedChunkIndex === chunks.length - 1) {
-            return 'flex-end'
+      useEffect(() => {
+        const listContainer = selectRef.current;
+        if (listContainer) {
+          listContainer.addEventListener('keydown', handleKeyDown);
         }
-
-        if (selectedChunkIndex === middle) {
-            return 'center'
-        }
-
-        return selectedChunkIndex > middle ? 'flex-end' : 'flex-start'
-        
-    }, [selectedChunkIndex, chunks])
+    
+        return () => {
+          if (listContainer) {
+            listContainer.removeEventListener('keydown', handleKeyDown);
+          }
+        };
+      }, [chunks, selectedChunkIndex, selectedItemIndex, selectData]);
 
 
     return (
         <SelectConainer>
-            <SelectWrapper>
-                { chunks[selectedChunkIndex].map(( item, index ) => (
+            <SelectWrapper ref={selectRef} tabIndex={tabIndex} onClick={() => {
+                if (selectRef?.current != null) {
+                    selectRef.current.focus()
+                }
+            }}>
+                { (chunks[selectedChunkIndex] ?? chunks[0]).map(( item, index ) => (
                     <SelectOption 
                         selected={index === selectedItemIndex}
                         key={`${item} + ${index}`} 
@@ -138,8 +187,8 @@ const Select2 = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex,
                 }}>
                     <TiArrowSortedUp />
                 </Button>
-                <ScrollIndicatorArea indicatorposition={scrollIndicatorFlexPosition}>
-                    <ScrollIndicator  indicatorsize={indicatorSize}/>
+                <ScrollIndicatorArea>
+                    <ScrollIndicator indicatorposition={`${indicatorPosition}px`}  indicatorsize={indicatorSize}/>
                 </ScrollIndicatorArea>
                 <Button disabled={selectedChunkIndex === chunks.length - 1} style={buttonStyles} onClick={() => {
                     handleChunkChange(selectedChunkIndex + 1)
@@ -151,4 +200,4 @@ const Select2 = ({ selectData, chunkSize, selectedChunkIndex, selectedItemIndex,
     )
 }
 
-export default Select2
+export default Select
