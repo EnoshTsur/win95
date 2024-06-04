@@ -8,10 +8,10 @@ import { splitIntoLimitedLengthChunks } from "utils/functions";
 
 const SelectConainer = styled.div`
     display: flex;
+    justify-content: center;
 `
 
 const SelectWrapper = styled.div`
-    flex-basis: 90%;
     margin-top: 15px; 
     margin-left: 10px;
     display: flex;
@@ -20,6 +20,8 @@ const SelectWrapper = styled.div`
     border-left: 2px solid black;
     height: 117px;
     background-color: ${({ theme }) => theme.colors.white};
+    width: 146px;
+
 
     &:focus, &:focus-visible {
         outline: none;
@@ -29,6 +31,10 @@ const SelectWrapper = styled.div`
 
 const SelectOption = styled.div<{ selected: boolean }>`
     font-family: mslevi;    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 146px;
     background-color: ${({ theme, selected }) => selected ? theme.colors.alertTitleBar : theme.colors.white};
     color: ${({ theme, selected }) => selected ? theme.colors.white : theme.colors.black};
     border: 1px solid white;
@@ -39,7 +45,6 @@ const SelectOption = styled.div<{ selected: boolean }>`
 `
 
 const ScrollArea = styled.div`
-    flex-basis: 10%;
     display: flex;
     flex-direction: column;
     margin-top: 15px;

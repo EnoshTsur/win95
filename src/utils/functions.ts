@@ -1,4 +1,5 @@
 import { OpenWindow } from "store/types";
+import { arrayBuffer } from "stream/consumers";
 
 export const splitIntoChunks = <T>(array: ReadonlyArray<T>) => (numberOfChunks: number) =>  {
         if (numberOfChunks <= 0) {

@@ -1,5 +1,5 @@
 import Underline from "components/Underline/Underline"
-import { useMemo } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import { useStartMenuState } from "store/store"
 import styled from "styled-components"
 import { useDisplayModalStore } from "components/DispalyProperties/store/store"
@@ -27,6 +27,7 @@ const ScreenMenuItemsContainer = styled.div<{ hasbordertop: boolean, hasborderbo
 `
 
 const ScreenMenuItem = styled.button`
+    position: relative;
     font-family: mslevi;
     text-align: left;
     letter-spacing: 1px;
@@ -44,6 +45,7 @@ const ScreenMenuItem = styled.button`
 `
 
 const ScreenMenuItemWrapper = styled.div`
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -53,72 +55,54 @@ const ScreenMenuItemWrapper = styled.div`
     }
 `
 
-interface ScreenItemProps {
-    readonly offset: { x: number, y: number }
+export interface ScreenMenuItem {
+    readonly children: React.ReactNode
+    readonly hasCaret: boolean
+    readonly disabled: boolean
+    readonly onClick: () => void
+    readonly next?: ReadonlyArray<ReadonlyArray<ScreenMenuItem>>
 }
 
-const ScreenMenu = ({ offset: { x, y } }: ScreenItemProps) => {
+interface ScreenItemProps {
+    readonly offset: { x: number, y: number }
+    readonly menuItems: ReadonlyArray<ReadonlyArray<ScreenMenuItem>>
+}
 
-    const { openDisplayProperties } = useDisplayModalStore(({ openDisplayProperties }) => ({ openDisplayProperties }))
-    const { closeStartMenu } = useStartMenuState()
+const ScreenMenu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
 
-    const items = useMemo(() => [
-        [
-            { 
-                children: <>Arrange <Underline>I</Underline>cons</>,
-                hasCaret: true,
-                disabled: false,
-                onClick: () => {},
-            },
-            { 
-                children: <>Lin<Underline>e</Underline> up Icons</>,
-                hasCaret: false,
-                disabled: false,
-                onClick: () => {},
-            },
-        ],
-        [
-            { 
-                children: <><Underline color="light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))">P</Underline>aste</>,
-                hasCaret: false,
-                disabled: true,
-                onClick: () => {},
-            },
-            { 
-                children: <>Paste <Underline color="light-dark(rgba(16, 16, 16, 0.3), rgba(255, 255, 255, 0.3))">S</Underline>hortcut</>,
-                hasCaret: false,
-                disabled: true,
-                onClick: () => {},
-            },
-        ],
-        [
-            { 
-                children: <>Ne<Underline>w</Underline></>,
-                hasCaret: true,
-                disabled: false,
-                onClick: () => {},
-            }, 
-        ],
-        [
-            { 
-                children: <>P<Underline>r</Underline>operties</>,
-                hasCaret: false,
-                disabled: false,
-                onClick: () => {
-                    openDisplayProperties()
-                    closeStartMenu()
-                },
-            },
-        ]
-    ], [])
+    const [isMouseHover, setMouseHover] = useState(false)
+
+    const ref = useRef<HTMLDivElement | null>(null)
+
+    const handleMouseEnter = useCallback((disabled: boolean) => {
+        if (disabled) {
+            return
+        }
+        setMouseHover(true)
+    }, [])
+
+    const handleMouseLeave = useCallback((disabled: boolean) => {
+        if (disabled) {
+            return
+        }
+        setMouseHover(false)
+    }, [])
 
     return (
-        <ScreenMenuWrapper x={x} y={y} >
-            { items.map((row, rowIndex) => (
-                <ScreenMenuItemsContainer key={`menuscreen${row.length}${rowIndex}`} hasbordertop={rowIndex !== 0} hasborderbottom={rowIndex !== items.length - 1}>
-                    { row.map(({ children, hasCaret, disabled, onClick }, colIndex) => (
+        <ScreenMenuWrapper x={x} y={y} ref={ref}>
+            { menuItems.map((row, rowIndex) => (
+                <ScreenMenuItemsContainer key={`menuscreen${row.length}${rowIndex}`} hasbordertop={rowIndex !== 0} hasborderbottom={rowIndex !== menuItems.length - 1}>
+                    { row.map(({ children, hasCaret, disabled, onClick, next }, colIndex) => (
                         <ScreenMenuItemWrapper key={`memuscreenitem${children}${colIndex}`} >
-                            <ScreenMenuItem onClick={onClick} disabled={disabled}>
+                            <ScreenMenuItem  
+                                onClick={onClick} 
+                                disabled={disabled} 
+                                onMouseEnter={() => handleMouseEnter(disabled)} 
+                                onMouseLeave={() => handleMouseLeave(disabled)}
+                            >
+                                { ( isMouseHover && next != null ) && (
+                                    <ScreenMenu menuItems={next} offset={{ x: ref?.current?.getBoundingClientRect().width ?? 0, y: -1 }} />
+                                )}
                                 { children }
                             </ScreenMenuItem>
                             { hasCaret && <FaCaretRight /> }

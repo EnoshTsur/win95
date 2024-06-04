@@ -75,7 +75,8 @@ export const useMainScreenBackgroundStore = create<MainScreenBackgroundStore>((s
             ? ({...pre, mainScreenBackgroundList: [ ...pre.mainScreenBackgroundList.slice(0, 1), userUpload, ...pre.mainScreenBackgroundList.slice(1)]})
             : pre
     ),
-    setMainScreenSelectedBackground: (backgroundObj) => set((pre) => ({...pre, mainScreenSelectedBackground: backgroundObj }))
+    setMainScreenSelectedBackground: (backgroundObj) => set((pre) => ({...pre, mainScreenSelectedBackground: backgroundObj })),
+    setMainScreenBackgrounds: (backgrounds) => set((pre) => ({...pre, mainScreenBackgroundList: backgrounds }))
 }))
 
 export const useMainScreenBackgroundSizeStore = create<MainScreenBackgroundSizeStore>((set) => ({

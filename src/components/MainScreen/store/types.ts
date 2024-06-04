@@ -21,6 +21,7 @@ export interface MainScreenBackgroundStore {
     readonly mainScreenSelectedBackground: Background
     readonly addUserBackground: (userUpload: Background) => void
     readonly setMainScreenSelectedBackground: (backgroundObj: Background) => void
+    readonly setMainScreenBackgrounds: (backgrounds: ReadonlyArray<Background>) => void
 }
 
 export interface MainScreenBackgroundSizeStore {

@@ -68,23 +68,24 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
     }))
 
     const isApplyAllowed = useMemo(() => {
+        debugger
         if (displayApplyBackground.fileName !== '[None]') {
             return displayApplyBackground.fileName !== displayBackground.fileName 
                 || displayBackgroundSize !== applyBackgroundSize
         }
         return displayBackground.fileName != mainScreenSelectedBackground.fileName
-    }, [displayApplyBackground, displayBackground, applyBackgroundSize, displayBackgroundSize, mainScreenSelectedBackground])
+    }, [displayApplyBackground, displayBackground, applyBackgroundSize, displayBackgroundSize, mainScreenSelectedBackground, mainScreenBackgroundList])
 
 
     const handleOk = useCallback(() => {
         setMainScreenSelectedBackground(displayBackground)
         setDisplayApplyBackground(displayBackground)
-        closeDisplayProperties()
         setMainScreenBackgroundSize(displayBackgroundSize)
+        setApplyBackgroundSize(displayBackgroundSize)
+        closeDisplayProperties()
     }, [displayBackground, mainScreenBackgroundList, displayBackgroundSize])
 
     const handleApply = useCallback(() => {        
-        debugger
         setDisplayApplyBackground(displayBackground)
         setApplyBackgroundSize(displayBackgroundSize)
     }, [displayBackground, displayBackgroundSize])

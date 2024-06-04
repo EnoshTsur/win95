@@ -1,22 +1,25 @@
 import { ThemeProvider } from 'styled-components'
 import windows95Theme from './theme';
-import StartContainer from './components/StartContainer/StartContainer';
-import MainScreen from 'components/MainScreen/MainScreen';
 import useClockUpdate from 'hooks/useClockUpdate';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import ScreenWrapper from 'components/ScreenWrapper/ScreenWrapper';
+
+const client = new QueryClient()
 
 function App() {
   
   useClockUpdate()
 
   return (
-    <DndProvider backend={HTML5Backend}>
-    <ThemeProvider theme={windows95Theme}>
-      <MainScreen />
-      <StartContainer />
-    </ThemeProvider>
-    </DndProvider>
+    <QueryClientProvider client={client}>
+      <DndProvider backend={HTML5Backend}>
+        <ThemeProvider theme={windows95Theme}>
+          <ScreenWrapper />
+        </ThemeProvider>
+      </DndProvider>
+    </QueryClientProvider>
   );
 }
 

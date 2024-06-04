@@ -62,6 +62,11 @@ const DisplayBackgorundOptionsContainer = () => {
         addUserBackground
     }))
 
+    useEffect(() => {
+        console.log(mainScreenBackgroundList);
+        
+    }, [mainScreenBackgroundList])
+
     const { 
         displayBackground,
         displayBackgroundSelection,

@@ -1,12 +1,14 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
-import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplayBackgroundSizeStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
-import ScreenMenu from "components/ScreenMenu/ScreenMenu";
+import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
+import ScreenMenu, { ScreenMenuItem } from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { useMemo, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
-import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore, useMainScreenItemsStore } from "./store/store";
+import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
+import Underline from "components/Underline/Underline";
+import useScreenMenuItems from "components/ScreenMenu/useScreenMenuItems";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
@@ -21,7 +23,7 @@ const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string
 const MainScreen = () => {
     const [offset, setOffset] = useState({ x: 0,  y: 0})
 
-    const { setMainScreenActiveItem } = useMainScreenItemsStore(({ setMainScreenActiveItem }) => ({ setMainScreenActiveItem }))
+    const { screenMenuItems } = useScreenMenuItems()
 
     const { closeStartMenu } = useStartMenuState()
 
@@ -66,13 +68,14 @@ const MainScreen = () => {
         openScreenMenu()
     };
 
+
     return (
         <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
                 
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
 
                 {
-                    isScreenMenuOpen && ( <ScreenMenu offset={offset} /> )
+                    isScreenMenuOpen && ( <ScreenMenu menuItems={screenMenuItems} offset={offset} /> )
                 }
                 <MainScreenContainer />
         </ScreenWrapper>

@@ -28,7 +28,7 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
         if (target.files && target.files[0]) {
             
             const fileName = target.files[0].name
-
+            
             if (imageEndings.some((ending) => fileName.toLowerCase().includes(ending))) {
                 saveImage({
                     fileName: fileName.slice(0, 15),

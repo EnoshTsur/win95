@@ -8,7 +8,7 @@ const MainScreenWrapper = styled.div`
     grid-auto-columns: max-content;
 `
 
-const ScreenItem = styled.div<{ isactive: boolean }>`
+const ScreenItem = styled.div<{ isactive: string }>`
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -25,8 +25,8 @@ const ScreenItem = styled.div<{ isactive: boolean }>`
 
 
     span {
-        border: ${({ theme, isactive }) => isactive ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
-        background-color: ${({ theme, isactive }) => isactive ? theme.colors.alertTitleBar : theme.colors.windowsBg};
+        border: ${({ theme, isactive }) => isactive === 'true' ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
+        background-color: ${({ theme, isactive }) => isactive === 'true' ? theme.colors.alertTitleBar : theme.colors.windowsBg};
         color: white;
         letter-spacing: 1px;
         max-width: 6rem;
@@ -55,7 +55,7 @@ const MainScreenContainer = () => {
     return (
         <MainScreenWrapper>
             {mainScreenItems.map(({ label, icon, onClick }, index) => (
-                <ScreenItem key={label+icon} isactive={isActiveItem(index)} onClick={(e) => {
+                <ScreenItem key={label+icon} isactive={`${isActiveItem(index)}`} onClick={(e) => {
                     onClick(e)
                     handleClick(index)
                 }}>
