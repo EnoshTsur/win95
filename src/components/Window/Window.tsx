@@ -35,10 +35,11 @@ interface WindowProps {
 
 const Window = ({ title, children, style, offset, panelButtons, panelButtonsStyle, getZIndex }: WindowProps) => {
 
-    const { zIndex } = useWindow({ getZIndex })
+    const { zIndex, windowId } = useWindow({ getZIndex })
+    const { moveToTop } = useOpenWindowState(({ moveToTop }) => ({ moveToTop }))
 
     return (
-        <WindowWrapper style={style} zindex={zIndex} offset={offset}>
+        <WindowWrapper style={style} zindex={zIndex} offset={offset} onClick={() => moveToTop(windowId)}>
             { 
                 title != null && (
                     <WindowTitle title={title.title} titleButtons={title.titleButtons ?? []} /> 

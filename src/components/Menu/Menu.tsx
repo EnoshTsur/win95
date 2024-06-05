@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 import { FaCaretRight } from "react-icons/fa"
 import Window from "components/Window/Window"
+import useMenu from "./useMenu"
 
 const ScreenMenuWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.menu};
@@ -61,24 +61,12 @@ export interface ScreenMenuItem {
 
 interface ScreenItemProps {
     readonly offset: { x: number, y: number }
-    // readonly zIndex: number
     readonly menuItems: ReadonlyArray<ReadonlyArray<ScreenMenuItem>>
 }
 
-const ScreenMenu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
+const Menu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
 
-    // const [isMouseHover, setMouseHover] = useState(false)
-    const [hoveredItem, setHoveredItem] = useState<{ row: number, col: number } | null>(null)
-
-    const ref = useRef<HTMLDivElement | null>(null)
-
-    const computedX = useMemo(() => {
-        if (ref.current != null) {
-            const { width } = ref.current.getBoundingClientRect()
-            return width - 10
-        }
-        return 0;
-    }, [ref.current])
+    const {ref, hoveredItem, setHoveredItem, computedX} = useMenu()
 
     return (
         <Window offset={{ x, y }}>
@@ -97,7 +85,7 @@ const ScreenMenu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
                         >
                             { 
                                 !disabled && hasCaret && next && hoveredItem?.row === rowIndex && hoveredItem?.col === colIndex && (
-                                    <ScreenMenu 
+                                    <Menu 
                                         menuItems={next!} 
                                         offset={{ x: computedX, y: -5 }} 
                                     />
@@ -119,4 +107,4 @@ const ScreenMenu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
     )
 }
 
-export default ScreenMenu
+export default Menu

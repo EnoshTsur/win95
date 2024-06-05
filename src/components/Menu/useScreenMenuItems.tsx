@@ -1,9 +1,13 @@
 import { useDisplayModalStore } from "components/DispalyProperties/store/store"
 import { useMemo } from "react"
 import { useStartMenuState } from "store/store"
-import { ScreenMenuItem } from "./ScreenMenu"
+import { ScreenMenuItem } from "./Menu"
 import Underline from "components/Underline/Underline"
 import styled from "styled-components"
+import { useMainScreenItemsStore } from "components/MainScreen/store/store"
+import folderIcon from '../../assets/folder.png'
+import folderActive from '../../assets/folder.png'
+
 
 const FlexWrapper = styled.div`
     display: flex;
@@ -14,6 +18,11 @@ const useScreenMenuItems = () => {
 
     const { openDisplayProperties } = useDisplayModalStore(({ openDisplayProperties }) => ({ openDisplayProperties }))
     const { closeStartMenu } = useStartMenuState()
+    const { arrangeByName, autoArrange, addItem } = useMainScreenItemsStore(({ arrangeByName, autoArrange, addItem }) => ({
+         arrangeByName, 
+         autoArrange, 
+         addItem 
+    }))
 
     const newIcons = useMemo<ReadonlyArray<ReadonlyArray<ScreenMenuItem>>>(() => [
         [
@@ -21,7 +30,7 @@ const useScreenMenuItems = () => {
                 children: <><Underline>F</Underline>older</>,
                 hasCaret: false,
                 disabled: false,
-                onClick: () => {},
+                onClick: () => addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {} }),
             },
             { 
                 children: <><Underline>S</Underline>hortcut</>,
@@ -70,7 +79,7 @@ const useScreenMenuItems = () => {
                 children: <FlexWrapper><span>by</span> <span><Underline>N</Underline>ame</span></FlexWrapper>,
                 hasCaret: false,
                 disabled: false,
-                onClick: () => {},
+                onClick: arrangeByName,
             },
             { 
                 children: <FlexWrapper><span>by</span> <span><Underline>T</Underline>ype</span></FlexWrapper>,
@@ -96,7 +105,7 @@ const useScreenMenuItems = () => {
                 children: <><Underline>A</Underline>uto Arrange</>,
                 hasCaret: false,
                 disabled: false,
-                onClick: () => {},
+                onClick: autoArrange,
             },
         ],
     ], [])

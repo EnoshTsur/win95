@@ -1,6 +1,7 @@
 import { useMainScreenItemsStore } from "components/MainScreen/store/store";
 import { useCallback } from "react";
 import styled from "styled-components";
+import MainScreenItem from "./MainScreenItem";
 
 const MainScreenWrapper = styled.div`
     padding: 0 2px;
@@ -55,13 +56,16 @@ const MainScreenContainer = () => {
     return (
         <MainScreenWrapper>
             {mainScreenItems.map(({ label, icon, onClick }, index) => (
-                <ScreenItem key={label+icon} isactive={`${isActiveItem(index)}`} onClick={(e) => {
-                    onClick(e)
-                    handleClick(index)
-                }}>
-                    <img src={isActiveItem(index) ? icon.activeIcon : icon.icon} alt={label} />
-                    <span>{label}</span>
-                </ScreenItem>
+                <MainScreenItem 
+                    key={label+icon} 
+                    isActive={isActiveItem(index)} 
+                    icon={isActiveItem(index) ? icon.activeIcon : icon.icon}
+                    label={label}
+                    onClick={(e) => {
+                        onClick(e)
+                        handleClick(index)
+                    }}
+                />
             ) )}
         </MainScreenWrapper>
     )

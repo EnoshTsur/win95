@@ -32,5 +32,8 @@ export interface MainScreenBackgroundSizeStore {
 export interface MainScreenItemsStore {
     readonly mainScreenItems: ReadonlyArray<ScreenItem>
     readonly mainScreenActiveItem: number
+    readonly addItem: (item: ScreenItem) => void
     readonly setMainScreenActiveItem: (index: number) => void
+    readonly arrangeByName: () => void
+    readonly autoArrange: () => void
 }

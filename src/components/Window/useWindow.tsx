@@ -35,6 +35,7 @@ const useWindow = ({ getZIndex }: useWindowProps) => {
 
     return {
         zIndex,
+        windowId,
     }
 }
 

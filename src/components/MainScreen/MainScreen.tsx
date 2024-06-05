@@ -1,15 +1,13 @@
 import DisplayProperties from "components/DispalyProperties/DisplayProperties";
 import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplayModalStore } from "components/DispalyProperties/store/store";
-import ScreenMenu, { ScreenMenuItem } from "components/ScreenMenu/ScreenMenu";
-import { useScreenMenuStore } from "components/ScreenMenu/store/store";
-import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
+import ScreenMenu from "components/Menu/Menu";
+import { useScreenMenuStore } from "components/Menu/store/store";
+import MainScreenContainer from "components/MainScreen/MainScreenContainer";
 import { useMemo, useState } from "react";
-import { useOpenWindowState, useStartMenuState } from "store/store";
+import { useStartMenuState } from "store/store";
 import styled from "styled-components";
 import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
-import Underline from "components/Underline/Underline";
-import useScreenMenuItems from "components/ScreenMenu/useScreenMenuItems";
-import useScreenMenuZIndex from "components/ScreenMenu/useScreenMenuZIndex";
+import useScreenMenuItems from "components/Menu/useScreenMenuItems";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
@@ -46,8 +44,6 @@ const MainScreen = () => {
     const { mainScreenSelectedBackground } = useMainScreenBackgroundStore(({ mainScreenSelectedBackground }) => ({ mainScreenSelectedBackground }))
 
     const { mainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize }) => ({ mainScreenBackgroundSize }))
-
-    const { zIndex } = useScreenMenuZIndex()
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? displayApplyBackground.url

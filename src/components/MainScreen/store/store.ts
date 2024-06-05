@@ -64,7 +64,10 @@ export const initialScreenItems: ReadonlyArray<ScreenItem> = [
 export const useMainScreenItemsStore = create<MainScreenItemsStore>((set) => ({
     mainScreenActiveItem: -1,
     mainScreenItems: initialScreenItems,
-    setMainScreenActiveItem: (index) => set((pre) => ({...pre, mainScreenActiveItem: index}))
+    addItem: (item) => set((pre) => ({ ...pre, mainScreenItems: [...pre.mainScreenItems, item ]})),
+    setMainScreenActiveItem: (index) => set((pre) => ({...pre, mainScreenActiveItem: index})),
+    arrangeByName: () => set((pre) => ({...pre, mainScreenItems: [...pre.mainScreenItems].sort((x, y) => x.label.localeCompare(y.label))})),
+    autoArrange: () => set((pre) => ({...pre, mainScreenItems: initialScreenItems }))
 }))
 
 export const useMainScreenBackgroundStore = create<MainScreenBackgroundStore>((set) => ({
