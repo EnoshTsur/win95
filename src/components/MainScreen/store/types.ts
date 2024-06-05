@@ -14,6 +14,7 @@ export interface ScreenItem {
     readonly label: string
     readonly icon: ScreenIcon
     readonly onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    readonly onDoubleClick: () => void
 }
 
 export interface MainScreenBackgroundStore {
@@ -34,6 +35,7 @@ export interface MainScreenItemsStore {
     readonly mainScreenActiveItem: number
     readonly addItem: (item: ScreenItem) => void
     readonly setMainScreenActiveItem: (index: number) => void
+    readonly setMainScreenItems: (items: ReadonlyArray<ScreenItem>) => void
     readonly arrangeByName: () => void
     readonly autoArrange: () => void
 }

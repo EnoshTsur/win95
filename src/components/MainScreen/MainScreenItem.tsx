@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import useMainScreenItem from "./hooks/useMainScreenItem";
 
 const ScreenItem = styled.div<{ isactive: string, editable: string }>`
     display: flex;
@@ -37,20 +38,26 @@ interface MainScreenItemProps {
     readonly isActive: boolean
     readonly icon: string
     readonly label: string
+    readonly spanStyle?: React.CSSProperties
     readonly onClick: (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    readonly onDoubleClick: () => void
 }
 
-const MainScreenItem = ({ isActive, onClick , icon, label }: MainScreenItemProps) => {
+// TODO: make it generic to reuse out side main screen
+const MainScreenItem = ({ isActive, onClick, onDoubleClick, icon, label, spanStyle = {} }: MainScreenItemProps) => {
 
-    const [isEditable, setEditable] = useState(false)
+    const { ref, isEditable, setEditable, handleBlur} = useMainScreenItem({ label })
 
     return (
         <ScreenItem isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
-            <img src={icon} alt={label} />
+            <img src={icon} alt={label} onDoubleClick={onDoubleClick}/>
             <span 
-                onBlur={() => setEditable(false)} 
-                onDoubleClick={() => setEditable(true)} 
+                style={spanStyle}
+                ref={ref}
+                onBlur={handleBlur} 
+                onDoubleClick={() => setEditable(true)}
                 contentEditable={isEditable}
+                suppressContentEditableWarning={true}
             >
                 {label}
             </span>

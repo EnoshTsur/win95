@@ -69,7 +69,6 @@ const DisplayPropertiesContent = ({ handleClose }: DisplayAlertContentProps) => 
     }))
 
     const isApplyAllowed = useMemo(() => {
-        debugger
         if (displayApplyBackground.fileName !== '[None]') {
             return displayApplyBackground.fileName !== displayBackground.fileName 
                 || displayBackgroundSize !== applyBackgroundSize

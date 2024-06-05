@@ -1,7 +1,8 @@
 import { useMainScreenItemsStore } from "components/MainScreen/store/store";
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 import MainScreenItem from "./MainScreenItem";
+import useMainScreenItemsInit from "./hooks/useMainScreenItemsInit";
 
 const MainScreenWrapper = styled.div`
     padding: 0 2px;
@@ -14,7 +15,7 @@ const MainScreenWrapper = styled.div`
 
 const MainScreenContainer = () => {
 
-    const ref = useRef(null)
+    useMainScreenItemsInit()
 
     const { mainScreenItems, mainScreenActiveItem, setMainScreenActiveItem } = useMainScreenItemsStore(({ 
         mainScreenItems, 
@@ -34,8 +35,8 @@ const MainScreenContainer = () => {
 
 
     return (
-        <MainScreenWrapper ref={ref}>
-            {mainScreenItems.map(({ label, icon, onClick }, index) => (
+        <MainScreenWrapper>
+            {mainScreenItems.map(({ label, icon, onClick, onDoubleClick }, index) => (
                 <MainScreenItem 
                     key={label+icon} 
                     isActive={isActiveItem(index)} 
@@ -45,6 +46,7 @@ const MainScreenContainer = () => {
                         onClick(e)
                         handleClick(index)
                     }}
+                    onDoubleClick={onDoubleClick}
                 />
             ) )}
         </MainScreenWrapper>

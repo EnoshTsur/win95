@@ -4,16 +4,6 @@ import blackThatchUrl from '../../../assets/black-thatch-wallpaper.png'
 import blueRivetsUrl from '../../../assets/blue-rivets-wallpaper.png'
 import bubblesUrl from '../../../assets/bubbles-wallpaper.jpg'
 import cravedStonedUrl from '../../../assets/craved-stoned-wallpaper.png'
-import emptyTrashIcon from '../../../assets/empty-trash.png';
-import emptyTrashActive from '../../../assets/empty-trash-active.png'
-import myComputerIcon from '../../../assets/my-computer.png';
-import myComputerActiveIcon from '../../../assets/my-computer-active.png';
-import networkNeighborhoodIcon from '../../../assets/network-neighborhood.png'
-import networkNeighborhoodActive from '../../../assets/network-neighborhood-active.png'
-import folderIcon from '../../../assets/folder.png'
-import folderActive from '../../../assets/folder-active.png'
-import inboxIcon from '../../../assets/inbox.png'
-import inboxActive from '../../../assets/inbox-active.png'
 
 export const initialBackgroundList: ReadonlyArray<Background> = [
     { fileName: '[None]', url: ''},
@@ -23,51 +13,14 @@ export const initialBackgroundList: ReadonlyArray<Background> = [
     { fileName: 'Carved Stoned', url: cravedStonedUrl }
 ]
 
-export const initialScreenItems: ReadonlyArray<ScreenItem> = [
-    {
-        icon: { icon: myComputerIcon, activeIcon: myComputerActiveIcon },
-        label: 'My Computer',
-        onClick: (e) => {
-            e.preventDefault()
-        },
-    },
-    {
-        icon: { icon: networkNeighborhoodIcon, activeIcon: networkNeighborhoodActive },
-        label: 'Network Neighborhood',
-        onClick: (e) => {
-            e.preventDefault()
-        },
-    },
-    {
-        icon: { icon: inboxIcon, activeIcon: inboxActive},
-        label: 'Inbox',
-        onClick: (e) => {
-            e.preventDefault()
-        },
-    },
-    {
-        icon: { icon: emptyTrashIcon, activeIcon: emptyTrashActive},
-        label: 'Recycle Bin',
-        onClick: (e) => {
-            e.preventDefault()
-        },
-    },
-    {
-        icon: { icon: folderIcon, activeIcon: folderActive},
-        label: 'Online Services',
-        onClick: (e) => {
-            e.preventDefault()
-        },
-    }
-]
-
 export const useMainScreenItemsStore = create<MainScreenItemsStore>((set) => ({
     mainScreenActiveItem: -1,
-    mainScreenItems: initialScreenItems,
+    mainScreenItems: [],
     addItem: (item) => set((pre) => ({ ...pre, mainScreenItems: [...pre.mainScreenItems, item ]})),
     setMainScreenActiveItem: (index) => set((pre) => ({...pre, mainScreenActiveItem: index})),
+    setMainScreenItems: (items) => set((pre) => ({...pre, mainScreenItems: items })),
     arrangeByName: () => set((pre) => ({...pre, mainScreenItems: [...pre.mainScreenItems].sort((x, y) => x.label.localeCompare(y.label))})),
-    autoArrange: () => set((pre) => ({...pre, mainScreenItems: initialScreenItems }))
+    autoArrange: () => set((pre) => ({...pre, mainScreenItems: pre.mainScreenItems }))
 }))
 
 export const useMainScreenBackgroundStore = create<MainScreenBackgroundStore>((set) => ({

@@ -30,7 +30,7 @@ const useScreenMenuItems = () => {
                 children: <><Underline>F</Underline>older</>,
                 hasCaret: false,
                 disabled: false,
-                onClick: () => addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {} }),
+                onClick: () => addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {}, onDoubleClick: () => {} }),
             },
             { 
                 children: <><Underline>S</Underline>hortcut</>,

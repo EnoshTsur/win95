@@ -4,7 +4,6 @@ import { useMemo, useState } from "react"
 import emarkIcon from '../../assets/emark-icon.png'
 import questionIcon from '../../assets/question-icon.png'
 import closeIcon from '../../assets/close-icon.png'
-
 import styled from "styled-components"
 import Backdrop from "./Backdrop"
 import { createPortal } from "react-dom"

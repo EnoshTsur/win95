@@ -2,7 +2,7 @@ import Underline from "components/Underline/Underline";
 import styled from "styled-components";
 import { useEffect } from "react";
 import { useMainScreenBackgroundSizeStore } from "components/MainScreen/store/store";
-import { useDisplayBackgroundSizeStore, useDisplayBackgroundStore } from "../store/store";
+import { useDisplayBackgroundSizeStore } from "../store/store";
 
 const BackgroundSizeWrapper = styled.div`
     display: flex;

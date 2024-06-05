@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ButtonProps } from "components/Button/Button";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
@@ -15,6 +15,7 @@ const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: numb
     border-right: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-left: 2px solid ${({ theme }) => theme.colors.white};
     border-top: 2px solid ${({ theme }) => theme.colors.white};
+    z-index: ${({ zindex }) => zindex};
 `
 
 interface TitleProps {
