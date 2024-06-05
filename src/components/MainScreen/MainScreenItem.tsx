@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const ScreenItem = styled.div<{ isactive: string }>`
+const ScreenItem = styled.div<{ isactive: string, editable: string }>`
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -18,6 +18,7 @@ const ScreenItem = styled.div<{ isactive: string }>`
 
 
     span {
+        cursor: ${({ editable }) => editable === 'true' ? 'text': 'pointer'};
         border: ${({ theme, isactive }) => isactive === 'true' ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
         background-color: ${({ theme, isactive }) => isactive === 'true' ? theme.colors.alertTitleBar : theme.colors.windowsBg};
         color: white;
@@ -39,12 +40,12 @@ interface MainScreenItemProps {
     readonly onClick: (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 
-const MainScreenItem = ({ isActive, onClick , icon, label}: MainScreenItemProps) => {
+const MainScreenItem = ({ isActive, onClick , icon, label }: MainScreenItemProps) => {
 
     const [isEditable, setEditable] = useState(false)
 
     return (
-        <ScreenItem isactive={`${isActive}`} onClick={onClick} >
+        <ScreenItem isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
             <img src={icon} alt={label} />
             <span 
                 onBlur={() => setEditable(false)} 
