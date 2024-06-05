@@ -10,6 +10,7 @@ import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplay
 const DisplayWrapper = styled.div`
     width: 500px;
     position: relative;
+    background-color: ${({ theme }) => theme.colors.menu };
 `
 
 const DisplayMain = styled.div`

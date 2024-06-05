@@ -1,16 +1,10 @@
-import Underline from "components/Underline/Underline"
-import { useCallback, useMemo, useRef, useState } from "react"
-import { useStartMenuState } from "store/store"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
-import { useDisplayModalStore } from "components/DispalyProperties/store/store"
 import { FaCaretRight } from "react-icons/fa"
+import Window from "components/Window/Window"
 
-const ScreenMenuWrapper = styled.div<{ x: number, y: number }>`
-    position: absolute;
-    top: ${({ y }) => y}px;
-    left: ${({ x }) => x}px;
+const ScreenMenuWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.menu};
-    padding: 5px;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
     border-left: 1px solid white;
@@ -19,11 +13,13 @@ const ScreenMenuWrapper = styled.div<{ x: number, y: number }>`
     flex-direction: column;
 `
 
-const ScreenMenuItemsContainer = styled.div<{ hasbordertop: boolean, hasborderbottom: boolean }>`
+const ScreenMenuItemsContainer = styled.div<{ hasbordertop: string, hasborderbottom: string }>`
     display: flex;
     flex-direction: column;
-    ${({ hasbordertop, theme }) => hasbordertop && `border-top: 1px solid ${theme.colors.white};`}
-    ${({ hasborderbottom, theme }) => hasborderbottom && `border-bottom: 1px solid ${theme.colors.buttonShadow};`}
+    padding: 3px;
+
+    ${({ hasbordertop, theme }) => hasbordertop === 'true' && `border-top: 1px solid ${theme.colors.white};`}
+    ${({ hasborderbottom, theme }) => hasborderbottom === 'true' && `border-bottom: 1px solid ${theme.colors.buttonShadow};`}
 `
 
 const ScreenMenuItem = styled.button`
@@ -36,7 +32,7 @@ const ScreenMenuItem = styled.button`
     font-size: 16px;
     background: transparent;
     border: none;
-
+    white-space: nowrap;
     &:hover {
         cursor: pointer;
         color: ${({ disabled, theme }) => disabled ? theme.colors.buttonFace :  'white' };
@@ -65,52 +61,61 @@ export interface ScreenMenuItem {
 
 interface ScreenItemProps {
     readonly offset: { x: number, y: number }
+    // readonly zIndex: number
     readonly menuItems: ReadonlyArray<ReadonlyArray<ScreenMenuItem>>
 }
 
 const ScreenMenu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
 
-    const [isMouseHover, setMouseHover] = useState(false)
+    // const [isMouseHover, setMouseHover] = useState(false)
+    const [hoveredItem, setHoveredItem] = useState<{ row: number, col: number } | null>(null)
 
     const ref = useRef<HTMLDivElement | null>(null)
 
-    const handleMouseEnter = useCallback((disabled: boolean) => {
-        if (disabled) {
-            return
+    const computedX = useMemo(() => {
+        if (ref.current != null) {
+            const { width } = ref.current.getBoundingClientRect()
+            return width - 10
         }
-        setMouseHover(true)
-    }, [])
-
-    const handleMouseLeave = useCallback((disabled: boolean) => {
-        if (disabled) {
-            return
-        }
-        setMouseHover(false)
-    }, [])
+        return 0;
+    }, [ref.current])
 
     return (
-        <ScreenMenuWrapper x={x} y={y} ref={ref}>
+        <Window offset={{ x, y }}>
+        <ScreenMenuWrapper ref={ref}>
             { menuItems.map((row, rowIndex) => (
-                <ScreenMenuItemsContainer key={`menuscreen${row.length}${rowIndex}`} hasbordertop={rowIndex !== 0} hasborderbottom={rowIndex !== menuItems.length - 1}>
+                <ScreenMenuItemsContainer 
+                    key={`menuscreen${row.length}${rowIndex}`} 
+                    hasbordertop={`${rowIndex !== 0}`} 
+                    hasborderbottom={`${rowIndex !== menuItems.length - 1}`}
+                >
                     { row.map(({ children, hasCaret, disabled, onClick, next }, colIndex) => (
-                        <ScreenMenuItemWrapper key={`memuscreenitem${children}${colIndex}`} >
+                        <ScreenMenuItemWrapper 
+                            key={`memuscreenitem${colIndex}`}
+                            onMouseEnter={() => setHoveredItem({ row: rowIndex, col: colIndex })}
+                            onMouseLeave={() => setHoveredItem(null)}
+                        >
+                            { 
+                                !disabled && hasCaret && next && hoveredItem?.row === rowIndex && hoveredItem?.col === colIndex && (
+                                    <ScreenMenu 
+                                        menuItems={next!} 
+                                        offset={{ x: computedX, y: -5 }} 
+                                    />
+                                )
+                            }
                             <ScreenMenuItem  
                                 onClick={onClick} 
                                 disabled={disabled} 
-                                onMouseEnter={() => handleMouseEnter(disabled)} 
-                                onMouseLeave={() => handleMouseLeave(disabled)}
                             >
-                                { ( isMouseHover && next != null ) && (
-                                    <ScreenMenu menuItems={next} offset={{ x: ref?.current?.getBoundingClientRect().width ?? 0, y: -1 }} />
-                                )}
                                 { children }
                             </ScreenMenuItem>
-                            { hasCaret && <FaCaretRight /> }
+                            { hasCaret && <FaCaretRight /> } 
                         </ScreenMenuItemWrapper>
                     ))}
                 </ScreenMenuItemsContainer>
             ))}
         </ScreenMenuWrapper>
+        </Window>
     )
 }
 

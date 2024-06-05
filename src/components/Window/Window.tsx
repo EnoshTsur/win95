@@ -4,72 +4,48 @@ import { ButtonProps } from "components/Button/Button";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
 import WindowTitle from "./WindowTitle/WindowTitle";
 import { useOpenWindowState } from "store/store";
+import useWindow from "./useWindow";
 
-const WindowWrapper = styled.div<{ zindex: number }>`
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: inline-flex;
-    flex-direction: column;
+const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: number } }>`
+    position: ${({ offset }) => offset ? 'absolute' : 'fixed'};
+    top: ${({ offset }) => offset ? `${offset.y}px` : '50%' };
+    left: ${({ offset }) => offset ? `${offset.x}px` : '50%' };
+    ${({ offset }) => !offset && 'transform: translate(-50%, -50%);'}
     border-bottom: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-right: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     border-left: 2px solid ${({ theme }) => theme.colors.white};
     border-top: 2px solid ${({ theme }) => theme.colors.white};
 `
 
-const WindowContent = styled.div`
-    background-color: ${({ theme }) => theme.colors.menu };
-`
+interface TitleProps {
+    readonly title?: string
+    readonly titleButtons?: ReadonlyArray<ButtonProps>
+}
 
 interface WindowProps {
-    readonly title?: string
+    readonly offset?: { x: number, y: number }
+    readonly title?: TitleProps
     readonly style?: React.CSSProperties
     readonly children: React.ReactNode
-    readonly titleButtons: ReadonlyArray<ButtonProps>
     readonly panelButtons?: ReadonlyArray<ButtonProps>
     readonly panelButtonsStyle?: React.CSSProperties
     readonly getZIndex?: (zIndex: number) => void
 }
 
-const windowIdGenerator = () => {
-    let idgen = 0;
 
-    return (title: string) => `${title} ${idgen++}`
-}
+const Window = ({ title, children, style, offset, panelButtons, panelButtonsStyle, getZIndex }: WindowProps) => {
 
-const idGenerator = windowIdGenerator()
-
-
-const Window = ({ title, children, titleButtons, style, panelButtons = [], panelButtonsStyle, getZIndex }: WindowProps) => {
-
-    const { addWindow, removeWindow, openedWindows } = useOpenWindowState()
-    
-    const windowId = useMemo(() => idGenerator(title ?? ''), [])
-
-    const zIndex = useMemo(() => openedWindows.find(({ id }) => id === windowId)?.zIndex ?? 0, [openedWindows])
-
-    useEffect(() => {
-        addWindow(windowId)
-
-        return () => {
-            removeWindow(windowId)
-        }
-    }, [])
-
-    useEffect(() => {
-        if (getZIndex != null) {
-            getZIndex(zIndex)
-        }
-    }, [zIndex])
+    const { zIndex } = useWindow({ getZIndex })
 
     return (
-        <WindowWrapper style={style} zindex={zIndex}>
-            <WindowTitle title={title} titleButtons={titleButtons} />
-            <WindowContent>
+        <WindowWrapper style={style} zindex={zIndex} offset={offset}>
+            { 
+                title != null && (
+                    <WindowTitle title={title.title} titleButtons={title.titleButtons ?? []} /> 
+                )
+            }
                 {children}
-            <PannelButtonsContainer data={panelButtons} style={panelButtonsStyle}/>
-            </WindowContent>
+            { panelButtons && <PannelButtonsContainer data={panelButtons} style={panelButtonsStyle}/> }
         </WindowWrapper>
     )
 }

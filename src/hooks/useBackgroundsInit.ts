@@ -28,7 +28,7 @@ const useBackgrounInit = () => {
     useEffect(() => {
         setTimeout(() => {
             setLoading(false)
-        }, 2000)
+        }, 200)
     }, [])
 
 

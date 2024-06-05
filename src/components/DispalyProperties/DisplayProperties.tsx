@@ -38,7 +38,7 @@ const DisplayProperties  = () => {
     
 
     return (
-            <Window title="Display properties" titleButtons={displayAlertButtons}>
+            <Window title={{ title:"Display properties", titleButtons: displayAlertButtons }}>
                 <DisplayPropertiesContent handleClose={handleClose}/>
             </Window>
     )

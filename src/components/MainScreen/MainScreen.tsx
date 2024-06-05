@@ -4,11 +4,12 @@ import ScreenMenu, { ScreenMenuItem } from "components/ScreenMenu/ScreenMenu";
 import { useScreenMenuStore } from "components/ScreenMenu/store/store";
 import MainScreenContainer from "containers/MainScreenContainer/MainScreenContainer";
 import { useMemo, useState } from "react";
-import { useStartMenuState } from "store/store";
+import { useOpenWindowState, useStartMenuState } from "store/store";
 import styled from "styled-components";
 import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
 import Underline from "components/Underline/Underline";
 import useScreenMenuItems from "components/ScreenMenu/useScreenMenuItems";
+import useScreenMenuZIndex from "components/ScreenMenu/useScreenMenuZIndex";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
@@ -46,6 +47,8 @@ const MainScreen = () => {
 
     const { mainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize }) => ({ mainScreenBackgroundSize }))
 
+    const { zIndex } = useScreenMenuZIndex()
+
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? displayApplyBackground.url
         : mainScreenSelectedBackground.url
@@ -71,7 +74,6 @@ const MainScreen = () => {
 
     return (
         <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
-                
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
 
                 {

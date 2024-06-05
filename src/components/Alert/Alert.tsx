@@ -10,7 +10,6 @@ import Backdrop from "./Backdrop"
 import { createPortal } from "react-dom"
 
 const AlertContent = styled.div`
-    background-color: ${({ theme }) => theme.colors.menu };
     padding: 15px;
     display: flex;
     gap: 10px;
@@ -67,7 +66,7 @@ const Alert = ({ title, titleButtons, message, status, panelButtons }: AlertProp
 
     return createPortal(
         <Backdrop zIndex={zIndex}>  
-            <Window title={title} titleButtons={titleButtons} panelButtons={panelButtons} getZIndex={(index) => setZindex(index)}>
+            <Window title={{ title, titleButtons }} style={{ backgroundColor: '#c4c4c4  '}} panelButtons={panelButtons} getZIndex={(index) => setZindex(index)}>
                 <AlertContent>
                     { status && icon }
                     <AlertMessage>

@@ -15,6 +15,7 @@ const OptionsWrapper = styled.div`
     display: flex;
     gap: 10px;
     justify-content: space-evenly;
+    background-color: ${({ theme }) => theme.colors.menu };
 `
 
 const DisabledButtonWrapper = styled.div`
