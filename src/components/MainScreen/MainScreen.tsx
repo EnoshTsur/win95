@@ -3,10 +3,10 @@ import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplay
 import ScreenMenu from "components/Menu/Menu";
 import { useScreenMenuStore } from "components/Menu/store/store";
 import MainScreenContainer from "components/MainScreen/MainScreenContainer";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useStartMenuState } from "store/store";
 import styled from "styled-components";
-import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
+import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore, useMainScreenItemsStore } from "./store/store";
 import useScreenMenuItems from "components/Menu/useScreenMenuItems";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
@@ -21,6 +21,8 @@ const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string
 
 const MainScreen = () => {
     const [offset, setOffset] = useState({ x: 0,  y: 0})
+
+    const ref = useRef(null)
 
     const { screenMenuItems } = useScreenMenuItems()
 
@@ -45,6 +47,8 @@ const MainScreen = () => {
 
     const { mainScreenBackgroundSize } = useMainScreenBackgroundSizeStore(({ mainScreenBackgroundSize }) => ({ mainScreenBackgroundSize }))
 
+    const { setMainScreenActiveItem } = useMainScreenItemsStore(({ setMainScreenActiveItem }) => ({ setMainScreenActiveItem }))
+
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? displayApplyBackground.url
         : mainScreenSelectedBackground.url
@@ -56,9 +60,13 @@ const MainScreen = () => {
     , [isDisplayPropertiesOpen, applyBackgroundSize, mainScreenBackgroundSize])
 
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => {
         closeStartMenu()
         closeScreenMenu()
+        if (e.target === ref.current) {
+            setMainScreenActiveItem(-1)
+        }
     }
 
     const handleContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -69,7 +77,7 @@ const MainScreen = () => {
 
 
     return (
-        <ScreenWrapper onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
+        <ScreenWrapper ref={ref} onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
 
                 {

@@ -1,5 +1,5 @@
 import { useMainScreenItemsStore } from "components/MainScreen/store/store";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import styled from "styled-components";
 import MainScreenItem from "./MainScreenItem";
 
@@ -32,19 +32,9 @@ const MainScreenContainer = () => {
 
     const isActiveItem = useCallback((index: number) => mainScreenActiveItem === index, [mainScreenActiveItem])
 
-    useEffect(() => {
-        console.log({ mainScreenActiveItem });
-        
-    }, [mainScreenActiveItem])
-
 
     return (
-        <MainScreenWrapper ref={ref} onClick={(e) =>{
-            if (e.target === ref.current) {
-                setMainScreenActiveItem(-1)
-            }
-            
-        }}>
+        <MainScreenWrapper ref={ref}>
             {mainScreenItems.map(({ label, icon, onClick }, index) => (
                 <MainScreenItem 
                     key={label+icon} 
