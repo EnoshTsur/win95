@@ -1,7 +1,6 @@
 export interface WindowsFileSystemItem {
     readonly label: string;
     readonly icon: string;
-    readonly isFolder: boolean;
     readonly items: { [name: string]: WindowsFileSystemItem };
 }
 
