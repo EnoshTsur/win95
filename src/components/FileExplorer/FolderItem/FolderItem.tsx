@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useFileItem from "../hooks/useFileItem";
+import Tooltip from "components/Tooltip/Tooltip";
 
 const FolderItemWrapper = styled.div<{ isactive: string, editable: string }>`
     display: flex;
@@ -62,24 +63,26 @@ const FolderItem = ({
     const navigate = useNavigate()
 
     return (
-        <FolderItemWrapper isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
-            <img src={icon} alt={label} onDoubleClick={() => {
-                onDoubleClick()
-                if (nextNavigation != null) {
-                    navigate(nextNavigation)
-                }
-            }}/>
-            <span 
-                style={spanStyle}
-                ref={ref}
-                onBlur={handleBlur} 
-                onDoubleClick={() => setEditable(true)}
-                contentEditable={editable && isEditable}
-                suppressContentEditableWarning={true}
-            >
-                {label}
-            </span>
-        </FolderItemWrapper>
+        <Tooltip placement="bottom" title={label} >
+            <FolderItemWrapper isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
+                <img src={icon} alt={label} onDoubleClick={() => {
+                    onDoubleClick()
+                    if (nextNavigation != null) {
+                        navigate(nextNavigation)
+                    }
+                }}/>
+                <span 
+                    style={spanStyle}
+                    ref={ref}
+                    onBlur={handleBlur} 
+                    onDoubleClick={() => setEditable(true)}
+                    contentEditable={editable && isEditable}
+                    suppressContentEditableWarning={true}
+                >
+                    {label}
+                </span>
+            </FolderItemWrapper>
+        </Tooltip>
     )
 }
 

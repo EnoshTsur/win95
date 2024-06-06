@@ -1,9 +1,8 @@
 import { useMainScreenItemsStore } from "components/MainScreen/store/store";
 import { useCallback } from "react";
 import styled from "styled-components";
-import MainScreenItem from "./MainScreenItem";
 import useMainScreenItemsInit from "./hooks/useMainScreenItemsInit";
-import Tooltip from "components/Tooltip/Tooltip";
+import FolderItem from "components/FileExplorer/FolderItem/FolderItem";
 
 const MainScreenWrapper = styled.div`
     padding: 0 2px;
@@ -38,9 +37,7 @@ const MainScreenContainer = () => {
     return (
         <MainScreenWrapper>
             {mainScreenItems.map(({ label, icon, onClick, onDoubleClick }, index) => (
-                <Tooltip title={label} placement="bottom">
-
-                <MainScreenItem 
+                <FolderItem 
                     key={label+icon} 
                     isActive={isActiveItem(index)} 
                     icon={isActiveItem(index) ? icon.activeIcon : icon.icon}
@@ -51,7 +48,6 @@ const MainScreenContainer = () => {
                     }}
                     onDoubleClick={onDoubleClick}
                     />
-                </Tooltip>
             ) )}
         </MainScreenWrapper>
     )

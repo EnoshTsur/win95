@@ -5,7 +5,7 @@ import floppyIcon from '../../../assets/floppy-driver.png'
 import folderIcon from '../../../assets/folder.png'
 import historyIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
-import FolderItem from "../FileItem/FileItem";
+import FolderItem from "../FolderItem/FolderItem";
 
 const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath: string = ''): ReadonlyArray<FileExplorerRoute> => 
     Object.keys(fileSystem).reduce<ReadonlyArray<FileExplorerRoute>>((acc, key) => {

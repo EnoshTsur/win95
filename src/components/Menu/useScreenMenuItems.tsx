@@ -8,7 +8,7 @@ import { useMainScreenItemsStore } from "components/MainScreen/store/store"
 import folderIcon from '../../assets/folder.png'
 import folderActive from '../../assets/folder.png'
 import { useFileExplorerRoutesStore, useFileSystemStore } from "components/FileExplorer/store/store"
-import FolderItem from "components/FileExplorer/FileItem/FileItem"
+import FolderItem from "components/FileExplorer/FolderItem/FolderItem"
 
 
 const FlexWrapper = styled.div`
