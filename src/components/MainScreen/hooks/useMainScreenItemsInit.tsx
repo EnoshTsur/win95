@@ -81,7 +81,7 @@ const useMainScreenItemsInit = () => {
 
     useEffect(() => {
         setMainScreenItems(initialScreenItems)
-    }, [fileSystem])
+    }, [])
 }
 
 export default useMainScreenItemsInit

@@ -2,7 +2,7 @@ import { useMainScreenItemsStore } from "components/MainScreen/store/store";
 import { useCallback } from "react";
 import styled from "styled-components";
 import useMainScreenItemsInit from "./hooks/useMainScreenItemsInit";
-import FolderItem from "components/FileExplorer/FolderItem/FolderItem";
+import FileItem from "components/FileExplorer/FileItem/FileItem";
 
 const MainScreenWrapper = styled.div`
     padding: 0 2px;
@@ -31,13 +31,13 @@ const MainScreenContainer = () => {
         setMainScreenActiveItem(index)
     }
 
-    const isActiveItem = useCallback((index: number) => mainScreenActiveItem === index, [mainScreenActiveItem])
+    const isActiveItem = useCallback((index: number) => mainScreenActiveItem === index, [mainScreenActiveItem, mainScreenItems])
 
 
     return (
         <MainScreenWrapper>
             {mainScreenItems.map(({ label, icon, onClick, onDoubleClick }, index) => (
-                <FolderItem 
+                <FileItem 
                     key={label+icon} 
                     isActive={isActiveItem(index)} 
                     icon={isActiveItem(index) ? icon.activeIcon : icon.icon}

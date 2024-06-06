@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useFileItem from "../hooks/useFileItem";
 import Tooltip from "components/Tooltip/Tooltip";
 
-const FolderItemWrapper = styled.div<{ isactive: string, editable: string }>`
+const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -36,7 +36,7 @@ const FolderItemWrapper = styled.div<{ isactive: string, editable: string }>`
     }
 `
 
-interface FolderItemProps {
+interface FileItemProps {
     readonly icon: string
     readonly label: string
     readonly isActive?: boolean
@@ -47,7 +47,7 @@ interface FolderItemProps {
     readonly onDoubleClick?: () => void
 }
 
-const FolderItem = ({ 
+const FileItem = ({ 
     icon, 
     label, 
     nextNavigation, 
@@ -56,7 +56,7 @@ const FolderItem = ({
     onClick = () => {}, 
     onDoubleClick = () => {}, 
     spanStyle = {} 
-}: FolderItemProps) => {
+}: FileItemProps) => {
 
     const { ref, isEditable, setEditable, handleBlur} = useFileItem()
 
@@ -64,7 +64,7 @@ const FolderItem = ({
 
     return (
         <Tooltip placement="bottom" title={label} >
-            <FolderItemWrapper isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
+            <FileItemWrapper isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
                 <img src={icon} alt={label} onDoubleClick={() => {
                     onDoubleClick()
                     if (nextNavigation != null) {
@@ -81,9 +81,9 @@ const FolderItem = ({
                 >
                     {label}
                 </span>
-            </FolderItemWrapper>
+            </FileItemWrapper>
         </Tooltip>
     )
 }
 
-export default FolderItem
+export default FileItem

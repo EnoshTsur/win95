@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom"
 import useFileExplorer from "./hooks/useFileExplorer"
 import useFileExplorerLocation from "./hooks/useFileExplorerLocation"
 import { useEffect } from "react"
+import useFileExplorerRoutesUpdate from "./hooks/useFileExplorerRoutesUpdate"
 
 
 
@@ -25,6 +26,7 @@ const FileExplorer = () => {
     const { titleButtons } = useFileExplorer()
     const { routes } = useFileExplorerRoutesStore(({ routes }) => ({ routes }))
     const { title, icon } = useFileExplorerLocation()
+    useFileExplorerRoutesUpdate()
 
     return (
         <Window title={{ title, titleButtons, icon }} >

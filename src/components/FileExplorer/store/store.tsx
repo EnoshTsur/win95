@@ -5,7 +5,7 @@ import floppyIcon from '../../../assets/floppy-driver.png'
 import folderIcon from '../../../assets/folder.png'
 import historyIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
-import FolderItem from "../FolderItem/FolderItem";
+import FileItem from "../FileItem/FileItem";
 
 const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath: string = ''): ReadonlyArray<FileExplorerRoute> => 
     Object.keys(fileSystem).reduce<ReadonlyArray<FileExplorerRoute>>((acc, key) => {
@@ -16,7 +16,7 @@ const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath:
             path,
             component: () => (<>
             {Object.values(item.items).map(({ label, icon, items }) => (
-                <FolderItem 
+                <FileItem 
                     key={path + label} 
                     label={label} 
                     icon={icon} 
@@ -202,10 +202,5 @@ export const useFileSystemStore = create<FileSystemStore>((set) => ({
 
 export const useFileExplorerRoutesStore = create<FileExplorerRouteStore>((set) => ({
     routes: initialRoutes,
-    addRoute: (route) => set((pre) => ({
-        routes: [...pre.routes, route]
-    })),
-    removeRoute: (path) => set((pre) => ({
-        routes: pre.routes.filter((route) => route.path !== path)
-    }))
+    setRoutesFromFileSystem: (fileSystem) => set({ routes: generateRoutesFromFileSystem(fileSystem) }),
 }))

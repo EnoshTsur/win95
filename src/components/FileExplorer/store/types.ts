@@ -27,6 +27,5 @@ export interface FileExplorerRoute {
 
 export interface FileExplorerRouteStore {
     readonly routes: ReadonlyArray<FileExplorerRoute>
-    readonly addRoute: (route: FileExplorerRoute) => void
-    readonly removeRoute: (path: string) => void
+    readonly setRoutesFromFileSystem: (fileSystem: FileSystemStructure) => void
 }
