@@ -21,20 +21,21 @@ const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: numb
 interface TitleProps {
     readonly title?: string
     readonly titleButtons?: ReadonlyArray<ButtonProps>
+    readonly icon?: string
 }
 
 interface WindowProps {
+    readonly children: React.ReactNode
     readonly offset?: { x: number, y: number }
     readonly title?: TitleProps
     readonly style?: React.CSSProperties
-    readonly children: React.ReactNode
     readonly panelButtons?: ReadonlyArray<ButtonProps>
     readonly panelButtonsStyle?: React.CSSProperties
     readonly getZIndex?: (zIndex: number) => void
 }
 
 
-const Window = ({ title, children, style, offset, panelButtons, panelButtonsStyle, getZIndex }: WindowProps) => {
+const Window = ({ children, title, style, offset, panelButtons, panelButtonsStyle, getZIndex }: WindowProps) => {
 
     const { zIndex, windowId } = useWindow({ getZIndex })
     const { moveToTop } = useOpenWindowState(({ moveToTop }) => ({ moveToTop }))
@@ -43,7 +44,7 @@ const Window = ({ title, children, style, offset, panelButtons, panelButtonsStyl
         <WindowWrapper style={style} zindex={zIndex} offset={offset} onClick={() => moveToTop(windowId)}>
             { 
                 title != null && (
-                    <WindowTitle title={title.title} titleButtons={title.titleButtons ?? []} /> 
+                    <WindowTitle title={title.title} titleButtons={title.titleButtons ?? []} icon={title.icon}/> 
                 )
             }
                 {children}

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { StartMenuState, ClockUpdate, OpenedWindowsState } from './types'
+import { StartMenuState, OpenedWindowsState, ClockStore } from './types'
 import { moveOpenWindowToTop, popOpenWindow } from 'utils/functions'
 
 
@@ -17,9 +17,11 @@ export const useStartMenuState = create<StartMenuState>((set) => ({
 
 }))
 
-export const useClockState = create<ClockUpdate>((set) => ({
+export const useClockState = create<ClockStore>((set) => ({
     time: timeSupplier(),
-    updateTime: () => set((pre) => ({ ...pre, time: timeSupplier() }))
+    fullTime: new Date().toDateString(),
+    updateTime: () => set((pre) => ({ ...pre, time: timeSupplier() })),
+    updateFullTime: () => set((pre) => ({ ...pre, fullTime: new Date().toDateString() }))
 }))
 
 export const useOpenWindowState = create<OpenedWindowsState>((set) => ({

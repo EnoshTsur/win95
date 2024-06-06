@@ -1,5 +1,7 @@
+import Tooltip from "components/Tooltip/Tooltip";
 import { useClockState } from "store/store";
 import styled from "styled-components";
+import volumeIcon from '../../assets/volume-icon.png'
 
 const PanelWrapper = styled.div`
     border-left: 3px solid ${({ theme }) => theme.colors.buttonShadow };
@@ -11,15 +13,24 @@ const PanelWrapper = styled.div`
     align-items: center;
     padding: 0 5px;
     font-family: mslevi;
+    gap: 1px;
+`
+
+const VolumeIcon = styled.img`
+    width: 40px;
+    height: 30px;
 `
 
 const StartRightPanel = () => {
-    const { time } = useClockState()
+    const { time, fullTime } = useClockState()
 
     return (
-    <PanelWrapper>
-        {time}
-    </PanelWrapper>
+        <Tooltip title={fullTime}>
+            <PanelWrapper>
+                <VolumeIcon src={volumeIcon} />
+                {time}
+            </PanelWrapper>
+        </Tooltip>
     )
 }
 

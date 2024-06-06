@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
 import styled from "styled-components"
 import { useDisplayBackgroundSizeStore, useDisplayBackgroundStore } from "../store/store"
 
@@ -122,11 +122,6 @@ const Computer = () => {
     const { displayBackgroundSize } = useDisplayBackgroundSizeStore(({ displayBackgroundSize }) => ({ displayBackgroundSize }))
 
     const backgroundUrl = useMemo(() => displayBackground.url, [displayBackground]);
-
-    useEffect(() => {
-        console.log(backgroundUrl);
-        
-    }, [backgroundUrl])
 
     return (
         <ComputerWrapper>

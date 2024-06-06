@@ -9,17 +9,20 @@ import folderActive from '../../../assets/folder-active.png'
 import inboxIcon from '../../../assets/inbox.png'
 import inboxActive from '../../../assets/inbox-active.png'
 import { ScreenItem } from "../store/types";
-import { useFileExplorerStore, useWindowsFileSystemStore } from 'components/FileExplorer/store/store';
+import { useFileExplorerStore, useFileSystemStore } from 'components/FileExplorer/store/store';
 import { useEffect, useMemo } from 'react';
 import { useMainScreenItemsStore } from '../store/store';
+import {useNavigate } from 'react-router-dom';
 
 const useMainScreenItemsInit = () => {
     
-    const { addOpenExplorer, setActiveExplorer } = useFileExplorerStore(({ addOpenExplorer, setActiveExplorer }) => ({ addOpenExplorer, setActiveExplorer }))
+    const { setExplorerOpen } = useFileExplorerStore(({ setExplorerOpen }) => ({ setExplorerOpen }))
     
     const { setMainScreenItems } = useMainScreenItemsStore(({ setMainScreenItems }) => ({ setMainScreenItems }))
 
-    const { windowsFileSystem, setOpenFileSystem } = useWindowsFileSystemStore(({ windowsFileSystem, setOpenFileSystem }) => ({ windowsFileSystem, setOpenFileSystem }))
+    const { fileSystem } = useFileSystemStore(({ fileSystem }) => ({ fileSystem }))
+
+    const navigate = useNavigate()
 
     const initialScreenItems: ReadonlyArray<ScreenItem> = useMemo(() => [
         {
@@ -30,9 +33,8 @@ const useMainScreenItemsInit = () => {
                 
             },
             onDoubleClick: () => {
-                addOpenExplorer({ id: 'my-computer' , path: 'root'})
-                setActiveExplorer('my-computer')
-                setOpenFileSystem(windowsFileSystem.root)
+                setExplorerOpen(true)
+                navigate('/My Computer')
             }
         },
         {
@@ -75,11 +77,11 @@ const useMainScreenItemsInit = () => {
                 
             }
         }
-    ], [windowsFileSystem])
+    ], [fileSystem])
 
     useEffect(() => {
         setMainScreenItems(initialScreenItems)
-    }, [windowsFileSystem])
+    }, [fileSystem])
 }
 
 export default useMainScreenItemsInit

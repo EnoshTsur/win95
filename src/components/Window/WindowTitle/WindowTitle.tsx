@@ -31,28 +31,40 @@ const TitleButtonsArea = styled.div`
     display: flex;
 `
 
+const TitleIcon = styled.img`
+    width: 35px;
+    height: 30px;
+`
+
 interface WindowTitleProps {
     readonly title?: string
+    readonly icon?: string
     readonly style?: React.CSSProperties
     readonly titleButtons: ReadonlyArray<ButtonProps>
 }
 
-const WindowTitle = ({ title, titleButtons, style}: WindowTitleProps) => {
+const WindowTitle = ({ icon, title, titleButtons, style = {}}: WindowTitleProps) => {
 
     return (
-        <TitleBar>
-            <TitleText>
-            { title }
-            </TitleText>
-            <TitleButtonsArea>
-                { titleButtons.map((buttonProps, i) => (
-                    <TitleButton {...buttonProps} key={`${buttonProps.children ?? ''} ${i}`}>
-                        {buttonProps.children}
-                    </TitleButton>
-                ))}
-            </TitleButtonsArea>
-    </TitleBar>
-    )
+            <TitleBar style={style}>
+                <div style={{ display: 'flex'}}>
+                    { icon && (
+                        <TitleIcon src={icon} />
+                    )}
+                    <TitleText>
+                        { title }
+                    </TitleText>
+                </div>
+                <TitleButtonsArea>
+                    { titleButtons.map((buttonProps, i) => (
+                        <TitleButton {...buttonProps} key={`${buttonProps.children ?? ''} ${i}`}>
+                            {buttonProps.children}
+                        </TitleButton>
+                    ))}
+                </TitleButtonsArea>
+            </TitleBar>
+        ) 
+                    
 }
 
 export default WindowTitle

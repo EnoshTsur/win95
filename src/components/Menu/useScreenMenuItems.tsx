@@ -7,6 +7,8 @@ import styled from "styled-components"
 import { useMainScreenItemsStore } from "components/MainScreen/store/store"
 import folderIcon from '../../assets/folder.png'
 import folderActive from '../../assets/folder.png'
+import { useFileExplorerRoutesStore, useFileSystemStore } from "components/FileExplorer/store/store"
+import FolderItem from "components/FileExplorer/FileItem/FileItem"
 
 
 const FlexWrapper = styled.div`
@@ -24,13 +26,22 @@ const useScreenMenuItems = () => {
          addItem 
     }))
 
+    // TODO:// handle this
+    // const { addFolder } = useFileSystemStore(({ addFolder }) => ({ addFolder }))
+    // const { addRoute } = useFileExplorerRoutesStore(({ addRoute }) => ({ addRoute }))
+
+
     const newIcons = useMemo<ReadonlyArray<ReadonlyArray<ScreenMenuItem>>>(() => [
         [
             { 
                 children: <><Underline>F</Underline>older</>,
                 hasCaret: false,
                 disabled: false,
-                onClick: () => addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {}, onDoubleClick: () => {} }),
+                onClick: () => {
+                    addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {}, onDoubleClick: () => {} })
+                    // addFolder(['My Computer', 'C', 'Windows', 'Desktop' ], 'New Folder', folderIcon)
+                    // addRoute({ path: '/My Computer/[C:]/Windows/Desktop/New Folder/', component: () => (<FolderItem icon={folderIcon} label="New Folder" />)})
+                },
             },
             { 
                 children: <><Underline>S</Underline>hortcut</>,

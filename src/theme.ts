@@ -12,6 +12,7 @@ const windows95Theme: DefaultTheme = {
         menuTitle: '#939393',
         windowsBg: '#1f9789',
         alertTitleBar: '#00006F',
+        tooltipBg: '#f7eedc',
 
     }
 }

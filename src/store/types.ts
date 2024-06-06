@@ -4,9 +4,11 @@ export interface StartMenuState {
     readonly toggleStartMenu: () => void
 }
 
-export interface ClockUpdate {
+export interface ClockStore {
     readonly time: string
+    readonly fullTime: string
     readonly updateTime: () => void
+    readonly updateFullTime: () => void
 }
 
 export interface OpenWindow {

@@ -3,11 +3,12 @@ import { useClockState } from "store/store"
 
 const useClockUpdate = () => {
 
-    const { updateTime } = useClockState()
+    const { updateTime, updateFullTime } = useClockState()
 
     useEffect(() => {
         const id = setInterval(() => {
             updateTime()
+            updateFullTime()
         }, 100)
 
         return () => {

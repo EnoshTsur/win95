@@ -1,35 +1,32 @@
-export interface WindowsFileSystemItem {
+export interface FileSystemStructure {
+    readonly [key: string]: FileSystemItem;
+}
+
+export interface FileSystemItem {
     readonly label: string;
     readonly icon: string;
-    readonly items: { [name: string]: WindowsFileSystemItem };
+    readonly items: FileSystemStructure
 }
 
-export interface WindowsFileSystem {
-    readonly [drive: string]: WindowsFileSystemItem;
-}
-
-export interface WindowsFileSystemRoot {
-    readonly root: WindowsFileSystem
-}
-
-export interface WindowsFileSystemStore {
-    readonly windowsFileSystem: WindowsFileSystemRoot
-    readonly openFileSystem: WindowsFileSystem
-    readonly setOpenFileSystem: (path: WindowsFileSystem) => void
-    readonly setWindowsFileSystem: (WindowsFileSystemRoot: WindowsFileSystemRoot) => void
-    readonly addWindowsFileSysteItem: (windowsFileSystemItem: WindowsFileSystemItem) => void
-
-}
-
-export interface FileExplorer {
-    readonly id: string
-    readonly path: string
+export interface FileSystemStore {
+    readonly fileSystem: FileSystemStructure
+    readonly setFileSystem: (newFileSystem: FileSystemStructure) => void
+    readonly addFolder: (path: ReadonlyArray<string>, folderName: string, folderIcon: string) => void
+    readonly removeFolder: (path: ReadonlyArray<string>, folderName: string) => void
 }
 
 export interface FileExplorerStore {
-    readonly openExplorers: ReadonlyArray<FileExplorer>
-    readonly activeExplorer: string
-    readonly addOpenExplorer: (explorer: FileExplorer) => void
-    readonly removeExplorer: (id: string) => void
-    readonly setActiveExplorer: (id: string) => void
+    readonly isExplorerOpen: boolean 
+    readonly setExplorerOpen: (value: boolean) => void
+}
+
+export interface FileExplorerRoute {
+    readonly path: string,
+    readonly component: React.ComponentType
+}
+
+export interface FileExplorerRouteStore {
+    readonly routes: ReadonlyArray<FileExplorerRoute>
+    readonly addRoute: (route: FileExplorerRoute) => void
+    readonly removeRoute: (path: string) => void
 }

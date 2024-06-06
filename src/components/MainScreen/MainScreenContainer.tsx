@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import MainScreenItem from "./MainScreenItem";
 import useMainScreenItemsInit from "./hooks/useMainScreenItemsInit";
+import Tooltip from "components/Tooltip/Tooltip";
 
 const MainScreenWrapper = styled.div`
     padding: 0 2px;
@@ -37,6 +38,8 @@ const MainScreenContainer = () => {
     return (
         <MainScreenWrapper>
             {mainScreenItems.map(({ label, icon, onClick, onDoubleClick }, index) => (
+                <Tooltip title={label} placement="bottom">
+
                 <MainScreenItem 
                     key={label+icon} 
                     isActive={isActiveItem(index)} 
@@ -47,7 +50,8 @@ const MainScreenContainer = () => {
                         handleClick(index)
                     }}
                     onDoubleClick={onDoubleClick}
-                />
+                    />
+                </Tooltip>
             ) )}
         </MainScreenWrapper>
     )

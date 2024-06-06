@@ -55,7 +55,7 @@ const MainScreen = () => {
 
     const { setMainScreenActiveItem } = useMainScreenItemsStore(({ setMainScreenActiveItem }) => ({ setMainScreenActiveItem }))
 
-    const { activeExplorer, openExplorers } = useFileExplorerStore(({ activeExplorer, openExplorers }) => ({ activeExplorer, openExplorers }))
+    const { isExplorerOpen } = useFileExplorerStore(({ isExplorerOpen }) => ({ isExplorerOpen }))
 
     const mainScreenUrl = useMemo(() => isDisplayPropertiesOpen 
         ? displayApplyBackground.url
@@ -87,9 +87,7 @@ const MainScreen = () => {
     return (
         <ScreenWrapper ref={ref} onContextMenu={handleContextMenu} backgroundurl={mainScreenUrl} backgroundsize={backgroundSize} onClick={handleClick} >
                 { isDisplayPropertiesOpen && <DisplayProperties /> }
-                { activeExplorer !== '' && openExplorers.map(({ id }) => (
-                    <FileExplorer key={id} />
-                ))}
+                { isExplorerOpen && ( <FileExplorer /> ) }
 
                 {
                     isScreenMenuOpen && ( <ScreenMenu menuItems={screenMenuItems} offset={offset} /> )
