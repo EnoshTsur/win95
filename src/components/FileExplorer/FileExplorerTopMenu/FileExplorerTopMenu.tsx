@@ -1,3 +1,4 @@
+import { ButtonProps } from "components/Button/Button";
 import Underline from "components/Underline/Underline";
 import { useMemo } from "react";
 import styled from "styled-components";
@@ -19,27 +20,11 @@ const FileExplorerMenuWrapper = styled.div`
     }
 `
 
+interface FileExplorerMenuProps {
+    readonly menuItems: ReadonlyArray<ButtonProps>
+}
 
-
-const FileExplorerMenu = () => {
-    const menuItems = useMemo(() => [
-        { 
-            children: <><Underline>F</Underline>ile</>,
-            onClick: () => {}
-        },
-        { 
-            children: <><Underline>E</Underline>dit</>,
-            onClick: () => {}
-        },
-        { 
-            children: <><Underline>V</Underline>iew</>,
-            onClick: () => {}
-        },
-        { 
-            children: <><Underline>H</Underline>elp</>,
-            onClick: () => {}
-        },
-    ], [])
+const FileExplorerMenu = ({ menuItems  }: FileExplorerMenuProps) => {
 
     return (
         <FileExplorerMenuWrapper>

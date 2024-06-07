@@ -5,7 +5,7 @@ import FileExplorerMenu from "./FileExplorerTopMenu/FileExplorerTopMenu"
 import { Route, Routes } from "react-router-dom"
 import useFileExplorer from "./hooks/useFileExplorer"
 import useFileExplorerLocation from "./hooks/useFileExplorerLocation"
-import useFileExplorerRoutesUpdate from "./hooks/useFileExplorerRoutesUpdate"
+import Underline from "components/Underline/Underline"
 
 export const FileExplorerWrapper = styled.div`
     background-color: white;
@@ -15,7 +15,9 @@ export const FileExplorerWrapper = styled.div`
     gap: 10px;
     justify-content: flex-start;
     align-items: top;
-    padding: 20px 10px;
+    padding-top: 5px;
+    padding-left: 20px;
+    padding-bottom: 30px;
     width: 400px;
 `
 const LeftBottomBar = styled.div`
@@ -51,19 +53,35 @@ const FileExplorerBottomBar = styled.div`
     }
 `
 
+const menuItems = [
+    { 
+        children: <><Underline>F</Underline>ile</>,
+        onClick: () => {}
+    },
+    { 
+        children: <><Underline>E</Underline>dit</>,
+        onClick: () => {}
+    },
+    { 
+        children: <><Underline>V</Underline>iew</>,
+        onClick: () => {}
+    },
+    { 
+        children: <><Underline>H</Underline>elp</>,
+        onClick: () => {}
+    },
+]
+
 const FileExplorer = () => {
 
-    const { titleButtons } = useFileExplorer()
+    const { handleFileExplorerNavigationOut, generateTitleButtons } = useFileExplorer()
     const { routes } = useFileExplorerRoutesStore(({ routes }) => ({ routes }))
     const { title, icon } = useFileExplorerLocation()
     const { itemsAtLocation: { result, found } } = useFileExplorerLocation()
 
-    useFileExplorerRoutesUpdate()
-
-
     return (
-        <Window title={{ title, titleButtons, icon }} >
-            <FileExplorerMenu />
+        <Window title={{ title, titleButtons: generateTitleButtons(handleFileExplorerNavigationOut), icon }} >
+            <FileExplorerMenu menuItems={menuItems} />
             <FileExplorerWrapper>
                     <Routes>
                         { routes.map(({ path, component  }, index) => (

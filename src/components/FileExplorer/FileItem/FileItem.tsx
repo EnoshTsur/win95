@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import useFileItem from "../hooks/useFileItem";
 import Tooltip from "components/Tooltip/Tooltip";
 import { FileIcon } from "../store/types";
+import { useFileSystemStore } from "../store/store";
 
 const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
     display: flex;
@@ -20,14 +20,13 @@ const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
         width: 80px;
     }
 
-
     span {
-        cursor: ${({ editable }) => editable === 'true' ? 'text': 'pointer'};
+        cursor: ${({ editable }) => editable === 'true' ? 'text' : 'pointer'};
         border: ${({ theme, isactive }) => isactive === 'true' ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
         background-color: ${({ theme, isactive }) => isactive === 'true' ? theme.colors.alertTitleBar : theme.colors.windowsBg};
         color: white;
         letter-spacing: 1px;
-        max-width: 6rem;
+        max-width: 7rem;
 
         &:focus {
             outline: none;
@@ -40,10 +39,12 @@ const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
 export interface FileItemProps {
     readonly icon: FileIcon
     readonly label: string
+    readonly path: ReadonlyArray<string>
+    readonly hasNext: boolean
     readonly isActive?: boolean
-    readonly nextNavigation?: string
     readonly editable?: boolean
     readonly spanStyle?: React.CSSProperties
+    readonly iconStyle?: React.CSSProperties
     readonly onClick?: () => void
     readonly onDoubleClick?: () => void
 }
@@ -51,40 +52,55 @@ export interface FileItemProps {
 const FileItem = ({ 
     icon, 
     label, 
-    nextNavigation, 
+    hasNext, 
+    path,
     isActive = false, 
     editable = false,
-    onClick = () => {}, 
-    onDoubleClick = () => {}, 
-    spanStyle = {} 
+    onClick,
+    onDoubleClick, 
+    spanStyle = {},
+    iconStyle = {},
 }: FileItemProps) => {
 
-    const { ref, isEditable, setEditable, handleBlur} = useFileItem()
+    const { ref, handleBlur, handleNext } = useFileItem()
 
-    const navigate = useNavigate()
+    const { toggleActive, setEditable } = useFileSystemStore(({ toggleActive, setEditable  }) => ({
+        toggleActive, 
+        setEditable
+    }))
+
 
     return (
         <Tooltip placement="bottom" title={label} >
             <FileItemWrapper 
                 isactive={`${isActive}`} 
                 onClick={(e) => {
-                    e.preventDefault();
-                    onClick()
-                }} 
-                editable={`${isEditable}`}
-            >
-                <img src={isActive ? icon.active : icon.regular} alt={label} onDoubleClick={() => {
-                    onDoubleClick()
-                    if (nextNavigation != null) {
-                        navigate(nextNavigation)
+                    if (onClick) {
+                        onClick()
+                    } else {
+                        toggleActive(path);
                     }
-                }}/>
+                }} 
+                editable={`${editable}`}
+            >
+                <img 
+                    src={isActive ? icon.active : icon.regular} 
+                    alt={label} 
+                    onDoubleClick={() => {
+                        if (onDoubleClick) {
+                            onDoubleClick();
+                        } else {
+                            handleNext(hasNext, path)
+                        }
+                    }}
+                    style={iconStyle}
+                />
                 <span 
                     style={spanStyle}
                     ref={ref}
                     onBlur={handleBlur} 
-                    onDoubleClick={() => setEditable(true)}
-                    contentEditable={editable && isEditable}
+                    onDoubleClick={() => { setEditable(path, true); }}
+                    contentEditable={editable}
                     suppressContentEditableWarning={true}
                 >
                     {label}

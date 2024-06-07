@@ -1,20 +1,26 @@
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 
 const useFileItem = () => {
 
-    const [isEditable, setEditable] = useState(false)
-
     const ref = useRef<HTMLSpanElement | null>(null)
+
+    const navigate = useNavigate()
+
+    const handleNext = useCallback((hasNext: boolean, path: ReadonlyArray<string>) =>{
+        if (hasNext) {
+            navigate(`/${path.join('/')}`);
+        }
+    }, [navigate])
+
     
     const handleBlur = useCallback(() => {
-        setEditable(false)
     }, [ref.current])
 
     return {
         ref,
-        isEditable,
-        setEditable,
         handleBlur,
+        handleNext
     }
 
 }

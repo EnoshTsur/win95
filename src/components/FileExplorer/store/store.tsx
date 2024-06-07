@@ -1,157 +1,27 @@
 import { create } from "zustand";
 import { FileExplorerRoute, FileExplorerRouteStore, FileExplorerStore, FileSystemItem, FileSystemStore, FileSystemStructure } from "./types";
-import driverIcon from '../../../assets/driver.png'
-import floppyIcon from '../../../assets/floppy-driver.png'
-import folderIcon from '../../../assets/folder.png'
-import folderActiveIcon from '../../../assets/folder-active.png'
-import historyIcon from '../../../assets/history-icon.png'
-import printersIcon from '../../../assets/printers.png'
 import FileItemContainer from "../FileItem/FileItemContainer";
 
 export const getFileSystem = (path: ReadonlyArray<string>) => (fileSystem: FileSystemStructure) => {
-    return path.reduce((acc, nextPath) => acc.result[nextPath] 
-    ? { ...acc, result: acc.result[nextPath].items }  
+    return path.reduce((acc, nextPath) => (acc.result[nextPath] && acc.result[nextPath].next )
+    ? { ...acc, result: acc.result[nextPath].next! }  
     : { ...acc, found: false } , { result: fileSystem, found: true })
 }
 
-const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath: string = ''): ReadonlyArray<FileExplorerRoute> => 
-    Object.keys(fileSystem).reduce<ReadonlyArray<FileExplorerRoute>>((acc, key) => {
-        const item = fileSystem[key]
-        const path = `${basePath}/${item.label}`
+export const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure): ReadonlyArray<FileExplorerRoute> => {
+    const traverseFileSystem = (items: FileSystemStructure): ReadonlyArray<FileExplorerRoute> => {
+        return Object.keys(items).filter((key) => items[key].next != null).flatMap(key => {
+            const item = items[key];
+            const route: FileExplorerRoute = {
+                path: item.path.join('/'),
+                component: () => <FileItemContainer items={Object.values(item.next ?? {})}  />
+            };
+            return [route, ...traverseFileSystem(item.next || {})];
+        });
+    };
+    return traverseFileSystem(fileSystem);
+};
 
-        const route = {
-            path,
-            component: () => <FileItemContainer items={Object.values(item.items)} path={path} /> 
-        }
-
-        return [
-            ...acc,
-            route,
-            ...generateRoutesFromFileSystem(item.items, path)
-        ]
-    }, [])
-
-
-const initialFileSystem: FileSystemStructure = {
-    "My Computer": {
-        label: "My Computer",
-        icon: {regular: '', active: ''},
-        items: {
-            
-            "[A:]": {
-                label: "3¹⁄₂ Floppy [A:]",
-                icon: { regular: floppyIcon, active: floppyIcon },
-                items: {},
-            },
-            
-            "[C:]": {
-                label: "[C:]",
-                icon: {regular: driverIcon, active: driverIcon },
-                items: { 
-                
-                    "Games": {
-                        label: "Games",
-                        icon: {regular: folderIcon, active: folderActiveIcon },
-                        items: {}
-                    },
-
-                    "Program Files": {
-                        label: "Program Files",
-                        icon: {regular: folderIcon, active: folderActiveIcon },
-                        items: {}
-                    },
-                
-                    "Windows": {
-                        label: "Windows",
-                        icon: {regular: folderIcon, active: folderActiveIcon },
-                        items: {
-                            "Command": {
-                                label: "Command",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Config": {
-                                label: "Config",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Cookies": {
-                                label: "Cookies",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Cursors": {
-                                label: "Cursors",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Desktop": {
-                                label: "Desktop",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {
-                                    
-                                    "Online Services": {
-                                        label: "Online Services",
-                                        icon: {regular: folderIcon, active: folderActiveIcon },
-                                        items: {},
-                                    }
-                                }
-                            },
-
-                            "Fonts": {
-                                label: "Fonts",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Forms": {
-                                label: "Forms",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "Help": {
-                                label: "Help",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-
-                            "History": {
-                                label: "History",
-                                icon: {regular : historyIcon, active: historyIcon },
-                                items: {}
-                            },
-
-                            "System": {
-                                label: "System",
-                                icon: {regular: folderIcon, active: folderActiveIcon },
-                                items: {}
-                            },
-                        
-                    },
-                },
-            }
-        },
-        
-        "[D:]": {
-            label: "[D:]",
-            icon: {regular: driverIcon, active: driverIcon },
-            items: {}
-        },
-        "Printers": {
-            label: "Printers",
-            icon: {regular: printersIcon, active: printersIcon },
-            items: {}
-        }
-    }
-}
-}
-
-const initialRoutes = generateRoutesFromFileSystem(initialFileSystem)
 
 export const useFileExplorerStore = create<FileExplorerStore>((set) => ({
     isExplorerOpen: false,
@@ -169,33 +39,62 @@ const updateFileSystem = (
     }
 
     const [currentKey, ...restPath] = path
+
     return {
         ...fileSystem,
         [currentKey]: {
             ...fileSystem[currentKey],
-            items: updateFileSystem(fileSystem[currentKey].items, restPath, updateFn)
+            next: fileSystem[currentKey].next != undefined 
+                ? updateFileSystem(fileSystem[currentKey].next!, restPath, updateFn) 
+                : undefined
         }   
     }
 }
 
 export const useFileSystemStore = create<FileSystemStore>((set) => ({
-    fileSystem: initialFileSystem,
+    fileSystem: {},
     setFileSystem: (newFileSystem) => set({ fileSystem: newFileSystem }),
-    addFolder: (path, folderName, folderIcon) => set((pre) => ({
-        fileSystem: updateFileSystem(pre.fileSystem, path, (currentItems) => ({
+    addFolder: (path, folderName, item) => set(({ fileSystem }) => ({
+        fileSystem: updateFileSystem(fileSystem, path, (currentItems) => ({
             ...currentItems,
-            [folderName]: { label: folderName, icon: {regular: folderIcon, active: folderIcon }, items: {} }
-        }))
+            [folderName]: {
+                ...item,
+                path: [...path, folderName],
+            },
+        })),
     })),
-    removeFolder: (path, folderName) => set((pre) => ({
-        fileSystem: updateFileSystem(pre.fileSystem, path, (currentItems) => {
-            const { [folderName]: _, ...rest } = currentItems
-            return rest
-        })
-    }))
-}))
 
+    toggleActive: (path) => set(({ fileSystem }) => {
+        const updateState = (items: FileSystemStructure): FileSystemStructure => {
+            return Object.keys(items).reduce<FileSystemStructure>((acc, key) => {
+                const item = items[key];
+                const updatedItem = item.path.every((entry) => path.includes(entry))
+                    ? { ...item, isActive: !item.isActive }
+                    : { ...item, next: item.next != undefined ? updateState(item.next) : undefined };
+
+                return { ...acc, [key]: updatedItem };
+            }, {});
+        };
+
+        return { fileSystem: updateState(fileSystem) };
+    }),
+
+    setEditable: (path, editable) => set(({ fileSystem }) => {
+        const updateState = (items: FileSystemStructure): FileSystemStructure => {
+            return Object.keys(items).reduce<FileSystemStructure>((acc, key) => {
+                const item = items[key];
+                const updatedItem = item.path === path
+                    ? { ...item, editable }
+                    : { ...item, next: item.next != undefined ? updateState(item.next) : undefined };
+
+                return { ...acc, [key]: updatedItem };
+            }, {});
+        };
+
+        return { fileSystem: updateState(fileSystem) };
+    }),
+}));
 export const useFileExplorerRoutesStore = create<FileExplorerRouteStore>((set) => ({
-    routes: initialRoutes,
+    routes: [],
     setRoutesFromFileSystem: (fileSystem) => set({ routes: generateRoutesFromFileSystem(fileSystem) }),
 }))

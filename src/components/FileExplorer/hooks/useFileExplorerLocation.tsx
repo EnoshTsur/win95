@@ -16,8 +16,8 @@ const useFileExplorerLocation = () => {
                 return myComputerIcon
             case '/':
                 return ''
-            case '/My Computer/[C:]':
-            case '/My Computer/[D:]':
+            case '/My Computer/C':
+            case '/My Computer/D':
                 return driveIcon
             default:
                 return folderIcon

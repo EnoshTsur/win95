@@ -19,19 +19,20 @@ const useFileExplorer = () => {
     
     const { setExplorerOpen } = useFileExplorerStore(({ setExplorerOpen }) => ({ setExplorerOpen }))
     
-    const handleClose = useCallback(() => {
+    const handleFileExplorerNavigationOut = useCallback(() => {
         setExplorerOpen(false)
         navigate('/')
     }, [navigate])
 
-    const titleButtons: ReadonlyArray<ButtonProps> = useMemo(() => [
+    const generateTitleButtons: (onClose: () => void) => ReadonlyArray<ButtonProps> = useCallback((onClose) => [
         { children: <ButtonWrapper><FaRegWindowMinimize /></ButtonWrapper>, onClick: () => {}},
         { children: <ButtonWrapper><FaRegWindowMaximize /></ButtonWrapper>, onClick: () => {}},
-        { children: <ButtonWrapper><IoMdClose /></ButtonWrapper>, onClick: handleClose },
+        { children: <ButtonWrapper><IoMdClose /></ButtonWrapper>, onClick: onClose },
     ], [])
 
     return {
-        titleButtons,
+        generateTitleButtons,
+        handleFileExplorerNavigationOut
     }
 }
 

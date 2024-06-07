@@ -17,7 +17,7 @@ function App() {
     <QueryClientProvider client={client}>
       <DndProvider backend={HTML5Backend}>
         <ThemeProvider theme={windows95Theme}>
-          <MemoryRouter>
+          <MemoryRouter initialEntries={['/']}>
             <ScreenWrapper />
           </MemoryRouter>
         </ThemeProvider>

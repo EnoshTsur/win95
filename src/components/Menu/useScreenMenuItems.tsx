@@ -25,7 +25,6 @@ const useScreenMenuItems = () => {
          addItem 
     }))
 
-    // TODO:// handle this
     const { addFolder } = useFileSystemStore(({ addFolder }) => ({ addFolder }))
 
     const newIcons = useMemo<ReadonlyArray<ReadonlyArray<ScreenMenuItem>>>(() => [
@@ -36,7 +35,16 @@ const useScreenMenuItems = () => {
                 disabled: false,
                 onClick: () => {
                     addItem({ label: 'New Folder', icon: { activeIcon: folderActive, icon: folderIcon}, onClick: () => {}, onDoubleClick: () => {} })
-                    addFolder(['My Computer', 'C', 'Windows', 'Desktop' ], 'New Folder', folderIcon)
+                    addFolder(
+                        ['My Computer', 'C', 'Windows', 'Desktop'], 
+                        'New Folder', 
+                        { 
+                            label: 'New Folder', 
+                            icon: { regular: folderIcon, active: folderActive }, 
+                            path: ['My Computer', 'C', 'Windows', 'Desktop', 'New Folder'],
+                            next: {},
+                        }
+                    )
                 },
             },
             { 

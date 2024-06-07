@@ -10,14 +10,21 @@ export interface FileSystemStructure {
 export interface FileSystemItem {
     readonly label: string;
     readonly icon: FileIcon;
-    readonly items: FileSystemStructure
+    readonly iconStyle?: React.CSSProperties
+    readonly path: ReadonlyArray<string>
+    readonly next?: FileSystemStructure
+    readonly isActive?: boolean;
+    readonly editable?: boolean;
+    readonly onClick?: () => void
+    readonly onDoubleClick?: () => void
 }
 
 export interface FileSystemStore {
-    readonly fileSystem: FileSystemStructure
-    readonly setFileSystem: (newFileSystem: FileSystemStructure) => void
-    readonly addFolder: (path: ReadonlyArray<string>, folderName: string, folderIcon: string) => void
-    readonly removeFolder: (path: ReadonlyArray<string>, folderName: string) => void
+    readonly fileSystem: FileSystemStructure;
+    readonly setFileSystem: (newFileSystem: FileSystemStructure) => void;
+    readonly addFolder: (path: ReadonlyArray<string>, folderName: string, fileSystemItem: FileSystemItem) => void;
+    readonly toggleActive: (path: ReadonlyArray<string>) => void;
+    readonly setEditable: (path: ReadonlyArray<string>, editable: boolean) => void;
 }
 
 export interface FileExplorerStore {

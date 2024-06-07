@@ -14,16 +14,19 @@ const MainScreenWrapper = styled.div`
 
 const MainScreenContainer = () => {
 
-    const { items, activeItem } = useMainScreenItems()
+    const { items, handleOpenExplorer } = useMainScreenItems()
 
     return (
         <MainScreenWrapper>
-            {items.map(({ label, icon, onClick, onDoubleClick }, index) => (
+            {items.map(({ label, icon, onClick, onDoubleClick, iconStyle, path, isActive }) => (
                 <FileItem 
-                    editable
+                    path={path}
+                    hasNext={false}
+                    editable={true}
                     key={label+icon} 
-                    isActive={activeItem === index} 
+                    isActive={isActive} 
                     icon={icon}
+                    iconStyle={iconStyle}
                     label={label}
                     onClick={() => {
                         if (onClick) {
@@ -31,9 +34,8 @@ const MainScreenContainer = () => {
                         }
                     }}
                     onDoubleClick={() => {
-                        if (onDoubleClick) {
-                            onDoubleClick()
-                        }
+                        handleOpenExplorer(path)
+                        onDoubleClick && onDoubleClick()
                     }}
                     />
             ) )}

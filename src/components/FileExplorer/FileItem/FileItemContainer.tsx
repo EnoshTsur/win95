@@ -1,29 +1,28 @@
-import useFileItemContainer from "../hooks/useFileItemContainer"
+import { useState } from "react"
 import { FileSystemItem } from "../store/types"
 import FileItem from "./FileItem"
 
 interface FileItemContainerProps {
     readonly items: ReadonlyArray<FileSystemItem>
-    readonly path: string
 }
 
-const FileItemContainer = ({ items, path }: FileItemContainerProps) => {
+const FileItemContainer = ({ items, }: FileItemContainerProps) => {
 
-    const { active, toggleActive } = useFileItemContainer()
+    const [isActiveIndex, setActiveIndex] = useState(-1)
 
     return (
         <>
-            { Object.values(items).map(({ label, icon, }, index) => (
+            { items.map(({ label, icon, path, next, iconStyle, onDoubleClick }, index) => (
                 <FileItem
                     key={path + label} 
                     label={label} 
                     icon={icon} 
-                    nextNavigation={Object.values(items).length > 0 ? `${path}/${label}`: undefined}
-                    onClick={() => {
-                        toggleActive(index)
-                    }} 
-                    onDoubleClick={() => {}} 
-                    isActive={index === active}
+                    iconStyle={iconStyle}
+                    hasNext={next != null}
+                    isActive={isActiveIndex === index}
+                    path={path}
+                    onDoubleClick={onDoubleClick}
+                    onClick={() => { setActiveIndex((pre) => pre === index ? -1 : index) }}
                 />
             ))}
         </>
