@@ -1,10 +1,15 @@
+export interface FileIcon {
+    readonly active: string
+    readonly regular: string
+}
+
 export interface FileSystemStructure {
     readonly [key: string]: FileSystemItem;
 }
 
 export interface FileSystemItem {
     readonly label: string;
-    readonly icon: string;
+    readonly icon: FileIcon;
     readonly items: FileSystemStructure
 }
 

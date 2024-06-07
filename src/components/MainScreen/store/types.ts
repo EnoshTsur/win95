@@ -13,8 +13,8 @@ export interface ScreenIcon {
 export interface ScreenItem {
     readonly label: string
     readonly icon: ScreenIcon
-    readonly onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-    readonly onDoubleClick: () => void
+    readonly onClick?: () => void
+    readonly onDoubleClick?: () => void
 }
 
 export interface MainScreenBackgroundStore {

@@ -1,11 +1,18 @@
 import { create } from "zustand";
-import { FileExplorerRoute, FileExplorerRouteStore, FileExplorerStore, FileSystemStore, FileSystemStructure } from "./types";
+import { FileExplorerRoute, FileExplorerRouteStore, FileExplorerStore, FileSystemItem, FileSystemStore, FileSystemStructure } from "./types";
 import driverIcon from '../../../assets/driver.png'
 import floppyIcon from '../../../assets/floppy-driver.png'
 import folderIcon from '../../../assets/folder.png'
+import folderActiveIcon from '../../../assets/folder-active.png'
 import historyIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
-import FileItem from "../FileItem/FileItem";
+import FileItemContainer from "../FileItem/FileItemContainer";
+
+export const getFileSystem = (path: ReadonlyArray<string>) => (fileSystem: FileSystemStructure) => {
+    return path.reduce((acc, nextPath) => acc.result[nextPath] 
+    ? { ...acc, result: acc.result[nextPath].items }  
+    : { ...acc, found: false } , { result: fileSystem, found: true })
+}
 
 const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath: string = ''): ReadonlyArray<FileExplorerRoute> => 
     Object.keys(fileSystem).reduce<ReadonlyArray<FileExplorerRoute>>((acc, key) => {
@@ -14,19 +21,7 @@ const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath:
 
         const route = {
             path,
-            component: () => (<>
-            {Object.values(item.items).map(({ label, icon, items }) => (
-                <FileItem 
-                    key={path + label} 
-                    label={label} 
-                    icon={icon} 
-                    nextNavigation={Object.values(items).length > 0 ? `${path}/${label}`: undefined}
-                    onClick={() => {}} 
-                    onDoubleClick={() => {}} 
-                    isActive={false}
-                />
-            )) }
-            </>)
+            component: () => <FileItemContainer items={Object.values(item.items)} path={path} /> 
         }
 
         return [
@@ -40,68 +35,68 @@ const generateRoutesFromFileSystem = (fileSystem: FileSystemStructure, basePath:
 const initialFileSystem: FileSystemStructure = {
     "My Computer": {
         label: "My Computer",
-        icon: '',
+        icon: {regular: '', active: ''},
         items: {
             
-            "A": {
+            "[A:]": {
                 label: "3¹⁄₂ Floppy [A:]",
-                icon: floppyIcon,
+                icon: { regular: floppyIcon, active: floppyIcon },
                 items: {},
             },
             
-            "C": {
+            "[C:]": {
                 label: "[C:]",
-                icon: driverIcon,
+                icon: {regular: driverIcon, active: driverIcon },
                 items: { 
                 
                     "Games": {
                         label: "Games",
-                        icon: folderIcon,
+                        icon: {regular: folderIcon, active: folderActiveIcon },
                         items: {}
                     },
 
                     "Program Files": {
                         label: "Program Files",
-                        icon: folderIcon,
+                        icon: {regular: folderIcon, active: folderActiveIcon },
                         items: {}
                     },
                 
                     "Windows": {
                         label: "Windows",
-                        icon: folderIcon,
+                        icon: {regular: folderIcon, active: folderActiveIcon },
                         items: {
                             "Command": {
                                 label: "Command",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Config": {
                                 label: "Config",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Cookies": {
                                 label: "Cookies",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Cursors": {
                                 label: "Cursors",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Desktop": {
                                 label: "Desktop",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {
                                     
                                     "Online Services": {
                                         label: "Online Services",
-                                        icon: folderIcon,
+                                        icon: {regular: folderIcon, active: folderActiveIcon },
                                         items: {},
                                     }
                                 }
@@ -109,31 +104,31 @@ const initialFileSystem: FileSystemStructure = {
 
                             "Fonts": {
                                 label: "Fonts",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Forms": {
                                 label: "Forms",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "Help": {
                                 label: "Help",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
 
                             "History": {
                                 label: "History",
-                                icon: historyIcon,
+                                icon: {regular : historyIcon, active: historyIcon },
                                 items: {}
                             },
 
                             "System": {
                                 label: "System",
-                                icon: folderIcon,
+                                icon: {regular: folderIcon, active: folderActiveIcon },
                                 items: {}
                             },
                         
@@ -142,14 +137,14 @@ const initialFileSystem: FileSystemStructure = {
             }
         },
         
-        "D": {
+        "[D:]": {
             label: "[D:]",
-            icon: driverIcon,
+            icon: {regular: driverIcon, active: driverIcon },
             items: {}
         },
         "Printers": {
             label: "Printers",
-            icon: printersIcon,
+            icon: {regular: printersIcon, active: printersIcon },
             items: {}
         }
     }
@@ -189,7 +184,7 @@ export const useFileSystemStore = create<FileSystemStore>((set) => ({
     addFolder: (path, folderName, folderIcon) => set((pre) => ({
         fileSystem: updateFileSystem(pre.fileSystem, path, (currentItems) => ({
             ...currentItems,
-            [folderName]: { label: folderName, icon: folderIcon, items: {} }
+            [folderName]: { label: folderName, icon: {regular: folderIcon, active: folderIcon }, items: {} }
         }))
     })),
     removeFolder: (path, folderName) => set((pre) => ({

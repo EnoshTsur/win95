@@ -16,6 +16,8 @@ const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: numb
     border-left: 2px solid ${({ theme }) => theme.colors.white};
     border-top: 2px solid ${({ theme }) => theme.colors.white};
     z-index: ${({ zindex }) => zindex};
+    box-shadow: inset 1px 1px 0px 1px ${({ theme }) => theme.colors.buttonShadow};
+    padding: 1px;
 `
 
 interface TitleProps {

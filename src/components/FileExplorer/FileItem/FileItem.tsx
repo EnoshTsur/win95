@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useFileItem from "../hooks/useFileItem";
 import Tooltip from "components/Tooltip/Tooltip";
+import { FileIcon } from "../store/types";
 
 const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
     display: flex;
@@ -36,14 +37,14 @@ const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
     }
 `
 
-interface FileItemProps {
-    readonly icon: string
+export interface FileItemProps {
+    readonly icon: FileIcon
     readonly label: string
     readonly isActive?: boolean
     readonly nextNavigation?: string
     readonly editable?: boolean
     readonly spanStyle?: React.CSSProperties
-    readonly onClick?: (e:  React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    readonly onClick?: () => void
     readonly onDoubleClick?: () => void
 }
 
@@ -64,8 +65,15 @@ const FileItem = ({
 
     return (
         <Tooltip placement="bottom" title={label} >
-            <FileItemWrapper isactive={`${isActive}`} onClick={onClick} editable={`${isEditable}`}>
-                <img src={icon} alt={label} onDoubleClick={() => {
+            <FileItemWrapper 
+                isactive={`${isActive}`} 
+                onClick={(e) => {
+                    e.preventDefault();
+                    onClick()
+                }} 
+                editable={`${isEditable}`}
+            >
+                <img src={isActive ? icon.active : icon.regular} alt={label} onDoubleClick={() => {
                     onDoubleClick()
                     if (nextNavigation != null) {
                         navigate(nextNavigation)

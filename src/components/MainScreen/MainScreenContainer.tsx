@@ -1,7 +1,6 @@
-import { useMainScreenItemsStore } from "components/MainScreen/store/store";
-import { useCallback } from "react";
+
 import styled from "styled-components";
-import useMainScreenItemsInit from "./hooks/useMainScreenItemsInit";
+import useMainScreenItems from "./hooks/useMainScreenItems";
 import FileItem from "components/FileExplorer/FileItem/FileItem";
 
 const MainScreenWrapper = styled.div`
@@ -15,38 +14,27 @@ const MainScreenWrapper = styled.div`
 
 const MainScreenContainer = () => {
 
-    useMainScreenItemsInit()
-
-    const { mainScreenItems, mainScreenActiveItem, setMainScreenActiveItem } = useMainScreenItemsStore(({ 
-        mainScreenItems, 
-        mainScreenActiveItem, 
-        setMainScreenActiveItem 
-    }) => ({ 
-        mainScreenItems, 
-        mainScreenActiveItem,
-        setMainScreenActiveItem 
-    }))
-    
-    const handleClick = (index: number) => {
-        setMainScreenActiveItem(index)
-    }
-
-    const isActiveItem = useCallback((index: number) => mainScreenActiveItem === index, [mainScreenActiveItem, mainScreenItems])
-
+    const { items, activeItem } = useMainScreenItems()
 
     return (
         <MainScreenWrapper>
-            {mainScreenItems.map(({ label, icon, onClick, onDoubleClick }, index) => (
+            {items.map(({ label, icon, onClick, onDoubleClick }, index) => (
                 <FileItem 
+                    editable
                     key={label+icon} 
-                    isActive={isActiveItem(index)} 
-                    icon={isActiveItem(index) ? icon.activeIcon : icon.icon}
+                    isActive={activeItem === index} 
+                    icon={icon}
                     label={label}
-                    onClick={(e) => {
-                        onClick(e)
-                        handleClick(index)
+                    onClick={() => {
+                        if (onClick) {
+                            onClick()                            
+                        }
                     }}
-                    onDoubleClick={onDoubleClick}
+                    onDoubleClick={() => {
+                        if (onDoubleClick) {
+                            onDoubleClick()
+                        }
+                    }}
                     />
             ) )}
         </MainScreenWrapper>
