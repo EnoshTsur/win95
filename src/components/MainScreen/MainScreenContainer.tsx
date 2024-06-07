@@ -14,7 +14,7 @@ const MainScreenWrapper = styled.div`
 
 const MainScreenContainer = () => {
 
-    const { items, handleOpenExplorer } = useMainScreenItems()
+    const { items } = useMainScreenItems()
 
     return (
         <MainScreenWrapper>
@@ -34,7 +34,6 @@ const MainScreenContainer = () => {
                         }
                     }}
                     onDoubleClick={() => {
-                        handleOpenExplorer(path)
                         onDoubleClick && onDoubleClick()
                     }}
                     />

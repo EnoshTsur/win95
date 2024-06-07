@@ -8,12 +8,12 @@ import { useStartMenuState } from "store/store";
 import styled from "styled-components";
 import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "./store/store";
 import useScreenMenuItems from "components/Menu/useScreenMenuItems";
-import { useFileExplorerStore, useFileSystemStore } from "components/FileExplorer/store/store";
+import { useFileExplorerStore } from "components/FileExplorer/store/store";
 import FileExplorer from "components/FileExplorer/FileExplorer";
 import useFileExplorer from "components/FileExplorer/hooks/useFileExplorer";
 import { useFreecellWindowStore } from "components/Freecell/store/store";
 import Freecell from "components/Freecell/Freecell";
-import useInittialFileSystem from "components/FileExplorer/store/initialFileSystem";
+import useInittialFileSystem from "components/FileExplorer/hooks/useFileSystemInit";
 import useFileExplorerRoutesUpdate from "components/FileExplorer/hooks/useFileExplorerRoutesUpdate";
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`

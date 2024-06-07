@@ -1,20 +1,122 @@
 import driverIcon from '../../../assets/driver.png'
 import floppyIcon from '../../../assets/floppy-driver.png'
 import folderIcon from '../../../assets/folder.png'
+import myComputerIcon from '../../../assets/my-computer.png'
+import myComputerActiveIcon from '../../../assets/my-computer-active.png'
+import networkIcon from '../../../assets/network-neighborhood.png'
+import networkActiveIcon from '../../../assets/network-neighborhood-active.png'
+import inboxIcon from '../../../assets/inbox.png'
+import inboxActiveIcon from '../../../assets/inbox-active.png'
 import freecellIcon from '../../../svg/freecell.svg'
 import folderActiveIcon from '../../../assets/folder-active.png'
+import recycleIcon from '../../../assets/empty-trash.png'
+import recycleActiveIcon from '../../../assets/empty-trash-active.png'
 import historyIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
-import { FileSystemStructure } from "./types";
-import { useEffect, useMemo } from 'react'
+import { FileSystemStructure } from "../store/types";
+import { useEffect, useMemo, useState } from 'react'
 import { useFreecellWindowStore } from 'components/Freecell/store/store'
-import { useFileExplorerRoutesStore, useFileSystemStore } from './store'
+import { useFileExplorerRoutesStore, useFileExplorerStore, useFileSystemStore } from '../store/store'
+import { useNavigate } from 'react-router-dom'
 
-const useInittialFileSystem = () => {
+const useFileSystemInit = () => {
+
+    const [isActiveMainScreen, setActiveMainScreen] = useState(-1)
+
+
+    const navigate = useNavigate()
+
+    const { isExplorerOpen, setExplorerOpen} = useFileExplorerStore(({ isExplorerOpen, setExplorerOpen }) => ({ isExplorerOpen, setExplorerOpen }))
 
     const  {isFreecellOpen, setFreecellOpen} = useFreecellWindowStore(({ isFreecellOpen, setFreecellOpen }) => ({ isFreecellOpen, setFreecellOpen }))
     
     const initialFileSystem: FileSystemStructure = useMemo(() => ({
+        "Main Screen": {
+            label: "Main Screen",
+            icon: { regular: '', active: ''},
+            path: ["Main Screen"],
+            next: {
+                "My Computer": {
+                    label: "My Computer",
+                    icon: { regular: myComputerIcon, active: myComputerActiveIcon },
+                    path: ["Main Screen", "My Computer"],
+                    isActive: isActiveMainScreen === 0,
+                    onClick: () => {
+                        setActiveMainScreen((pre) => pre === 0 ? -1 : 0)
+                    },
+                    onDoubleClick: () => {
+                        if(!isExplorerOpen) {
+                            setExplorerOpen(true)
+                            navigate('/My Computer')
+                        }
+                    },
+                    editable: false
+                },
+                "Network Neighborhood": {
+                    label: "Network Neighborhood",
+                    icon: { regular: networkIcon, active: networkActiveIcon },
+                    path: ["Main Screen", "Network Neighborhood"],
+                    isActive: isActiveMainScreen === 1,
+                    onClick: () => {
+                        setActiveMainScreen((pre) => pre === 1 ? -1 : 1)
+                    },
+                    editable: false
+                },
+                "Inbox": {
+                    label: "Inbox",
+                    icon: { regular: inboxIcon, active: inboxActiveIcon },
+                    path: ["Main Screen", "Inbox"],
+                    isActive: isActiveMainScreen === 2,
+                    onClick: () => {
+                        setActiveMainScreen((pre) => pre === 2 ? -1 : 2)
+                    },
+                    editable: false
+                },
+                "Recycle Bin": {
+                    label: "Recycle Bin",
+                    icon: { regular: recycleIcon, active: recycleActiveIcon },
+                    path: ["Main Screen", "Recycle Bin"],
+                    isActive: isActiveMainScreen === 3,
+                    onClick: () => {
+                        setActiveMainScreen((pre) => pre === 3 ? -1 : 3)
+                    },
+                    editable: false
+                },
+                "FreeCell": {
+                    label: "FreeCell",
+                    icon: { regular: freecellIcon, active: freecellIcon },
+                    path: ["Main Screen", "FreeCell"],
+                    isActive: isActiveMainScreen === 4,
+                    oonClick: () => {
+                        setActiveMainScreen((pre) => pre === 4 ? -1 : 4)
+                    },
+                    onDoubleClick: () => {
+                        if (!isFreecellOpen) {
+                            setFreecellOpen(true)
+                        }
+                    },
+                    iconStyle: { width: '45px'},
+                    editable: true,
+                },
+                "Online Services": {
+                    label: "Online Services",
+                    icon: { regular: folderIcon, active: folderActiveIcon },
+                    path: ["Main Screen", "Online Services"],
+                    isActive: isActiveMainScreen === 5,
+                    onClick: () => {
+                        setActiveMainScreen((pre) => pre === 5 ? -1 : 5)
+                    },
+                    onDoubleClick: () => {
+                        if(!isExplorerOpen) {
+                            setExplorerOpen(true)
+                            navigate('/My Computer/Windoes/Desktop/Online Services')
+                        }
+                    },
+                    editable: false
+                },
+                
+            }
+        },
         "My Computer": {
             label: "My Computer",
             icon: { regular: '', active: '' },
@@ -174,7 +276,7 @@ const useInittialFileSystem = () => {
                 },
             },
         },
-    }), [isFreecellOpen])
+    }), [isFreecellOpen, isActiveMainScreen])
 
 
     const { setFileSystem } = useFileSystemStore(({ setFileSystem }) => ({ setFileSystem }))
@@ -186,4 +288,4 @@ const useInittialFileSystem = () => {
     }, [initialFileSystem])
 }
 
-export default useInittialFileSystem
+export default useFileSystemInit
