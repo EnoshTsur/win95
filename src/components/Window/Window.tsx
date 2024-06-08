@@ -20,7 +20,7 @@ const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: numb
     padding: 1px;
 `
 
-interface TitleProps {
+export interface TitleProps {
     readonly title?: string
     readonly titleButtons?: ReadonlyArray<ButtonProps>
     readonly icon?: string

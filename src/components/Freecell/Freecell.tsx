@@ -163,10 +163,12 @@ const Freecell = () => {
                 isError && ( 
                     <Alert 
                         status="INFO"
-                        title="FreeCell" 
-                        titleButtons={[
-                            { children: <IoMdClose />, onClick: () => { setError(false) } }
-                        ]} 
+                        title={{ 
+                            title: 'FreeCell', 
+                            titleButtons: [
+                                { children: <IoMdClose />, onClick: () => { setError(false) } }
+                            ]
+                        }} 
                         panelButtons={[
                             { children: 'OK', onClick: () => { setError(false) } }
                         ]}

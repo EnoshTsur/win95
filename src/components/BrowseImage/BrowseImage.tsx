@@ -8,7 +8,9 @@ import styled from "styled-components";
 import { playErrorSound } from "utils/functions";
 
 const HiddenInput = styled.input`
-    display: none
+    visibility: hidden;
+    width: 0;
+    height: 0;
 `
 
 interface BrowseProps extends ButtonProps {
@@ -43,6 +45,8 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
     }
 
     const handleClick = () => {
+        console.log('handleClick triggered'); // Debug log
+        console.log('inputRef.current:', inputRef.current); 
         inputRef?.current?.click()
     }
 
@@ -51,10 +55,12 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
             {
                 isFormatError && (
                     <Alert 
-                        title="Format Error" 
-                        titleButtons={[
-                            { children: <IoMdClose />, onClick: () => { setFormat(''); setFormatError(false); }}
-                        ]}
+                        title={{ 
+                            title: 'Format Error',
+                            titleButtons: [
+                                { children: <IoMdClose />, onClick: () => { setFormat(''); setFormatError(false); }}
+                            ]
+                        }}
                         message={`File of format ${format} is not supported, try image format instead`}
                         status="ERROR"
                         panelButtons={[
@@ -63,7 +69,7 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
                     />
                 )
             }
-            <HiddenInput type="file" ref={inputRef} onChange={handleChange}/>
+            <HiddenInput type="file" ref={inputRef} onChange={handleChange} key="enosh"/>
             <PanelButton {...rest} onClick={handleClick}>
                 { children }
             </PanelButton>

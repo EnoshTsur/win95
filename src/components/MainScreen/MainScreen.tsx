@@ -78,7 +78,6 @@ const MainScreen = () => {
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
-        e.preventDefault()
         closeStartMenu()
         closeScreenMenu()
     }
