@@ -44,9 +44,8 @@ const BrowseImage = ({ children, saveImage, ...rest }: BrowseProps) => {
         }
     }
 
-    const handleClick = () => {
-        console.log('handleClick triggered'); // Debug log
-        console.log('inputRef.current:', inputRef.current); 
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
         inputRef?.current?.click()
     }
 

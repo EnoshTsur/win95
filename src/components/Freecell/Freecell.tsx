@@ -6,8 +6,7 @@ import Underline from "components/Underline/Underline";
 import freecellIcon from '../../svg/freecell.svg';
 import freecellLeftIcon from '../../assets/freecell-left-icon.png';
 import styled from "styled-components";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { finished } from "stream";
+import { useCallback, useMemo, useState } from "react";
 import { GameCard } from "./store/types";
 import Alert from "components/Alert/Alert";
 import { IoMdClose } from "react-icons/io";
@@ -105,19 +104,35 @@ const Freecell = () => {
     
     const [direction, setDirection] = useState<'left' | 'right'>('left');
 
-    const { gameDeck, bankDeck, initiateDeck, finishGame, toggleActive, moveCardToBankDeck, } = useFreeCellGameStore(({ 
+    const { 
+        activeGameDeckId, 
+        activeBankDeckId, 
+        gameDeck, 
+        bankDeck, 
+        initiateDeck, 
+        finishGame, 
+        toggleGameDeckActive, 
+        toggleBankActive, 
+        moveCardToBankDeck, 
+    } = useFreeCellGameStore(({ 
+        activeGameDeckId,
+        activeBankDeckId,
         gameDeck, 
         bankDeck,
         finishGame, 
         initiateDeck, 
-        toggleActive, 
+        toggleBankActive,
+        toggleGameDeckActive, 
         moveCardToBankDeck
     }) => ({ 
+        activeGameDeckId,
+        activeBankDeckId,
         gameDeck,  
         bankDeck,
         initiateDeck,
         finishGame,
-        toggleActive,
+        toggleBankActive,
+        toggleGameDeckActive,
         moveCardToBankDeck
     }));
 
@@ -141,21 +156,54 @@ const Freecell = () => {
     }
 
     const handleBankClick = useCallback(() => {
+
         if (bankDeck.length === 4) {
             setError(true)
             return
         }
-        const active = gameDeck.reduce<GameCard | null>((acc,  cardColumn) => {
-            if (acc != null) {
-                return acc
-            }
-            const active = cardColumn.find(({ isActive }) => isActive )
-            return active ? active : acc
-        }, null)
-        if (active) {
-            moveCardToBankDeck(active)
+
+        if (activeGameDeckId != null && activeBankDeckId == null) {
+            const active = gameDeck.reduce<GameCard | null>((acc,  cardColumn) => {
+                    if (acc != null) {
+                        return acc
+                    }
+                    const active = cardColumn.find(({ isActive }) => isActive )
+                    return active ? active : acc
+                }, null)
+        
+                if (active) {
+                    toggleGameDeckActive(active.id)
+                    moveCardToBankDeck(active)
+                }
+
         }
-    }, [bankDeck, gameDeck])
+    }, [bankDeck, gameDeck, activeGameDeckId, activeBankDeckId])
+
+
+    const handleGamePanelCardClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+        if (activeBankDeckId != null) {
+            return
+        }
+        const targetId = (e.target as HTMLElement).id;        
+        
+        if (activeGameDeckId == null || targetId === activeGameDeckId) {
+            toggleGameDeckActive(targetId)
+        }
+    }, [activeGameDeckId, activeBankDeckId])
+
+
+    const handleBankCardClick = useCallback((e: React.MouseEvent<HTMLElement>) => {
+        if (activeGameDeckId != null) {
+            return
+        }
+        const targetId = (e.target as HTMLElement).id;
+        
+        debugger
+        if (activeBankDeckId == null || targetId === activeBankDeckId) {
+            toggleBankActive(targetId)
+        }
+    }, [activeBankDeckId, activeGameDeckId])
+
 
     return (
         <Window title={{ title: 'FreeCell', icon: freecellIcon, titleButtons: generateTitleButtons(handleClose) }}>
@@ -183,9 +231,20 @@ const Freecell = () => {
                     {Array.from({ length: 4 }).map((_, colIndex) => (
                         <div key={colIndex} style={{ zIndex: 90 }} onClick={handleBankClick}>
                             { bankDeck[colIndex] && (
-                            <GameCardBankView key={colIndex +100} onClick={() => toggleActive(bankDeck[colIndex].id)} isactive={`${bankDeck[colIndex].isActive}`}>
-                                    <img src={bankDeck[colIndex].image} alt={`${bankDeck[colIndex].value} of ${bankDeck[colIndex].suit}`} />
+
+                            <GameCardBankView 
+                                id={bankDeck[colIndex].id} 
+                                key={colIndex +100} 
+                                onClick={handleBankCardClick}
+                                isactive={`${bankDeck[colIndex].isActive}`}
+                            >
+                                    <img 
+                                        id={bankDeck[colIndex].id} 
+                                        src={bankDeck[colIndex].image} 
+                                        alt={`${bankDeck[colIndex].value} of ${bankDeck[colIndex].suit}`} 
+                                    />
                             </GameCardBankView>
+
                             )}
                         </div>
                     ))}
@@ -210,9 +269,20 @@ const Freecell = () => {
                         <CardColumn key={`cardcol${index}`}>
                             { 
                                 col.map((card, cardIndex) => (
-                                    <GameCardView key={`card${cardIndex}`} col={cardIndex} onClick={() => toggleActive(card.id)} isactive={`${card.isActive}`}>
-                                        <img src={card.image} alt={`${card.value} of ${card.suit}`} />
+
+                                    <GameCardView 
+                                        id={card.id} 
+                                        key={`card${cardIndex}`} 
+                                        col={cardIndex} onClick={handleGamePanelCardClick} 
+                                        isactive={`${card.isActive}`}
+                                    >
+                                        <img 
+                                            id={card.id} 
+                                            src={card.image} 
+                                            alt={`${card.value} of ${card.suit}`} 
+                                        />
                                     </GameCardView>
+
                                 )) 
                             }
                         </CardColumn>

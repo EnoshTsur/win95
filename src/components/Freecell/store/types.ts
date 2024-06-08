@@ -35,14 +35,20 @@ export interface GameCard {
 export type Deck = ReadonlyArray<GameCard>
 
 export interface FreeCellGameStore {
+    readonly activeGameDeckId: string | null
+    readonly activeBankDeckId: string | null
+    readonly activeFinishDeckId: string | null
     readonly gameDeck: ReadonlyArray<Deck>
     readonly finishDeck: Deck
     readonly bankDeck: Deck
     readonly initiateDeck: () => void
     readonly finishGame: () => void
     readonly moveCardToFinishDeck: (card: GameCard) => void
-    readonly moveCardToBankDeck: (card: GameCard) => void
-    readonly toggleActive: (id: string) => void
+    readonly moveCardToBankDeck: (id: GameCard) => void
+    readonly toggleGameDeckActive: (id: string) => void
+    readonly toggleBankActive: (id: string) => void
+    readonly toggleFinishActive: (id: string) => void
+
 }
 
 

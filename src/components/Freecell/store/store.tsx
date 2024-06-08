@@ -34,6 +34,9 @@ const shuffleDeck = (deck: Deck): Deck => deck.reduce<Deck>((shuffledDeck, _, in
 
 
 export const useFreeCellGameStore = create<FreeCellGameStore>((set) => ({
+    activeGameDeckId: null,
+    activeBankDeckId: null,
+    activeFinishDeckId: null,
     gameDeck: [],
     finishDeck: [],
     bankDeck: [],
@@ -58,14 +61,21 @@ export const useFreeCellGameStore = create<FreeCellGameStore>((set) => ({
             A.map((cardColumn) => cardColumn.filter(({ value, suit}) => value !== card.value || suit !== card.suit))
 
         ),
-        bankDeck: [...pre.bankDeck, {...card, isActive: false }]
+        bankDeck: [...pre.bankDeck, {...card, isActive: false }],
+        isActiveCard: false,
     })),
     finishGame: () => set({ gameDeck: [], finishDeck: [], bankDeck: []}),
-    toggleActive: (id) => set((pre) => ({
-        gameDeck: pre.gameDeck.map((cardColumn) => cardColumn.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card)),
-        finishDeck: pre.finishDeck.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card),
-        bankDeck: pre.bankDeck.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card),
-
+    toggleGameDeckActive: (cardId) => set((pre) => ({
+        gameDeck: pre.gameDeck.map((col) => col.map(({ isActive, id, ...rest }) => ({...rest, id, isActive:  id === cardId ? !isActive : isActive }))),
+        activeGameDeckId: pre.activeGameDeckId == null ? cardId : null
+    })),
+    toggleBankActive: (cardId) => set((pre) => ({
+        bankDeck: pre.bankDeck.map(({ isActive, id, ...rest }) => ({...rest, id, isActive:  id === cardId ? !isActive : isActive })),
+        activeBankDeckId: pre.activeBankDeckId === null ? cardId : null
+    })),
+    toggleFinishActive: (cardId) => set((pre) => ({
+        finishDeck: pre.finishDeck.map(({ isActive, id, ...rest }) => ({...rest, id, isActive:  id === cardId ? !isActive : isActive })),
+        activeFinishDeckId: pre.activeFinishDeckId == null ? cardId : null,
     }))
 }))
 
