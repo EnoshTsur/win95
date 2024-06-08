@@ -28,6 +28,7 @@ const FileItemLabel = styled.span<{
 }>`
     font-family: mslevi;
     letter-spacing: 1px;
+    max-width: 7rem;
     cursor: ${({ editable }) => editable === 'true' ? 'text' : 'pointer'};
     ${({ theme, isactive, itemlocation }) => theme.regular.fileItem.label[itemlocation](isactive)}  
     &:focus {
@@ -71,11 +72,6 @@ const FileItem = ({
     }))
 
     const itemLocation: 'desktop' | 'fileExplorer' = useMemo(() => path[0].includes('Main Screen') ? 'desktop' : 'fileExplorer', [path])
-
-    useEffect(() => {
-        console.log({ itemLocation, isActive, path});
-        
-    }, [itemLocation, path, isActive])
 
     return (
         <Tooltip placement="bottom" title={label} >
