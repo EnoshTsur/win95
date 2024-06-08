@@ -34,20 +34,38 @@ const shuffleDeck = (deck: Deck): Deck => deck.reduce<Deck>((shuffledDeck, _, in
 
 
 export const useFreeCellGameStore = create<FreeCellGameStore>((set) => ({
-    initialDeck: [],
+    gameDeck: [],
     finishDeck: [],
-    initiateGame: () => set({ initialDeck: pipe(generateInitialDeck(), shuffleDeck), finishDeck: []}),
+    bankDeck: [],
+    initiateDeck: () => {
+        const fullDeck = pipe(generateInitialDeck(), shuffleDeck)
+        const finalDeck = Array.from({ length: 8 }).map((_, colIndex) => fullDeck.slice(
+                    colIndex * 7 - Math.max(0, colIndex - 4), 
+                    (colIndex + 1) * 7 - Math.max(0, colIndex - 3)
+        ))
+        set({ gameDeck: finalDeck, bankDeck: [], finishDeck: [] })
+    },
     moveCardToFinishDeck: (card) => set((pre) => ({
-        initialDeck: pipe(
-            pre.initialDeck,
-            A.filter(({ value, suit}) => value !== card.value || suit !== card.suit)
+        gameDeck: pipe(
+            pre.gameDeck,
+            A.map((cardColumn) => cardColumn.filter(({ value, suit}) => value !== card.value || suit !== card.suit))
         ),
         finishDeck: [...pre.finishDeck, card]
     })),
-    finishGame: () => set({ initialDeck: [], finishDeck: []}),
+    moveCardToBankDeck: (card) => set((pre) => ({
+        gameDeck: pipe(
+            pre.gameDeck,
+            A.map((cardColumn) => cardColumn.filter(({ value, suit}) => value !== card.value || suit !== card.suit))
+
+        ),
+        bankDeck: [...pre.bankDeck, {...card, isActive: false }]
+    })),
+    finishGame: () => set({ gameDeck: [], finishDeck: [], bankDeck: []}),
     toggleActive: (id) => set((pre) => ({
-        initialDeck: pre.initialDeck.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card),
+        gameDeck: pre.gameDeck.map((cardColumn) => cardColumn.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card)),
         finishDeck: pre.finishDeck.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card),
+        bankDeck: pre.bankDeck.map((card) => card.id === id ? {...card, isActive: !card.isActive } : card),
+
     }))
 }))
 

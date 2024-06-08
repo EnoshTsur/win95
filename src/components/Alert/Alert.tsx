@@ -3,6 +3,7 @@ import Window from "components/Window/Window"
 import { useMemo, useState } from "react"
 import emarkIcon from '../../assets/emark-icon.png'
 import questionIcon from '../../assets/question-icon.png'
+import infoIcon from '../../assets/info-icon.png'
 import closeIcon from '../../assets/close-icon.png'
 import styled from "styled-components"
 import Backdrop from "./Backdrop"
@@ -25,7 +26,7 @@ const AlertIcon = styled.img`
     height: 70px;
 `
 
-export type AlertStatus = 'ERROR'| 'WARNING' | 'QUESTION'
+export type AlertStatus = 'ERROR'| 'WARNING' | 'QUESTION' | 'INFO'
 
 interface AlertProps {
     readonly title?: string
@@ -48,6 +49,10 @@ const Alert = ({ title, titleButtons, message, status, panelButtons }: AlertProp
             case 'WARNING':
                 return (
                     <AlertIcon src={emarkIcon} />
+                )
+            case 'INFO':
+                return (
+                    <AlertIcon src={infoIcon} />
                 )
             case 'QUESTION':
                 return (
