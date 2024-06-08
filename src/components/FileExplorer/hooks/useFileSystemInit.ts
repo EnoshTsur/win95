@@ -1,4 +1,4 @@
-import driverIcon from '../../../assets/driver.png'
+import driveIcon from '../../../assets/driver.png'
 import driveActiveIcon from '../../../assets/active-drive-icon.png'
 import floppyIcon from '../../../assets/floppy-driver.png'
 import floppyActiveIcon from '../../../assets/floppy-active-drive-icon.png'
@@ -18,11 +18,29 @@ import historyActiveIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
 import printersActiveIcon from '../../../assets/printers-active-icon.png'
 import freecellActiveIcon from '../../../svg/freecell.png'
-import { FileSystemStructure } from "../store/types";
+import { FileIcon, FileSystemStructure } from "../store/types";
 import { useEffect, useMemo, useState } from 'react'
 import { useFreecellWindowStore } from 'components/Freecell/store/store'
 import { useFileExplorerRoutesStore, useFileExplorerStore, useFileSystemStore } from '../store/store'
 import { useNavigate } from 'react-router-dom'
+
+type IconName = 'drive' | 'floppy' | 'folder' | 'myComputer' | 'network' | 'inbox' | 'freecell' | 'recycle' | 'history' | 'printers' | 'none'
+
+type IconsSources = Readonly<Record<IconName, FileIcon>>
+
+const iconSourcesMap: IconsSources = {
+    none: { regular: '', active: ''},
+    myComputer: { regular: myComputerIcon, active: myComputerActiveIcon },
+    network: { regular: networkIcon, active: networkActiveIcon },
+    inbox: { regular: inboxIcon, active: inboxActiveIcon },
+    recycle: { regular: recycleIcon, active: recycleActiveIcon },
+    freecell: { regular: freecellIcon, active: freecellActiveIcon },
+    folder: { regular: folderIcon, active: folderActiveIcon },
+    floppy: { regular: floppyIcon, active: floppyActiveIcon },
+    history: {regular : historyIcon, active: historyActiveIcon },
+    printers: { regular: printersIcon, active: printersActiveIcon },
+    drive: { regular: driveIcon, active: driveActiveIcon },
+}
 
 const useFileSystemInit = () => {
 
@@ -38,12 +56,12 @@ const useFileSystemInit = () => {
     const initialFileSystem: FileSystemStructure = useMemo(() => ({
         "Main Screen": {
             label: "Main Screen",
-            icon: { regular: '', active: ''},
+            icon: iconSourcesMap.none,
             path: ["Main Screen"],
             next: {
                 "My Computer": {
                     label: "My Computer",
-                    icon: { regular: myComputerIcon, active: myComputerActiveIcon },
+                    icon: iconSourcesMap.myComputer,
                     path: ["Main Screen", "My Computer"],
                     isActive: isActiveMainScreen === 0,
                     onClick: () => {
@@ -59,7 +77,7 @@ const useFileSystemInit = () => {
                 },
                 "Network Neighborhood": {
                     label: "Network Neighborhood",
-                    icon: { regular: networkIcon, active: networkActiveIcon },
+                    icon: iconSourcesMap.network,
                     path: ["Main Screen", "Network Neighborhood"],
                     isActive: isActiveMainScreen === 1,
                     onClick: () => {
@@ -69,7 +87,7 @@ const useFileSystemInit = () => {
                 },
                 "Inbox": {
                     label: "Inbox",
-                    icon: { regular: inboxIcon, active: inboxActiveIcon },
+                    icon: iconSourcesMap.inbox,
                     path: ["Main Screen", "Inbox"],
                     isActive: isActiveMainScreen === 2,
                     onClick: () => {
@@ -79,7 +97,7 @@ const useFileSystemInit = () => {
                 },
                 "Recycle Bin": {
                     label: "Recycle Bin",
-                    icon: { regular: recycleIcon, active: recycleActiveIcon },
+                    icon: iconSourcesMap.recycle,
                     path: ["Main Screen", "Recycle Bin"],
                     isActive: isActiveMainScreen === 3,
                     onClick: () => {
@@ -89,7 +107,7 @@ const useFileSystemInit = () => {
                 },
                 "FreeCell": {
                     label: "FreeCell",
-                    icon: { regular: freecellIcon, active: freecellActiveIcon },
+                    icon: iconSourcesMap.freecell,
                     path: ["Main Screen", "FreeCell"],
                     isActive: isActiveMainScreen === 4,
                     onClick: () => {
@@ -105,7 +123,7 @@ const useFileSystemInit = () => {
                 },
                 "Online Services": {
                     label: "Online Services",
-                    icon: { regular: folderIcon, active: folderActiveIcon },
+                    icon: iconSourcesMap.folder,
                     path: ["Main Screen", "Online Services"],
                     isActive: isActiveMainScreen === 5,
                     onClick: () => {
@@ -124,31 +142,31 @@ const useFileSystemInit = () => {
         },
         "My Computer": {
             label: "My Computer",
-            icon: { regular: '', active: '' },
+            icon: iconSourcesMap.none,
             path: ["My Computer"],
             editable: false,
             next: {
                 "A": {
                     label: "3½ Floppy [A:]",
-                    icon: { regular: floppyIcon, active: floppyActiveIcon },
+                    icon: iconSourcesMap.floppy,
                     path: ["My Computer", "A"],
                     editable: false
                 },
                 "C": {
                     label: "[C:]",
-                    icon: { regular: driverIcon, active: driveActiveIcon },
+                    icon: iconSourcesMap.drive,
                     path: ["My Computer", "C"],
                     editable: false,
                     next: {
                         "Games": {
                             label: "Games",
-                            icon: { regular: folderIcon, active: folderActiveIcon },
+                            icon: iconSourcesMap.folder,
                             path: ["My Computer", "C", "Games"],
                             editable: true,
                             next: {
                                 "FreeCell": {
                                     label: "FreeCell",
-                                    icon: { regular: freecellIcon, active: freecellActiveIcon },
+                                    icon: iconSourcesMap.freecell,
                                     iconStyle: { width: '45px'},
                                     editable: true,
                                     onDoubleClick: () => {
@@ -162,21 +180,21 @@ const useFileSystemInit = () => {
                         },
                         "Program Files": {
                             label: "Program Files",
-                            icon: { regular: folderIcon, active: folderActiveIcon },
+                            icon: iconSourcesMap.folder,
                             editable: true,
                             path: ["My Computer", "C", "Program Files"],
                             next: {}
                         },
                         "Windows": {
                             label: "Windows",
-                            icon: { regular: folderIcon, active: folderActiveIcon },
+                            icon: iconSourcesMap.folder,
                             editable: true,
                             path: ["My Computer", "C", "Windows"],
                             next: {
     
                                 "Command": {
                                     label: "Command",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Command"],
                                     next: {},
@@ -184,7 +202,7 @@ const useFileSystemInit = () => {
     
                                 "Config": {
                                     label: "Config",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Config"],
                                     next: {},
@@ -192,7 +210,7 @@ const useFileSystemInit = () => {
     
                                 "Cookies": {
                                     label: "Cookies",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Cookies"],
                                     next: {},
@@ -200,7 +218,7 @@ const useFileSystemInit = () => {
     
                                 "Cursors": {
                                     label: "Cursors",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Cursors"],
                                     next: {},
@@ -208,14 +226,14 @@ const useFileSystemInit = () => {
     
                                 "Desktop": {
                                     label: "Desktop",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Desktop"],
                                     next: {
                                     
                                         "Online Services": {
                                             label: "Online Services",
-                                            icon: {regular: folderIcon, active: folderActiveIcon },
+                                            icon: iconSourcesMap.folder,
                                             editable: true,
                                             path: ["My Computer", "C", "Windows", "Desktop", "Online Services"],
                                             next: {},
@@ -225,7 +243,7 @@ const useFileSystemInit = () => {
     
                                 "Fonts": {
                                     label: "Fonts",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Fonts"],
                                     next: {},
@@ -233,7 +251,7 @@ const useFileSystemInit = () => {
     
                                 "Forms": {
                                     label: "Forms",
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     editable: true,
                                     path: ["My Computer", "C", "Windows", "Forms"],
                                     next: {},
@@ -242,7 +260,7 @@ const useFileSystemInit = () => {
                                 "Help": {
                                     label: "Help",
                                     editable: true,
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     path: ["My Computer", "C", "Windows", "Help"],
                                     next: {},
                                 },
@@ -250,14 +268,14 @@ const useFileSystemInit = () => {
                                 "History": {
                                     label: "History",
                                     editable: true,
-                                    icon: {regular : historyIcon, active: historyActiveIcon },
+                                    icon: iconSourcesMap.history,
                                     path: ["My Computer", "C", "Windows", "History"],
                                 },
     
                                 "System": {
                                     label: "System",
                                     editable: true,
-                                    icon: {regular: folderIcon, active: folderActiveIcon },
+                                    icon: iconSourcesMap.folder,
                                     path: ["My Computer", "C", "Windows", "System"],
                                     next: {},
                                 },
@@ -269,14 +287,14 @@ const useFileSystemInit = () => {
                 "D": {
                     label: "[D:]",
                     editable: false,
-                    icon: { regular: driverIcon, active: driveActiveIcon },
+                    icon: iconSourcesMap.drive,
                     path: ["My Computer", "D"],
                     next: {},
                 },
                 "Printers": {
                     label: "Printers",
                     editable: false,
-                    icon: { regular: printersIcon, active: printersActiveIcon },
+                    icon: iconSourcesMap.printers,
                     path: ["My Computer", "Printers"]
                 },
             },
