@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
 import useFileItem from "../hooks/useFileItem";
 import Tooltip from "components/Tooltip/Tooltip";
 import { FileIcon } from "../store/types";
 import { useFileSystemStore } from "../store/store";
 
-const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
+const FileItemWrapper = styled.div`
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -19,20 +19,21 @@ const FileItemWrapper = styled.div<{ isactive: string, editable: string }>`
     img {
         width: 80px;
     }
+`
 
-    span {
-        cursor: ${({ editable }) => editable === 'true' ? 'text' : 'pointer'};
-        border: ${({ theme, isactive }) => isactive === 'true' ? `1px dashed ${theme.colors.white}` : `1px solid ${theme.colors.windowsBg}` };
-        background-color: ${({ theme, isactive }) => isactive === 'true' ? theme.colors.alertTitleBar : theme.colors.windowsBg};
-        color: white;
-        letter-spacing: 1px;
-        max-width: 7rem;
-
-        &:focus {
-            outline: none;
-            background-color: white;
-            color: black;
-        }
+const FileItemLabel = styled.span<{ 
+    editable: string, 
+    isactive: string, 
+    itemlocation: 'desktop' | 'fileExplorer' 
+}>`
+    font-family: mslevi;
+    letter-spacing: 1px;
+    cursor: ${({ editable }) => editable === 'true' ? 'text' : 'pointer'};
+    ${({ theme, isactive, itemlocation }) => theme.regular.fileItem.label[itemlocation](isactive)}  
+    &:focus {
+        outline: none;
+        background-color: white;
+        color: black;
     }
 `
 
@@ -69,19 +70,23 @@ const FileItem = ({
         setEditable
     }))
 
+    const itemLocation: 'desktop' | 'fileExplorer' = useMemo(() => path[0].includes('Main Screen') ? 'desktop' : 'fileExplorer', [path])
+
+    useEffect(() => {
+        console.log({ itemLocation, isActive, path});
+        
+    }, [itemLocation, path, isActive])
 
     return (
         <Tooltip placement="bottom" title={label} >
             <FileItemWrapper 
-                isactive={`${isActive}`} 
-                onClick={(e) => {
+                onClick={() => {
                     if (onClick) {
                         onClick()
                     } else {
                         toggleActive(path);
                     }
                 }} 
-                editable={`${editable}`}
             >
                 <img 
                     src={isActive ? icon.active : icon.regular} 
@@ -95,8 +100,11 @@ const FileItem = ({
                     }}
                     style={iconStyle}
                 />
-                <span 
+                <FileItemLabel 
                     style={spanStyle}
+                    editable={`${editable}`}
+                    isactive={`${isActive}`}
+                    itemlocation={itemLocation}
                     ref={ref}
                     onBlur={handleBlur} 
                     onDoubleClick={() => { setEditable(path, true); }}
@@ -104,7 +112,7 @@ const FileItem = ({
                     suppressContentEditableWarning={true}
                 >
                     {label}
-                </span>
+                </FileItemLabel>
             </FileItemWrapper>
         </Tooltip>
     )

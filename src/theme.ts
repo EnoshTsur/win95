@@ -14,6 +14,24 @@ const windows95Theme: DefaultTheme = {
         alertTitleBar: '#00006F',
         tooltipBg: '#f7eedc',
 
+    },
+    regular: {
+        fileItem: {
+            label: {
+                desktop: (isActive: string) => `
+                    background-color: ${isActive === 'true' ? '#00006F' : '#1f9789'};
+                    border: 1px ${isActive === 'true' ? 'dashed' : 'solid'} ${isActive === 'true' ? '#FFFFFF' : '#1f9789'};
+                    color: white;
+                `,
+
+                fileExplorer: (isActive: string) => `
+                background-color: ${isActive === 'true' ? '#00006F' : '#FFFFFF'};
+                border: 1px ${isActive === 'true' ? 'dashed' : 'solid'} #FFFFFF;
+                color: ${isActive === 'true' ? '#FFFFFF' : '#000000'};
+            `,
+
+            }
+        }
     }
 }
 

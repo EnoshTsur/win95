@@ -1,5 +1,7 @@
 import driverIcon from '../../../assets/driver.png'
+import driveActiveIcon from '../../../assets/active-drive-icon.png'
 import floppyIcon from '../../../assets/floppy-driver.png'
+import floppyActiveIcon from '../../../assets/floppy-active-drive-icon.png'
 import folderIcon from '../../../assets/folder.png'
 import myComputerIcon from '../../../assets/my-computer.png'
 import myComputerActiveIcon from '../../../assets/my-computer-active.png'
@@ -12,7 +14,10 @@ import folderActiveIcon from '../../../assets/folder-active.png'
 import recycleIcon from '../../../assets/empty-trash.png'
 import recycleActiveIcon from '../../../assets/empty-trash-active.png'
 import historyIcon from '../../../assets/history-icon.png'
+import historyActiveIcon from '../../../assets/history-icon.png'
 import printersIcon from '../../../assets/printers.png'
+import printersActiveIcon from '../../../assets/printers-active-icon.png'
+import freecellActiveIcon from '../../../svg/freecell.png'
 import { FileSystemStructure } from "../store/types";
 import { useEffect, useMemo, useState } from 'react'
 import { useFreecellWindowStore } from 'components/Freecell/store/store'
@@ -84,10 +89,10 @@ const useFileSystemInit = () => {
                 },
                 "FreeCell": {
                     label: "FreeCell",
-                    icon: { regular: freecellIcon, active: freecellIcon },
+                    icon: { regular: freecellIcon, active: freecellActiveIcon },
                     path: ["Main Screen", "FreeCell"],
                     isActive: isActiveMainScreen === 4,
-                    oonClick: () => {
+                    onClick: () => {
                         setActiveMainScreen((pre) => pre === 4 ? -1 : 4)
                     },
                     onDoubleClick: () => {
@@ -125,13 +130,13 @@ const useFileSystemInit = () => {
             next: {
                 "A": {
                     label: "3½ Floppy [A:]",
-                    icon: { regular: floppyIcon, active: floppyIcon },
+                    icon: { regular: floppyIcon, active: floppyActiveIcon },
                     path: ["My Computer", "A"],
                     editable: false
                 },
                 "C": {
                     label: "[C:]",
-                    icon: { regular: driverIcon, active: driverIcon },
+                    icon: { regular: driverIcon, active: driveActiveIcon },
                     path: ["My Computer", "C"],
                     editable: false,
                     next: {
@@ -143,7 +148,7 @@ const useFileSystemInit = () => {
                             next: {
                                 "FreeCell": {
                                     label: "FreeCell",
-                                    icon: { regular: freecellIcon, active: freecellIcon },
+                                    icon: { regular: freecellIcon, active: freecellActiveIcon },
                                     iconStyle: { width: '45px'},
                                     editable: true,
                                     onDoubleClick: () => {
@@ -245,7 +250,7 @@ const useFileSystemInit = () => {
                                 "History": {
                                     label: "History",
                                     editable: true,
-                                    icon: {regular : historyIcon, active: historyIcon },
+                                    icon: {regular : historyIcon, active: historyActiveIcon },
                                     path: ["My Computer", "C", "Windows", "History"],
                                 },
     
@@ -264,14 +269,14 @@ const useFileSystemInit = () => {
                 "D": {
                     label: "[D:]",
                     editable: false,
-                    icon: { regular: driverIcon, active: driverIcon },
+                    icon: { regular: driverIcon, active: driveActiveIcon },
                     path: ["My Computer", "D"],
                     next: {},
                 },
                 "Printers": {
                     label: "Printers",
                     editable: false,
-                    icon: { regular: printersIcon, active: printersIcon },
+                    icon: { regular: printersIcon, active: printersActiveIcon },
                     path: ["My Computer", "Printers"]
                 },
             },
