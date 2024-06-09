@@ -18,7 +18,7 @@ import useFileExplorerRoutesUpdate from "components/FileExplorer/hooks/useFileEx
 
 const ScreenWrapper = styled.div<{ backgroundurl: string, backgroundsize: string }>`
     position: relative;
-    height: 55rem;
+    height: 95%;
     ${({ backgroundurl }) => backgroundurl !== '' && `background-image: url(${backgroundurl});`}
     ${({ backgroundurl, backgroundsize }) => backgroundurl !== '' && `background-size: ${backgroundsize};`}
     background-position: center center;

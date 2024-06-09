@@ -1,18 +1,16 @@
 import { ButtonProps } from "components/Button/Button";
-import Underline from "components/Underline/Underline";
-import { useMemo } from "react";
 import styled from "styled-components";
 
 const FileExplorerMenuWrapper = styled.div`
     display: flex;
-    gap: 5px;
+    gap: 0.3rem;
     background-color: ${({ theme }) => theme.colors.menu};
     border-bottom: 2px solid ${({ theme }) => theme.colors.buttonShadow};
     `
     
     const FileExplorerMenuItem = styled.span`
     font-family: mslevi;
-    padding: 5px;
+    padding: 0.4rem;
     &:hover {
         cursor: pointer;
         background-color: ${({ theme }) => theme.colors.alertTitleBar};

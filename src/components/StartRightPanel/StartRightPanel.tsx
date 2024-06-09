@@ -8,17 +8,17 @@ const PanelWrapper = styled.div`
     border-top: 3px solid ${({ theme }) => theme.colors.buttonShadow};
     border-bottom: 3px solid ${({ theme }) => theme.colors.white };
     border-right: 3px solid ${({ theme }) => theme.colors.white };
-    margin: 2px;
+    margin: 0.5rem;
     display: flex;
     align-items: center;
-    padding: 0 5px;
+    padding: 0 0.8rem;
     font-family: mslevi;
     gap: 1px;
 `
 
 const VolumeIcon = styled.img`
-    width: 40px;
-    height: 30px;
+    width: 2rem;
+    height: 1.8rem;
 `
 
 const StartRightPanel = () => {

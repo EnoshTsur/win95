@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 import useFileItem from "../hooks/useFileItem";
 import Tooltip from "components/Tooltip/Tooltip";
@@ -49,6 +49,7 @@ export interface FileItemProps {
     readonly iconStyle?: React.CSSProperties
     readonly onClick?: () => void
     readonly onDoubleClick?: () => void
+    readonly onTouchEnd?: () => void
 }
 
 const FileItem = ({ 
@@ -60,6 +61,7 @@ const FileItem = ({
     editable = false,
     onClick,
     onDoubleClick, 
+    onTouchEnd,
     spanStyle = {},
     iconStyle = {},
 }: FileItemProps) => {
@@ -93,6 +95,13 @@ const FileItem = ({
                         } else {
                             handleNext(hasNext, path)
                         }
+                    }}
+                    onTouchEnd={() => {
+                        if (onTouchEnd) {
+                            onTouchEnd()
+                        } else {
+                            handleNext(hasNext, path)
+                        }   
                     }}
                     style={iconStyle}
                 />

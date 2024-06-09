@@ -2,8 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useOpenWindowState } from "store/store";
 
 const windowIdGenerator = () => {
-    let idgen = 0;
-
+    let idgen = 1;
     return () => `window${idgen++}`
 }
 

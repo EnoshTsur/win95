@@ -9,10 +9,11 @@ const Container = styled.div`
     border-top: 1px solid ${({ theme: { colors } })=>  colors.window };
     display: flex;
     justify-content: space-between;
+    height: 5%;
 `
 
 const ExplorerMinimize = styled.div`
-    margin: 3px 0;
+    margin: 0.5rem 0;
     border-left: 2px solid black;
     border-top: 2px solid black;
     border-bottom: 1px solid white;
@@ -22,19 +23,20 @@ const ExplorerMinimize = styled.div`
     display: flex;
     gap: 2px;
     align-items: center;
-    padding: 0 3px;
+    padding: 0 0.5rem;
+    min-width: 10rem;
 
     span {
         font-family: mslevi;
         letter-spacing: 1px;
         font-weight: 600;
-        padding-right: 10px;
+        padding-right: 1rem;
     }
 `
 
 const Icon = styled.img`
-    width: 30px;
-    height: 30px
+    width: 2rem;
+    height: 2rem;
 `
 
 const StartContainer = () => {

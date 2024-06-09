@@ -31,15 +31,15 @@ const StarMenuWrapper = styled.div`
     border-right: 3px solid ${({ theme }) => theme.colors.black};
     border-left: 3px solid ${({ theme }) => theme.colors.white};
     border-top: 3px solid ${({ theme }) => theme.colors.white};
-    top: -280px;
-    left: -3px;
+    top: -17.5rem;
+    left: -0.5rem;
     background-color: ${({ theme }) => theme.colors.menu };
     display: flex;
 
     .windows95 {
         display: flex;
-        gap: 5px;
-        padding: 5px 0;
+        gap: 0.5rem;
+        padding: 0.5rem 0;
         color: ${({ theme }) => theme.colors.menu};
         font-size: 22px;
         writing-mode: vertical-rl;

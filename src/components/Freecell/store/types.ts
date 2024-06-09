@@ -44,6 +44,7 @@ export interface FreeCellGameStore {
     readonly initiateDeck: () => void
     readonly finishGame: () => void
     readonly moveCardToFinishDeck: (card: GameCard) => void
+    // readonly moveCardToColumn: (card: GameCard, colIndex: number) => void;
     readonly moveCardToBankDeck: (id: GameCard) => void
     readonly toggleGameDeckActive: (id: string) => void
     readonly toggleBankActive: (id: string) => void

@@ -12,17 +12,18 @@ export const FileExplorerWrapper = styled.div`
     border-left: 1px solid ${({ theme }) => theme.colors.buttonShadow};
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 1rem;
     justify-content: flex-start;
     align-items: top;
-    padding-top: 5px;
-    padding-left: 20px;
-    padding-bottom: 30px;
-    width: 400px;
+    padding-top: 0.5rem;
+    padding-left: 1rem;
+    padding-bottom: 1.5rem;
+    min-width: 30rem;
+    min-height: 6rem;
 `
 const LeftBottomBar = styled.div`
     flex-basis: 30%;
-    padding-left: 5px;
+    padding-left: 0.3rem;
 
 `
 const RightBottomBar = styled.div`
@@ -36,17 +37,17 @@ const FileExplorerBottomBar = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 24px;
-    padding: 0 1px;
+    padding: 0 0.1rem;
 
     ${LeftBottomBar}, ${RightBottomBar} {
         font-family: mslevi;
         height: 68%;
         width: 100%;
         font-size: 12px;
-        margin: 2px 0;
+        margin: 0.5rem 0;
         border-bottom: 1px solid white;
         border-right: 1px solid white;
-        padding-top: 2px;
+        padding-top: 0.2rem;
         justify-content: center;
         align-content: center;
         box-shadow: inset 1px 1px 0px 1px ${({ theme }) => theme.colors.buttonShadow};

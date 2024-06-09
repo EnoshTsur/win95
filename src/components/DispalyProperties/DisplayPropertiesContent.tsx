@@ -8,7 +8,7 @@ import { useMainScreenBackgroundSizeStore, useMainScreenBackgroundStore } from "
 import { useApplyBackgroundSizeStore, useDisplayApplyBackgroundStore, useDisplayBackgroundSizeStore, useDisplayBackgroundStore, useDisplayModalStore } from "./store/store";
 
 const DisplayWrapper = styled.div`
-    width: 500px;
+    width: 31.5rem;
     position: relative;
     background-color: ${({ theme }) => theme.colors.menu };
 `
@@ -17,12 +17,12 @@ const DisplayMain = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 0 10px;
+    margin: 0 0.6rem;
     border-left: 2px solid ${({ theme }) => theme.colors.white };
     border-top: 2px solid ${({ theme }) => theme.colors.white };
     border-bottom: 2px solid ${({ theme }) => theme.colors.black };
     border-right: 2px solid ${({ theme }) => theme.colors.black };
-    padding: 5px;
+    padding: 0.3rem;
 `   
 
 interface DisplayAlertContentProps {

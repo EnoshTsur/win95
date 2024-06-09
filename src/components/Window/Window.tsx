@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { ButtonProps } from "components/Button/Button";
 import PannelButtonsContainer from "components/PanelButton/PannelButtonsContainer";
 import WindowTitle from "./WindowTitle/WindowTitle";
-import { useOpenWindowState } from "store/store";
 import useWindow from "./useWindow";
 
 const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: number } }>`
@@ -18,6 +17,7 @@ const WindowWrapper = styled.div<{ zindex: number, offset?: { x: number, y: numb
     z-index: ${({ zindex }) => zindex};
     box-shadow: inset 1px 1px 0px 1px ${({ theme }) => theme.colors.buttonShadow};
     padding: 1px;
+
 `
 
 export interface TitleProps {
@@ -39,11 +39,10 @@ interface WindowProps {
 
 const Window = ({ children, title, style, offset, panelButtons, panelButtonsStyle, getZIndex }: WindowProps) => {
 
-    const { zIndex, windowId } = useWindow({ getZIndex })
-    const { moveToTop } = useOpenWindowState(({ moveToTop }) => ({ moveToTop }))
+    const { zIndex } = useWindow({ getZIndex })
 
     return (
-        <WindowWrapper style={style} zindex={zIndex} offset={offset} onClick={() => moveToTop(windowId)}>
+        <WindowWrapper style={style} zindex={zIndex} offset={offset}>
             { 
                 title != null && (
                     <WindowTitle title={title.title} titleButtons={title.titleButtons ?? []} icon={title.icon}/> 

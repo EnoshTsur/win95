@@ -2,6 +2,7 @@ import styled from "styled-components"
 import { FaCaretRight } from "react-icons/fa"
 import Window from "components/Window/Window"
 import useMenu from "./useMenu"
+import { useLayoutEffect } from "react"
 
 const ScreenMenuWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.menu};
@@ -16,7 +17,7 @@ const ScreenMenuWrapper = styled.div`
 const ScreenMenuItemsContainer = styled.div<{ hasbordertop: string, hasborderbottom: string }>`
     display: flex;
     flex-direction: column;
-    padding: 3px;
+    padding: 0.2rem;
 
     ${({ hasbordertop, theme }) => hasbordertop === 'true' && `border-top: 1px solid ${theme.colors.white};`}
     ${({ hasborderbottom, theme }) => hasborderbottom === 'true' && `border-bottom: 1px solid ${theme.colors.buttonShadow};`}
@@ -40,9 +41,10 @@ const ScreenMenuItem = styled.button`
     
 `
 
-const ScreenMenuItemWrapper = styled.div`
+const ScreenMenuItemWrapper = styled.div<{ xdirection: string }>`
     position: relative;
     display: flex;
+    flex-direction: ${({ xdirection }) => xdirection === 'left' ? 'row-reverse' : 'row'};
     justify-content: space-between;
     align-items: center;
     &:hover {
@@ -62,14 +64,21 @@ export interface ScreenMenuItem {
 interface ScreenItemProps {
     readonly offset: { x: number, y: number }
     readonly menuItems: ReadonlyArray<ReadonlyArray<ScreenMenuItem>>
+    readonly isSubMenu?: boolean
 }
 
-const Menu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
+const Menu = ({ offset: { x, y }, menuItems, isSubMenu = false }: ScreenItemProps) => {
 
-    const {ref, hoveredItem, setHoveredItem, computedX} = useMenu()
+    const {ref, adjustPosition, xDirection, menuPosition, hoveredItem, setHoveredItem, computeSubMenuX } = useMenu()
+
+    useLayoutEffect(() => {
+        if (!isSubMenu) {
+            adjustPosition(x, y);
+        }
+    }, [x, y, adjustPosition, isSubMenu]);
 
     return (
-        <Window offset={{ x, y }}>
+        <Window offset={isSubMenu ? { x, y } : menuPosition}>
         <ScreenMenuWrapper ref={ref}>
             { menuItems.map((row, rowIndex) => (
                 <ScreenMenuItemsContainer 
@@ -79,25 +88,31 @@ const Menu = ({ offset: { x, y }, menuItems }: ScreenItemProps) => {
                 >
                     { row.map(({ children, hasCaret, disabled, onClick, next }, colIndex) => (
                         <ScreenMenuItemWrapper 
+                            xdirection={xDirection}
                             key={`memuscreenitem${colIndex}`}
-                            onMouseEnter={() => setHoveredItem({ row: rowIndex, col: colIndex })}
+                            onMouseEnter={() => {
+                                setHoveredItem({ row: rowIndex, col: colIndex })
+                                
+                            }}
                             onMouseLeave={() => setHoveredItem(null)}
                         >
                             { 
                                 !disabled && hasCaret && next && hoveredItem?.row === rowIndex && hoveredItem?.col === colIndex && (
                                     <Menu 
+                                        isSubMenu={true}
                                         menuItems={next!} 
-                                        offset={{ x: computedX, y: -5 }} 
+                                        offset={{ x: computeSubMenuX(xDirection), y: -5 }} 
                                     />
                                 )
                             }
                             <ScreenMenuItem  
                                 onClick={onClick} 
                                 disabled={disabled} 
+
                             >
                                 { children }
                             </ScreenMenuItem>
-                            { hasCaret && <FaCaretRight /> } 
+                            { hasCaret && <FaCaretRight style={{ transform: `rotate(${xDirection === 'left' ? '180deg' : '0'})`}}/> } 
                         </ScreenMenuItemWrapper>
                     ))}
                 </ScreenMenuItemsContainer>

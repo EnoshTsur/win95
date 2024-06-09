@@ -7,7 +7,9 @@ import { useEffect, useState } from "react";
 
 const Screen = styled.div`
     position: relative;
-    height: 57.5rem;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 `
 
 const ImageBg = styled.img<{ isloading: string }>`

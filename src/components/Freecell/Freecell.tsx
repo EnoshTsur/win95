@@ -12,8 +12,8 @@ import Alert from "components/Alert/Alert";
 import { IoMdClose } from "react-icons/io";
 
 const FreeCellGameContent = styled.div`
-    height: 500px;
-    width: 750px;
+    height: 31.5rem;
+    width: 47rem;
     background-color: green;
 `;
 
@@ -273,7 +273,8 @@ const Freecell = () => {
                                     <GameCardView 
                                         id={card.id} 
                                         key={`card${cardIndex}`} 
-                                        col={cardIndex} onClick={handleGamePanelCardClick} 
+                                        col={cardIndex} onClick={(e)=>
+                                            col[col.length - 1].id == card.id && handleGamePanelCardClick(e)} 
                                         isactive={`${card.isActive}`}
                                     >
                                         <img 
